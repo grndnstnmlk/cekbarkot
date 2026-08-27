@@ -2214,7 +2214,7 @@ function showToast(msg, isSuccess = false) {
 }
 
 // ==========================================
-// TANGGAL & STATE MANAGEMENT
+// TANGGAL & STATE MANAGEMENT (INSTANT ZERO-LAG CACHE-FIRST)
 // ==========================================
 function formatDateIndo(dateStr) {
   if (!dateStr) return '';
@@ -2224,7 +2224,7 @@ function formatDateIndo(dateStr) {
   return `${hari}, ${d.getDate()} ${bulan} ${d.getFullYear()}`;
 }
 
-async function onDateChanged(newDate) {
+function onDateChanged(newDate) {
   if (!newDate) return;
   currentDate = newDate;
   document.getElementById('datePicker').value = currentDate;
@@ -2240,7 +2240,7 @@ async function onDateChanged(newDate) {
   });
 
   hideSpotlight();
-  await loadDataForCurrentDate();
+  loadDataForCurrentDate();
 }
 
 function saveLocalState() {
@@ -2249,9 +2249,40 @@ function saveLocalState() {
   } catch(e) {}
 }
 
+// FUNGSI LOAD DATA: INSTANT 0ms DISPLAY DARI CACHE LALU SYNC CLOUD DI BACKGROUND
 async function loadDataForCurrentDate() {
-  state = { list: [], doneMap: {} };
+  // 1. CEK LOCALSTORAGE (INSTANT 0ms)
+  let found = false;
+  const raw = localStorage.getItem('barkot_local:' + currentDate);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.list) && parsed.list.length > 0) {
+        state = parsed;
+        if (!state.doneMap) state.doneMap = {};
+        found = true;
+      }
+    } catch(e) {}
+  }
 
+  // 2. JIKA BELUM ADA DI LOCALSTORAGE, AMBIL DARI SEED_DATA EXCEL (INSTANT 0ms)
+  if (!found && SEED_DATA[currentDate]) {
+    state = {
+      list: SEED_DATA[currentDate].map(x => ({ ...x, is_done: false })),
+      doneMap: {}
+    };
+    saveLocalState();
+    found = true;
+  }
+
+  if (!found) {
+    state = { list: [], doneMap: {} };
+  }
+
+  // ⚡ TAMPILKAN KE LAYAR LANGSUNG DETIK ITU JUGA TANPA MENUNGGU KONEKSI
+  render();
+
+  // 3. JIKA SUPABASE TERHUBUNG, SYNC DATA TERBARU DI BACKGROUND (TIDAK MEMBLOKIR LAYAR)
   if (supabaseClient) {
     try {
       const { data, error } = await supabaseClient
@@ -2268,29 +2299,11 @@ async function loadDataForCurrentDate() {
         });
         saveLocalState();
         render();
-        return;
       }
     } catch(err) {
-      console.warn('Supabase fetch failed, fallback to local', err);
+      console.warn('Supabase fetch failed, tetap menggunakan data lokal', err);
     }
   }
-
-  const raw = localStorage.getItem('barkot_local:' + currentDate);
-  if (raw) {
-    try {
-      state = JSON.parse(raw);
-      render();
-      return;
-    } catch(e) {}
-  }
-
-  if (SEED_DATA[currentDate]) {
-    state.list = SEED_DATA[currentDate].map(x => ({ ...x, is_done: false }));
-    state.doneMap = {};
-    saveLocalState();
-  }
-
-  render();
 }
 
 // ==========================================
@@ -2600,6 +2613,14 @@ function handleExcelUpload(event) {
         document.getElementById('datePicker').value = currentDate;
         document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 
+        // Simpan langsung ke lokal
+        state = {
+          list: parsedItems.sort((a,b) => a.no_gud - b.no_gud),
+          doneMap: {}
+        };
+        saveLocalState();
+        render();
+
         if (supabaseClient) {
           showToast('Mengunggah ke database Supabase...');
           const { error } = await supabaseClient
@@ -2609,7 +2630,6 @@ function handleExcelUpload(event) {
           if (error) console.error('Supabase bulk upload err', error);
         }
 
-        await loadDataForCurrentDate();
         showToast(`Berhasil memuat ${parsedItems.length} bal tembakau!`, true);
       }
     } catch(err) {
@@ -2679,11 +2699,18 @@ async function addManualEntries() {
   }
 
   if (newItems.length > 0) {
+    newItems.forEach(item => {
+      const existing = state.list.find(x => x.no_gud === item.no_gud);
+      if (!existing) state.list.push(item);
+    });
+    state.list.sort((a,b) => a.no_gud - b.no_gud);
+    saveLocalState();
+    render();
+
     if (supabaseClient) {
       await supabaseClient.from('barkot_data').upsert(newItems, { onConflict: 'tanggal,no_gud' });
     }
     document.getElementById('manualInput').value = '';
-    await loadDataForCurrentDate();
     showToast(`+${newItems.length} bal ditambahkan`, true);
   }
 }
@@ -2716,14 +2743,15 @@ ${remainNos.length > 0 ? `*Sisa No Gud Belum Dibarkot:* \n${remainNos.join(', ')
 async function resetChecks() {
   if (confirm(`Kosongkan semua centang untuk tanggal ${currentDate}?`)) {
     state.doneMap = {};
+    state.list.forEach(x => x.is_done = false);
     saveLocalState();
+    render();
     if (supabaseClient) {
       await supabaseClient
         .from('barkot_data')
         .update({ is_done: false, done_at: null })
         .eq('tanggal', currentDate);
     }
-    render();
     showToast('Centang hari ini dikosongkan');
   }
 }
@@ -2732,13 +2760,13 @@ async function clearCurrentDateData() {
   if (confirm(`Hapus SELURUH daftar bal untuk tanggal ${currentDate}?`)) {
     state = { list: [], doneMap: {} };
     saveLocalState();
+    render();
     if (supabaseClient) {
       await supabaseClient
         .from('barkot_data')
         .delete()
         .eq('tanggal', currentDate);
     }
-    render();
     showToast('Data tanggal ini dihapus');
   }
 }
@@ -2843,7 +2871,7 @@ function stopScanner() {
 }
 
 // ==========================================
-// STARTUP
+// STARTUP: INSTANT 0ms DISPLAY
 // ==========================================
 document.getElementById('datePicker').value = currentDate;
 document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
