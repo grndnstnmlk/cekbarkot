@@ -156,6 +156,9 @@
     letter-spacing: 0.02em;
     cursor: pointer;
     transition: background 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .ghost-btn:active {
     background: rgba(0,0,0,0.06);
@@ -184,12 +187,6 @@
     color: var(--color-ink);
     outline: none;
     -webkit-appearance: none;
-  }
-  .date-display-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-smoke);
-    text-transform: uppercase;
   }
 
   .quick-dates-bar {
@@ -396,13 +393,14 @@
     color: var(--color-done-text);
   }
 
-  /* Filter Controls */
+  /* Filter Controls & Batch Actions Bar */
   .filter-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
     gap: 8px;
+    flex-wrap: wrap;
   }
   .filter-pills {
     display: flex;
@@ -423,6 +421,11 @@
     background: var(--color-ink);
     color: var(--color-bone);
     border-color: var(--color-ink);
+  }
+
+  .batch-actions {
+    display: flex;
+    gap: 6px;
   }
 
   /* Grid of Display Chips (Gallery Exhibition Items) */
@@ -732,14 +735,18 @@
     </div>
   </div>
 
-  <!-- Filter Controls -->
+  <!-- Filter Controls & Batch Actions -->
   <div class="filter-bar">
     <div class="filter-pills">
       <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
       <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
       <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
     </div>
-    <button class="ghost-btn" style="padding:4px 10px; font-size:11px;" onclick="startScanner()">Scan Kamera</button>
+    <div class="batch-actions">
+      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="checkAllBal()" title="Centang Semua Bal Hari Ini">✓ Centang Semua</button>
+      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="uncheckAllBal()" title="Batalkan Centang Semua Bal">↺ Un-centang</button>
+      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="startScanner()">📷 Scan</button>
+    </div>
   </div>
 
   <!-- Main Bal Exhibition Grid -->
@@ -762,9 +769,9 @@
       <button class="ghost-btn-dark" onclick="refreshCurrentDateData()">Muat Ulang</button>
     </div>
 
-    <div style="margin-top:16px; pt-16; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:8px;">
-      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px;" onclick="resetChecks()">Reset Centang Hari Ini</button>
-      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px; border-color:var(--color-danger);" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
+    <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:8px;">
+      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
+      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px; border-color:#ef5350; color:#ef5350;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
     </div>
   </div>
 </main>
@@ -2230,6 +2237,82 @@ async function loadDataForCurrentDate() {
 }
 
 // ==========================================
+// BATCH ACTIONS: CENTANG SEMUA & UN-CENTANG SEMUA
+// ==========================================
+async function checkAllBal() {
+  if (state.list.length === 0) {
+    showToast('Tidak ada data bal pada tanggal ini');
+    return;
+  }
+  
+  if (confirm(`Centang SEMUA (${state.list.length} bal) untuk tanggal ${formatDateIndo(currentDate)}?`)) {
+    initAudio();
+    playBeep(true);
+    if (navigator.vibrate) navigator.vibrate(50);
+    
+    state.doneMap = {};
+    const nowIso = new Date().toISOString();
+    state.list.forEach(item => {
+      item.is_done = true;
+      item.done_at = nowIso;
+      state.doneMap[item.no_gud] = true;
+    });
+    
+    saveLocalState();
+    render();
+    updateSpotlightUI();
+    
+    showToast(`✓ Semua ${state.list.length} bal ditandai selesai!`);
+    
+    if (supabaseClient) {
+      try {
+        await supabaseClient
+          .from('barkot_data')
+          .update({ is_done: true, done_at: nowIso })
+          .eq('tanggal', currentDate);
+      } catch(err) {
+        console.error('Supabase check-all err', err);
+      }
+    }
+  }
+}
+
+async function uncheckAllBal() {
+  if (state.list.length === 0) {
+    showToast('Tidak ada data bal pada tanggal ini');
+    return;
+  }
+  
+  if (confirm(`Batalkan centang SEMUA (${state.list.length} bal) untuk tanggal ${formatDateIndo(currentDate)}?`)) {
+    initAudio();
+    playBeep(false);
+    
+    state.doneMap = {};
+    state.list.forEach(item => {
+      item.is_done = false;
+      item.done_at = null;
+    });
+    
+    saveLocalState();
+    render();
+    updateSpotlightUI();
+    
+    showToast('Centang semua bal dibatalkan');
+    
+    if (supabaseClient) {
+      try {
+        await supabaseClient
+          .from('barkot_data')
+          .update({ is_done: false, done_at: null })
+          .eq('tanggal', currentDate);
+      } catch(err) {
+        console.error('Supabase uncheck-all err', err);
+      }
+    }
+  }
+}
+
+// ==========================================
 // PENCARIAN & SPOTLIGHT
 // ==========================================
 function handleSearchInput(type) {
@@ -2593,22 +2676,6 @@ ${remainNos.length > 0 ? `*Sisa No Gud Belum Dibarkot:* \n${remainNos.join(', ')
     });
   } else {
     prompt('Salin teks laporan di bawah ini:', text);
-  }
-}
-
-async function resetChecks() {
-  if (confirm(`Kosongkan semua centang untuk tanggal ${currentDate}?`)) {
-    state.doneMap = {};
-    state.list.forEach(x => x.is_done = false);
-    saveLocalState();
-    render();
-    if (supabaseClient) {
-      await supabaseClient
-        .from('barkot_data')
-        .update({ is_done: false, done_at: null })
-        .eq('tanggal', currentDate);
-    }
-    showToast('Centang hari ini dikosongkan');
   }
 }
 
