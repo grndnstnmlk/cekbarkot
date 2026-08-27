@@ -143,25 +143,33 @@
     display: flex;
     gap: 6px;
     align-items: center;
+    flex-wrap: wrap;
   }
   .ghost-btn {
     background: transparent;
     border: 1px solid var(--color-ink);
     color: var(--color-ink);
     border-radius: var(--radius-buttons);
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-family: var(--font-mono);
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.02em;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .ghost-btn:active {
     background: rgba(0,0,0,0.06);
+  }
+  .ghost-btn.active-lock {
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    border-color: var(--color-obsidian);
   }
 
   /* Date Bar & Chips */
@@ -392,6 +400,11 @@
     border-color: var(--color-done-border);
     color: var(--color-done-text);
   }
+  .ghost-btn-full.btn-locked {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.25);
+    color: var(--color-parchment);
+  }
 
   /* Filter Controls & Batch Actions Bar */
   .filter-bar {
@@ -426,6 +439,7 @@
   .batch-actions {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
   }
 
   /* Grid of Display Chips (Gallery Exhibition Items) */
@@ -515,12 +529,15 @@
   .bal-card.done .card-status-label {
     color: var(--color-smoke);
   }
-  .bal-card.done .check-mark {
+  .bal-card.done .badge-top-right {
     position: absolute;
     top: 4px;
     right: 7px;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-bone);
+    display: flex;
+    align-items: center;
+    gap: 2px;
   }
 
   .bal-card.highlight {
@@ -668,6 +685,8 @@
       <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
     </div>
     <div class="header-actions">
+      <!-- Tombol Mode Kunci Anti Salah Pencet -->
+      <button class="ghost-btn active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
       <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">Bip</button>
       <button class="ghost-btn" onclick="openConfigModal()">Setup</button>
     </div>
@@ -2017,6 +2036,7 @@ let state = {
 };
 let currentFilter = 'all';
 let soundEnabled = true;
+let lockModeEnabled = true; // DEFAULT KUNCI AKTIF UNTUK KEAMANAN DI LAPANGAN
 let audioCtx = null;
 let supabaseClient = null;
 let realtimeChannel = null;
@@ -2140,12 +2160,48 @@ function toggleSound() {
   showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
 }
 
+// ==========================================
+// FITUR KUNCI BAL SELESAI (LOCK MODE)
+// ==========================================
+function initLockMode() {
+  const savedLock = localStorage.getItem('barkot_lock_mode');
+  if (savedLock !== null) {
+    lockModeEnabled = savedLock === 'true';
+  }
+  updateLockBtnUI();
+}
+
+function toggleLockMode() {
+  lockModeEnabled = !lockModeEnabled;
+  localStorage.setItem('barkot_lock_mode', String(lockModeEnabled));
+  updateLockBtnUI();
+  render();
+  updateSpotlightUI();
+  
+  if (lockModeEnabled) {
+    showToast('🔒 Mode Kunci AKTIF — No Gud selesai terlindungi');
+  } else {
+    showToast('🔓 Mode Kunci NONAKTIF — Anda bisa membatalkan centang');
+  }
+}
+
+function updateLockBtnUI() {
+  const btn = document.getElementById('lockBtn');
+  if (lockModeEnabled) {
+    btn.textContent = '🔒 Kunci: ON';
+    btn.className = 'ghost-btn active-lock';
+  } else {
+    btn.textContent = '🔓 Kunci: OFF';
+    btn.className = 'ghost-btn';
+  }
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast show';
   clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => t.className = 'toast', 1600);
+  window._toastTimer = setTimeout(() => t.className = 'toast', 1800);
 }
 
 // ==========================================
@@ -2364,9 +2420,17 @@ function updateSpotlightUI() {
   const status = document.getElementById('spotStatusVal');
 
   if (isDone) {
-    status.textContent = 'SUDAH DIBARKOT';
-    btn.textContent = 'Batalkan Centang';
-    btn.className = 'ghost-btn-full btn-done';
+    status.innerHTML = lockModeEnabled ? 
+      '<span style="color:#a5d6a7;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
+      '<span style="color:#a5d6a7;">✓ SUDAH DIBARKOT</span>';
+    
+    if (lockModeEnabled) {
+      btn.textContent = '🔒 Bal Terkunci (Buka Kunci untuk Edit)';
+      btn.className = 'ghost-btn-full btn-locked';
+    } else {
+      btn.textContent = 'Batalkan Centang';
+      btn.className = 'ghost-btn-full btn-done';
+    }
   } else {
     status.textContent = 'BELUM DIBARKOT';
     btn.textContent = 'Tandai Sudah Ditempel';
@@ -2381,23 +2445,43 @@ function hideSpotlight() {
 
 function toggleSpotlightBal() {
   if (!activeSpotlightBal) return;
+  const isDone = Boolean(state.doneMap[activeSpotlightBal.no_gud]);
+  
+  if (isDone && lockModeEnabled) {
+    if (confirm(`No Gud ${activeSpotlightBal.no_gud} sudah terkunci. Yakin ingin membatalkan centang?`)) {
+      forceToggleBal(activeSpotlightBal.no_gud, false);
+    }
+    return;
+  }
+  
   toggleBal(activeSpotlightBal.no_gud);
-  updateSpotlightUI();
 }
 
 // ==========================================
-// TOGGLE BAL
+// TOGGLE BAL DENGAN PROTEKSI LOCK MODE
 // ==========================================
 async function toggleBal(no_gud) {
-  initAudio();
   const isCurrentlyDone = Boolean(state.doneMap[no_gud]);
-  const newStatus = !isCurrentlyDone;
+  
+  // Jika bal SUDAH dicentang dan MODE KUNCI AKTIF: Proteksi terhadap ketidaksengajaan
+  if (isCurrentlyDone && lockModeEnabled) {
+    initAudio();
+    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+    showToast(`🔒 No Gud ${no_gud} terkunci! Buka Kunci di atas jika ingin membatalkan.`);
+    return;
+  }
 
+  const newStatus = !isCurrentlyDone;
+  await forceToggleBal(no_gud, newStatus);
+}
+
+async function forceToggleBal(no_gud, newStatus) {
+  initAudio();
   if (newStatus) {
     state.doneMap[no_gud] = true;
     playBeep(true);
     if (navigator.vibrate) navigator.vibrate(30);
-    showToast(`No Gud ${no_gud} ditandai selesai`);
+    showToast(`✓ No Gud ${no_gud} ditandai selesai (Terkunci 🔒)`);
   } else {
     delete state.doneMap[no_gud];
     playBeep(false);
@@ -2405,7 +2489,10 @@ async function toggleBal(no_gud) {
   }
 
   const target = state.list.find(x => x.no_gud === no_gud);
-  if (target) target.is_done = newStatus;
+  if (target) {
+    target.is_done = newStatus;
+    target.done_at = newStatus ? new Date().toISOString() : null;
+  }
   saveLocalState();
   render();
   updateSpotlightUI();
@@ -2495,11 +2582,13 @@ function render() {
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
       const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
 
+      const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
+
       card.innerHTML = `
-        ${isDone ? '<span class="check-mark">✓</span>' : ''}
+        ${isDone ? `<span class="badge-top-right">${lockIndicator}</span>` : ''}
         <div class="card-no">${item.no_gud}</div>
         <div class="card-meta">${barkotHtml}${gradeHtml}${kgHtml}</div>
-        <div class="card-status-label">${isDone ? 'SELESAI' : 'NO GUD'}</div>
+        <div class="card-status-label">${isDone ? (lockModeEnabled ? 'TERKUNCI' : 'SELESAI') : 'NO GUD'}</div>
       `;
       card.onclick = () => {
         showSpotlight(item);
@@ -2796,6 +2885,7 @@ function stopScanner() {
 // Inisialisasi awal
 document.getElementById('datePicker').value = currentDate;
 document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+initLockMode();
 initSupabase();
 loadDataForCurrentDate();
 </script>
