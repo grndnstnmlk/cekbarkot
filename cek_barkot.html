@@ -2177,14 +2177,16 @@ function playBeep(isSuccess = true) {
     gain.connect(audioCtx.destination);
     
     if (isSuccess) {
+      // Melodic iOS success tone
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+      osc.frequency.setValueAtTime(880, now); // A5
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08); // E6
       gain.gain.setValueAtTime(0.25, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
       osc.start(now);
       osc.stop(now + 0.18);
     } else {
+      // iOS Taptic-like subtle tap click
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(320, now);
       osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
@@ -2310,7 +2312,6 @@ function handleSearchInput(type) {
     if (val) {
       barkotInput.value = '';
       clearBarkot.style.display = 'none';
-      // Cari tepat atau awalan
       match = state.list.find(x => String(x.no_gud) === val) || 
               state.list.find(x => String(x.no_gud).startsWith(val));
     }
@@ -2359,7 +2360,7 @@ function showSpotlight(item) {
 
 function updateSpotlightUI() {
   if (!activeSpotlightBal) return;
-  const isDone = !state.doneMap[activeSpotlightBal.no_gud];
+  const isDone = Boolean(state.doneMap[activeSpotlightBal.no_gud]);
   const btn = document.getElementById('spotToggleBtn');
   const status = document.getElementById('spotStatusVal');
 
@@ -2390,8 +2391,8 @@ function toggleSpotlightBal() {
 // ==========================================
 async function toggleBal(no_gud) {
   initAudio();
-  const currentStatus = !state.doneMap[no_gud];
-  const newStatus = !currentStatus;
+  const isCurrentlyDone = Boolean(state.doneMap[no_gud]);
+  const newStatus = !isCurrentlyDone;
 
   // Update State Lokal
   if (newStatus) {
@@ -2468,7 +2469,7 @@ function render() {
 
   // Filter items
   const filtered = state.list.filter(item => {
-    const isDone = !state.doneMap[item.no_gud];
+    const isDone = Boolean(state.doneMap[item.no_gud]);
     if (currentFilter === 'pending' && isDone) return false;
     if (currentFilter === 'done' && !isDone) return false;
     
@@ -2489,7 +2490,7 @@ function render() {
   } else {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
-      const isDone = !state.doneMap[item.no_gud];
+      const isDone = Boolean(state.doneMap[item.no_gud]);
       const isSearchMatch = (nogudQ && String(item.no_gud) === nogudQ) || 
                             (barkotQ && item.barkot === barkotQ);
 
@@ -2691,7 +2692,7 @@ async function addManualEntries() {
 function copyWaSummary() {
   const total = state.list.length;
   const doneNos = Object.keys(state.doneMap).map(k => parseInt(k,10));
-  const remainNos = state.list.filter(x => !state.doneMap[x.no_gud]).map(x => x.no_gud);
+  const remainNos = state.list.filter(x => !Boolean(state.doneMap[x.no_gud])).map(x => x.no_gud);
   const pct = total > 0 ? Math.round((doneNos.length / total) * 100) : 0;
 
   const text = 
