@@ -2,40 +2,48 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<!-- Viewport dioptimalkan khusus untuk iPhone 16 Pro Max & iOS Safari (Dynamic Island & Safe Area) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cek Barkot">
-<meta name="theme-color" content="#120a05">
-<title>Cek Barkot Tembakau — Mobile Pro</title>
+<meta name="theme-color" content="#faf6f3">
+<title>Cek Barkot — DrawHistory Gallery Edition</title>
 
-<!-- Library SheetJS untuk baca Excel -->
+<!-- Google Fonts: Inter (for Eloquia style) & Roboto Mono -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- SheetJS & Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<!-- Library Supabase JS Client -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
   :root {
-    --wood-dark: #120a05;
-    --wood-mid: #22140a;
-    --wood-card: #2f1d10;
-    --wood-card-active: #3d2716;
-    --wood-border: #46301d;
-    --paper: #f6eedf;
-    --paper-dim: #e4d5be;
-    --paper-sub: #b39f82;
-    --gold: #e5a93c;
-    --gold-bright: #ffc857;
-    --gold-bg: rgba(229, 169, 60, 0.15);
-    --done-bg: #164622;
-    --done-card: #1b5329;
-    --done-border: #2e7d32;
-    --done-bright: #4caf50;
-    --danger: #d32f2f;
-    --danger-border: #ef5350;
-    --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
-    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* DrawHistory Design Tokens */
+    --color-parchment: #faf6f3;
+    --color-ash: #e5e7eb;
+    --color-smoke: #999999;
+    --color-silver: #b3b3b3;
+    --color-ink: #000000;
+    --color-bone: #ffffff;
+    --color-olive-charcoal: #3d3b2f;
+    --color-obsidian: #1d1d1b;
+    --color-saffron-dot: #ff6714;
+    
+    /* Functional status colors aligned with editorial palette */
+    --color-done-surface: #2b3a2c;
+    --color-done-text: #e2f1e4;
+    --color-done-border: #4c6b50;
+    
+    /* Typography Tokens */
+    --font-eloquia: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    
+    /* Radius Tokens */
+    --radius-cards: 16px;
+    --radius-buttons: 8px;
+    --radius-pills: 9999px;
     
     /* Safe Area insets iPhone 16 Pro Max */
     --sat: env(safe-area-inset-top, 0px);
@@ -53,428 +61,386 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--wood-dark);
-    color: var(--paper);
-    font-family: var(--sans);
+    background: var(--color-parchment);
+    color: var(--color-ink);
+    font-family: var(--font-eloquia);
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    padding-bottom: calc(var(--sab) + 45px);
+    padding-bottom: calc(var(--sab) + 40px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overscroll-behavior-y: none;
   }
 
-  /* Header Sticky with Dynamic Island Support */
+  /* Top Announcement Strip with Saffron Dot */
+  .announcement-bar {
+    background: var(--color-parchment);
+    border-bottom: 1px solid var(--color-ash);
+    padding-top: calc(var(--sat) + 6px);
+    padding-bottom: 6px;
+    padding-left: calc(var(--sal) + 16px);
+    padding-right: calc(var(--sar) + 16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink);
+  }
+  .announcement-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .saffron-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pills);
+    background: var(--color-saffron-dot);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  /* Header Section (Gallery Wall Style) */
   header {
-    background: rgba(18, 10, 5, 0.96);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1.5px solid var(--wood-border);
-    padding-top: calc(var(--sat) + 8px);
-    padding-bottom: 8px;
-    padding-left: calc(var(--sal) + 14px);
-    padding-right: calc(var(--sar) + 14px);
+    background: var(--color-parchment);
+    padding: 14px calc(var(--sal) + 16px) 12px calc(var(--sar) + 16px);
+    border-bottom: 1px solid var(--color-ash);
     position: sticky;
     top: 0;
     z-index: 50;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
-
-  .header-top {
+  .header-main {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+    margin-bottom: 12px;
   }
-  .brand-title {
+  .display-title {
     margin: 0;
-    font-size: 18px;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: -0.02em;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 28px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--color-ink);
   }
-  .cloud-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 10.5px;
-    font-family: var(--mono);
-    padding: 2px 7px;
-    border-radius: 20px;
-    background: rgba(0,0,0,0.45);
-    border: 1px solid var(--wood-border);
+  .display-subtitle {
+    margin: 4px 0 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-smoke);
+    letter-spacing: -0.01em;
   }
-  .cloud-status.connected { color: #81c784; border-color: #388e3c; }
-  .cloud-status.offline { color: #ffb74d; border-color: #f57c00; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  .hdr-controls {
+  .header-actions {
     display: flex;
-    align-items: center;
     gap: 6px;
+    align-items: center;
   }
-  .icon-btn {
-    background: var(--wood-card);
-    border: 1px solid var(--wood-border);
-    color: var(--paper);
-    padding: 6px 10px;
-    border-radius: 9px;
-    font-size: 12px;
-    font-weight: 700;
+  .ghost-btn {
+    background: transparent;
+    border: 1px solid var(--color-ink);
+    color: var(--color-ink);
+    border-radius: var(--radius-buttons);
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    transition: transform 0.08s ease, background 0.15s;
+    transition: background 0.15s ease;
   }
-  .icon-btn:active {
-    transform: scale(0.92);
-    background: var(--wood-card-active);
+  .ghost-btn:active {
+    background: rgba(0,0,0,0.06);
   }
 
-  /* Date Bar */
-  .date-bar {
-    margin-top: 7px;
-    background: rgba(0,0,0,0.35);
-    border: 1px solid var(--wood-border);
-    border-radius: 9px;
-    padding: 6px 9px;
-  }
-  .date-selector-row {
+  /* Date Bar & Chips */
+  .date-section {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .date-input-wrap {
+    display: flex;
+    align-items: center;
     gap: 6px;
   }
-  .date-input {
-    background: var(--wood-card);
-    border: 1px solid var(--wood-border);
-    color: var(--gold-bright);
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: 12.5px;
-    padding: 4px 7px;
-    border-radius: 6px;
+  .date-picker {
+    background: transparent;
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-buttons);
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-ink);
     outline: none;
-    cursor: pointer;
     -webkit-appearance: none;
   }
+  .date-display-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-smoke);
+    text-transform: uppercase;
+  }
 
-  /* Quick Date Pills */
-  .quick-dates {
+  .quick-dates-bar {
     display: flex;
-    gap: 5px;
-    margin-top: 5px;
+    gap: 6px;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 2px;
   }
-  .quick-dates::-webkit-scrollbar { display: none; }
+  .quick-dates-bar::-webkit-scrollbar { display: none; }
 
-  .date-chip {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 700;
-    background: var(--wood-card);
-    color: var(--paper-dim);
-    border: 1px solid var(--wood-border);
-    padding: 3px 8px;
-    border-radius: 7px;
+  .date-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-pills);
+    padding: 3px 10px;
     cursor: pointer;
     white-space: nowrap;
-    user-select: none;
-    -webkit-user-select: none;
+    transition: all 0.15s ease;
   }
-  .date-chip.active {
-    background: var(--gold);
-    color: #120a05;
-    border-color: var(--gold-bright);
-    font-weight: 800;
+  .date-pill.active {
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    border-color: var(--color-obsidian);
   }
 
-  /* Progress Bar */
-  .progress-section {
-    margin-top: 6px;
+  /* Progress Section: Minimalist Ash Line */
+  .progress-container {
+    margin-top: 10px;
   }
-  .progress-bar-bg {
-    height: 7px;
-    background: #080402;
-    border-radius: 5px;
+  .progress-track {
+    height: 3px;
+    background: var(--color-ash);
+    border-radius: var(--radius-pills);
     overflow: hidden;
-    border: 1px solid var(--wood-border);
   }
-  .progress-bar-fill {
+  .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2e7d32, #4caf50);
+    background: var(--color-ink);
     width: 0%;
-    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.25s ease;
   }
-  .progress-stats {
+  .progress-label-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 3px;
+    font-family: var(--font-mono);
     font-size: 11px;
-    font-family: var(--mono);
+    color: var(--color-smoke);
+    margin-top: 4px;
   }
-  .stat-highlight { font-weight: 800; color: var(--gold-bright); }
-  .stat-done { color: #81c784; font-weight: 800; }
-  .stat-remain { color: #ffb74d; font-weight: 700; }
+  .progress-label-row b {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
 
-  /* Main Container */
+  /* Layout Container */
   main {
-    max-width: 960px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 8px calc(var(--sal) + 12px) 20px calc(var(--sar) + 12px);
+    padding: 16px calc(var(--sal) + 16px) 30px calc(var(--sar) + 16px);
   }
 
-  /* SEARCH BARKOT & NO GUD PANEL (WORKFLOW UTAMA LAPANGAN) */
-  .search-card-container {
-    background: linear-gradient(180deg, var(--wood-card) 0%, #24150a 100%);
-    border: 1.5px solid var(--gold);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-    border-radius: 14px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
+  /* DUAL PANEL LAYOUT (DRAW HISTORY SIGNATURE: OLIVE CHARCOAL + OBSIDIAN) */
+  .editorial-panels {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
   }
-  .search-card-title {
+  @media (min-width: 768px) {
+    .editorial-panels {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+  }
+
+  /* Left Panel: Olive Charcoal Search & Finder */
+  .panel-olive {
+    background: var(--color-olive-charcoal);
+    color: var(--color-parchment);
+    border-radius: var(--radius-cards);
+    padding: 20px 18px;
+  }
+  .panel-eyebrow {
+    font-family: var(--font-eloquia);
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold-bright);
-    margin: 0 0 7px;
+    letter-spacing: 0.08em;
+    color: var(--color-smoke);
+    margin: 0 0 6px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 6px;
   }
-  
-  .search-inputs-grid {
+  .panel-headline {
+    font-family: var(--font-eloquia);
+    font-size: 22px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: var(--color-parchment);
+    margin: 0 0 14px;
+    line-height: 1.15;
+  }
+
+  .search-inputs-dual {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-  
-  .input-field-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .input-label-tag {
+  .input-label-editorial {
+    font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 700;
-    color: var(--paper-sub);
-    font-family: var(--mono);
+    color: var(--color-parchment);
+    opacity: 0.8;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
   }
-  
-  .search-input-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .search-input-box input {
+  .editorial-input {
     width: 100%;
-    background: #0d0603;
-    border: 1.5px solid var(--wood-border);
-    color: #fff;
-    font-size: 17px;
-    font-weight: 800;
-    font-family: var(--mono);
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--color-bone);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 500;
     padding: 9px 10px;
-    border-radius: 10px;
+    border-radius: var(--radius-buttons);
     outline: none;
-    -webkit-appearance: none;
+    transition: border-color 0.15s ease;
   }
-  .search-input-box input:focus {
-    border-color: var(--gold-bright);
-    background: #180d07;
-    box-shadow: 0 0 0 3px rgba(229, 169, 60, 0.3);
-  }
-  .clear-btn {
-    position: absolute;
-    right: 7px;
-    background: rgba(255,255,255,0.15);
-    color: var(--paper);
-    border: none;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 12px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  .editorial-input:focus {
+    border-color: var(--color-bone);
   }
 
-  /* SPOTLIGHT KARTU BARKOT COCOK (HASIL PENCARIAN BESAR) */
-  .spotlight-card {
-    background: linear-gradient(135deg, #184824 0%, #0d2914 100%);
-    border: 2px solid var(--done-bright);
-    border-radius: 14px;
-    padding: 12px;
-    margin-top: 8px;
+  /* Spotlight Result Card inside Olive Panel */
+  .spotlight-inset {
+    background: var(--color-obsidian);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 14px;
+    margin-top: 12px;
     display: none;
-    animation: slideDown 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    animation: fadeIn 0.2s ease;
   }
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-8px); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  
-  .spotlight-header {
+  .spotlight-top-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-smoke);
   }
-  .spotlight-no {
-    font-size: 13px;
-    color: #c8e6c9;
-    font-weight: 800;
-    font-family: var(--mono);
+  .spotlight-no-label {
+    color: var(--color-bone);
+    font-size: 14px;
+    font-weight: 500;
   }
-  .spotlight-no b {
-    font-size: 24px;
-    color: #fff;
-    margin-left: 2px;
-  }
-  .spotlight-barkot-wrap {
-    background: rgba(0,0,0,0.35);
-    border: 1px dashed var(--gold);
-    border-radius: 10px;
-    padding: 8px 12px;
-    margin: 8px 0;
-    text-align: center;
-  }
-  .barkot-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold-bright);
-    font-weight: 800;
-    margin-bottom: 2px;
-  }
-  .barkot-value {
-    font-family: var(--mono);
+  .spotlight-barcode-huge {
+    font-family: var(--font-mono);
     font-size: 32px;
-    font-weight: 900;
-    color: #ffffff;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    color: var(--color-bone);
+    text-align: center;
+    margin: 8px 0;
   }
-  .spotlight-details {
+  .spotlight-meta-row {
     display: flex;
-    justify-content: space-around;
-    font-size: 12px;
-    font-family: var(--mono);
-    color: #e8f5e9;
-    margin-bottom: 8px;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-smoke);
+    margin-bottom: 10px;
   }
-  
-  .btn-spotlight-toggle {
+  .ghost-btn-full {
     width: 100%;
-    background: var(--done-bright);
-    color: #0d2914;
-    font-weight: 900;
-    font-size: 15px;
-    padding: 11px;
-    border: none;
-    border-radius: 10px;
+    background: transparent;
+    border: 1px solid var(--color-bone);
+    color: var(--color-bone);
+    border-radius: var(--radius-buttons);
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-    transition: transform 0.08s ease;
+    transition: background 0.15s ease;
   }
-  .btn-spotlight-toggle:active {
-    transform: scale(0.96);
+  .ghost-btn-full:active {
+    background: rgba(255,255,255,0.1);
   }
-  .btn-spotlight-toggle.is-done-btn {
-    background: #ffb74d;
-    color: #24140a;
+  .ghost-btn-full.btn-done {
+    background: var(--color-done-surface);
+    border-color: var(--color-done-border);
+    color: var(--color-done-text);
   }
 
-  /* Filter Tabs Bar */
-  .filter-tabs-bar {
+  /* Filter Controls */
+  .filter-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-  .filter-tabs {
-    display: flex;
-    gap: 5px;
-    flex: 1;
-  }
-  .tab-btn {
-    flex: 1;
-    text-align: center;
-    background: var(--wood-card);
-    border: 1px solid var(--wood-border);
-    color: var(--paper-sub);
-    font-weight: 700;
-    font-size: 11.5px;
-    padding: 7px 3px;
-    border-radius: 9px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    transition: all 0.15s;
-  }
-  .tab-btn:active { transform: scale(0.95); }
-  .tab-btn.active {
-    background: var(--paper);
-    color: var(--wood-dark);
-    border-color: var(--paper);
-    font-weight: 800;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-  .btn-scan-small {
-    background: linear-gradient(135deg, var(--gold), #c98a3d);
-    color: #120a05;
-    border: none;
-    font-weight: 800;
-    font-size: 11.5px;
-    padding: 7px 11px;
-    border-radius: 9px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  /* Grid Layout: dioptimalkan untuk layar iPhone 16 Pro Max */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 12px;
     gap: 8px;
   }
-  @media (min-width: 420px) {
-    .grid-container {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-    }
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+  }
+  .filter-pill {
+    background: transparent;
+    border: 1px solid var(--color-ash);
+    color: var(--color-smoke);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 5px 12px;
+    border-radius: var(--radius-pills);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-pill.active {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    border-color: var(--color-ink);
+  }
+
+  /* Grid of Display Chips (Gallery Exhibition Items) */
+  .bal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin-bottom: 24px;
   }
   @media (min-width: 600px) {
-    .grid-container {
-      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-      gap: 10px;
+    .bal-grid {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
     }
   }
 
-  /* Chip No Gud */
-  .chip {
-    background: var(--wood-card);
-    border: 2px solid var(--wood-border);
-    border-radius: 13px;
-    padding: 10px 4px 6px;
+  .bal-card {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-cards);
+    padding: 14px 8px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -484,183 +450,163 @@
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     position: relative;
-    transition: transform 0.08s ease, background 0.15s, border-color 0.15s;
-    min-height: 94px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+    min-height: 96px;
   }
-  .chip:active {
-    transform: scale(0.92);
-    background: var(--wood-card-active);
+  .bal-card:active {
+    transform: scale(0.95);
   }
-
-  .chip .no-gud {
-    font-family: var(--mono);
+  .bal-card .card-no {
+    font-family: var(--font-mono);
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 500;
     line-height: 1;
-    color: #ffffff;
+    color: var(--color-ink);
     letter-spacing: -0.03em;
   }
-  .chip .sub-info {
-    margin-top: 4px;
+  .bal-card .card-meta {
+    margin-top: 6px;
     display: flex;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 3px;
     justify-content: center;
   }
-  .chip .pill {
-    font-family: var(--mono);
+  .meta-tag {
+    font-family: var(--font-mono);
     font-size: 9.5px;
-    font-weight: 700;
-    padding: 2px 4.5px;
+    padding: 2px 5px;
     border-radius: 4px;
-    background: rgba(0,0,0,0.45);
-    color: var(--paper-dim);
+    background: var(--color-parchment);
+    color: var(--color-smoke);
+    border: 1px solid var(--color-ash);
   }
-  .chip .pill-barkot {
-    background: rgba(229, 169, 60, 0.25);
-    color: var(--gold-bright);
-    font-weight: 800;
+  .meta-tag-barcode {
+    color: var(--color-ink);
+    font-weight: 500;
   }
-  .chip .pill-grade {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-  .chip .status-badge {
-    margin-top: 3px;
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+  .bal-card .card-status-label {
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 8.5px;
     text-transform: uppercase;
-    color: var(--paper-sub);
+    color: var(--color-silver);
   }
 
-  /* Status Done */
-  .chip.done {
-    background: linear-gradient(145deg, #14421d 0%, var(--done-card) 100%);
-    border-color: var(--done-bright);
-    box-shadow: 0 0 12px rgba(76, 175, 80, 0.35);
+  /* DONE STATE (EDITORIAL TONAL SHIFT TO MOSS OLIVE) */
+  .bal-card.done {
+    background: var(--color-olive-charcoal);
+    border-color: var(--color-olive-charcoal);
+    color: var(--color-parchment);
   }
-  .chip.done .no-gud { color: #e8f5e9; }
-  .chip.done .status-badge { color: #a5d6a7; }
-  .chip.done .pill { background: rgba(0,0,0,0.3); color: #e8f5e9; }
-  .chip.done .stamp-check {
+  .bal-card.done .card-no {
+    color: var(--color-bone);
+  }
+  .bal-card.done .meta-tag {
+    background: rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--color-parchment);
+  }
+  .bal-card.done .card-status-label {
+    color: var(--color-smoke);
+  }
+  .bal-card.done .check-mark {
     position: absolute;
-    top: 3px;
-    right: 5px;
-    font-size: 15px;
-    color: #4caf50;
-    font-weight: 900;
-    line-height: 1;
-    animation: stampBounce 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    top: 4px;
+    right: 7px;
+    font-size: 14px;
+    color: var(--color-bone);
   }
 
-  @keyframes stampBounce {
-    0% { transform: scale(0.3); opacity: 0; }
-    80% { transform: scale(1.3); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+  .bal-card.highlight {
+    border: 1.5px solid var(--color-saffron-dot);
   }
 
-  .chip.highlight {
-    outline: 3.5px solid var(--gold-bright);
-    animation: pulse 1s infinite alternate;
+  /* Bottom Management Panel (Obsidian Card Style) */
+  .panel-obsidian {
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    border-radius: var(--radius-cards);
+    padding: 20px 18px;
+    margin-top: 24px;
   }
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.04); }
-  }
-
-  /* Management Panel */
-  .panel-card {
-    background: var(--wood-card);
-    border: 1px solid var(--wood-border);
-    border-radius: 14px;
-    padding: 12px;
-    margin-top: 16px;
-  }
-  .panel-card h3 {
-    margin: 0 0 6px;
-    font-size: 11.5px;
+  .panel-obsidian h3 {
+    font-family: var(--font-eloquia);
+    font-size: 14px;
+    font-weight: 300;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold);
+    letter-spacing: 0.05em;
+    color: var(--color-parchment);
+    margin: 0 0 8px;
   }
-  .panel-actions {
+  .obsidian-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 8px;
+    gap: 8px;
+    margin-top: 12px;
   }
-
-  button.btn {
-    font-family: var(--sans);
-    font-weight: 700;
-    border: none;
-    border-radius: 9px;
-    padding: 8px 12px;
-    font-size: 12.5px;
+  .ghost-btn-dark {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--color-bone);
+    border-radius: var(--radius-buttons);
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
     cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    transition: transform 0.08s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+    transition: background 0.15s ease;
   }
-  button.btn:active { transform: scale(0.94); }
-  .btn-gold { background: var(--gold); color: #120a05; font-weight: 800; }
-  .btn-outline { background: transparent; border: 1.5px solid var(--wood-border); color: var(--paper); }
-  .btn-danger-outline { background: transparent; border: 1.5px solid var(--danger-border); color: #ef5350; }
+  .ghost-btn-dark:active {
+    background: rgba(255,255,255,0.1);
+  }
 
   /* Modals */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.6);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 100;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: calc(var(--sat) + 16px) calc(var(--sar) + 16px) calc(var(--sab) + 16px) calc(var(--sal) + 16px);
+    padding: 16px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
   }
-  .modal-overlay.open { opacity: 1; pointer-events: auto; }
-  .modal-box {
-    background: var(--wood-card);
-    border: 2px solid var(--wood-border);
-    border-radius: 18px;
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-card {
+    background: var(--color-bone);
+    border-radius: var(--radius-cards);
     width: 100%;
     max-width: 440px;
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    padding: 24px 20px;
+    border: 1px solid var(--color-ash);
   }
-  .modal-box h3 { margin: 0 0 10px; color: var(--gold); font-size: 15px; }
-  .modal-box input[type=text], .modal-box input[type=password] {
+  .modal-title {
+    font-family: var(--font-eloquia);
+    font-size: 18px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: 0 0 12px;
+  }
+  .modal-input {
     width: 100%;
-    background: var(--wood-dark);
-    border: 1.5px solid var(--wood-border);
-    color: #fff;
-    border-radius: 10px;
-    padding: 9px 11px;
-    font-family: var(--mono);
+    background: var(--color-parchment);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-buttons);
+    padding: 10px 12px;
+    font-family: var(--font-mono);
     font-size: 13px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     outline: none;
-    -webkit-appearance: none;
-  }
-  #scannerVideo {
-    width: 100%;
-    max-height: 240px;
-    border-radius: 12px;
-    background: #000;
-    object-fit: cover;
-    border: 2px solid var(--gold);
   }
 
   /* Toast Notification */
@@ -669,199 +615,181 @@
     bottom: calc(var(--sab) + 20px);
     left: 50%;
     transform: translateX(-50%) translateY(40px);
-    background: var(--gold);
-    color: #120a05;
-    font-weight: 800;
-    font-size: 12.5px;
-    padding: 9px 18px;
-    border-radius: 30px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 8px 18px;
+    border-radius: var(--radius-pills);
     opacity: 0;
     pointer-events: none;
     transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 150;
-    text-align: center;
     white-space: nowrap;
+    border: 1px solid rgba(255,255,255,0.15);
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .toast.success { background: #4caf50; color: #fff; }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
-  .empty-msg {
+  .empty-state {
     text-align: center;
-    padding: 35px 10px;
-    font-family: var(--mono);
-    color: var(--paper-sub);
-    font-size: 12.5px;
+    padding: 40px 10px;
+    font-family: var(--font-mono);
+    color: var(--color-smoke);
+    font-size: 12px;
   }
 </style>
 </head>
 <body>
 
+<!-- Announcement Strip -->
+<div class="announcement-bar">
+  <div class="announcement-left">
+    <span class="saffron-dot"></span>
+    <span>Buku Grade Induk · Realtime Field Log</span>
+  </div>
+  <div class="cloud-status-indicator" id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:10px; color:var(--color-smoke);">
+    <span id="cloudStatusText">Offline</span>
+  </div>
+</div>
+
 <header>
-  <div class="header-top">
-    <div class="brand-title">
-      🌿 Cek Barkot
-      <span class="cloud-status offline" id="cloudStatusBadge" title="Status Koneksi Supabase">
-        <span class="dot"></span> <span id="cloudStatusText">Offline</span>
-      </span>
+  <div class="header-main">
+    <div>
+      <h1 class="display-title">Cek Barkot</h1>
+      <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
     </div>
-    <div class="hdr-controls">
-      <button class="icon-btn" id="soundBtn" onclick="toggleSound()" title="Bunyi Bip">🔊 Bip</button>
-      <button class="icon-btn" onclick="openConfigModal()" title="Pengaturan Database Supabase">⚙️ Setup</button>
+    <div class="header-actions">
+      <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">Bip</button>
+      <button class="ghost-btn" onclick="openConfigModal()">Setup</button>
     </div>
   </div>
 
-  <!-- Date Switcher Bar -->
-  <div class="date-bar">
-    <div class="date-selector-row">
-      <div style="display:flex; align-items:center; gap:5px;">
-        <span style="font-size:11.5px; color:var(--paper-sub);">📅 Tgl:</span>
-        <input type="date" id="datePicker" class="date-input" onchange="onDateChanged(this.value)">
-      </div>
-      <div style="font-size:11.5px; color:var(--gold); font-weight:700;" id="dateDisplayLabel"></div>
+  <!-- Date Selection & Quick Date Badges -->
+  <div class="date-section">
+    <div class="date-input-wrap">
+      <input type="date" id="datePicker" class="date-picker" onchange="onDateChanged(this.value)">
     </div>
-    <!-- Quick Date Switcher Chips -->
-    <div class="quick-dates" id="quickDatesContainer">
-      <span class="date-chip" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
-      <span class="date-chip" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
-      <span class="date-chip" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
-      <span class="date-chip active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
+    <div class="quick-dates-bar" id="quickDatesContainer">
+      <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
+      <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
+      <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
+      <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
     </div>
   </div>
 
-  <!-- Progress Bar -->
-  <div class="progress-section">
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressBar"></div>
+  <!-- Minimalist Progress -->
+  <div class="progress-container">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressBar"></div>
     </div>
-    <div class="progress-stats">
-      <span>Sudah: <b class="stat-done" id="countDone">0</b> / <span id="countTotal">0</span></span>
-      <span>Sisa: <b class="stat-remain" id="countRemain">0</b></span>
-      <span class="stat-highlight" id="pctLabel">0%</span>
+    <div class="progress-label-row">
+      <span>SELESAI: <b id="countDone">0</b> / <span id="countTotal">0</span></span>
+      <span>SISA: <b id="countRemain">0</b></span>
+      <span id="pctLabel">0%</span>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- DUA KOLOM PENCARIAN CEPAT: NO GUD (DARI PEKERJA) & NO BARKOT -->
-  <div class="search-card-container">
-    <div class="search-card-title">
-      <span>⚡ Pencarian Cepat Lapangan</span>
-      <span style="font-size:10px; font-weight:normal; color:var(--paper-sub);">Ketik nomor langsung muncul</span>
-    </div>
-    <div class="search-inputs-grid">
-      <!-- Input No Gud dari Pekerja -->
-      <div class="input-field-wrap">
-        <label class="input-label-tag">🗣️ NO GUD (Pekerja):</label>
-        <div class="search-input-box">
-          <input type="text" id="searchNoGudInput" inputmode="numeric" pattern="[0-9]*" placeholder="Misal: 107" autocomplete="off" oninput="handleSearchInput('nogud')">
-          <button class="clear-btn" id="clearNoGudBtn" onclick="clearSearch('nogud')">✕</button>
+  <!-- EDITORIAL PANEL (OLIVE CHARCOAL FINDER) -->
+  <div class="editorial-panels">
+    <div class="panel-olive">
+      <p class="panel-eyebrow"><span class="saffron-dot"></span> PENCARIAN CEPAT LAPANGAN</p>
+      <h2 class="panel-headline">Siapkan Stiker Barkot</h2>
+      
+      <div class="search-inputs-dual">
+        <div>
+          <label class="input-label-editorial">No Gud (Pekerja):</label>
+          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleSearchInput('nogud')">
+        </div>
+        <div>
+          <label class="input-label-editorial">No Barkot (Stiker):</label>
+          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleSearchInput('barkot')">
         </div>
       </div>
-      <!-- Input No Barkot -->
-      <div class="input-field-wrap">
-        <label class="input-label-tag">🏷️ NO BARKOT:</label>
-        <div class="search-input-box">
-          <input type="text" id="searchBarkotInput" inputmode="numeric" pattern="[0-9]*" placeholder="Misal: 943605" autocomplete="off" oninput="handleSearchInput('barkot')">
-          <button class="clear-btn" id="clearBarkotBtn" onclick="clearSearch('barkot')">✕</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- Spotlight Hasil Pencarian Besar (Saat nomor ditemukan) -->
-    <div class="spotlight-card" id="spotlightCard">
-      <div class="spotlight-header">
-        <div class="spotlight-no">NO GUD: <b id="spotNoGudVal">107</b></div>
-        <span class="pill pill-grade" id="spotGradeVal">Grade 68</span>
+      <!-- Spotlight Inset Card -->
+      <div class="spotlight-inset" id="spotlightCard">
+        <div class="spotlight-top-row">
+          <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
+          <span id="spotGradeVal">GRADE 68</span>
+        </div>
+        <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
+        <div class="spotlight-meta-row">
+          <span id="spotKgVal">50 KG</span>
+          <span id="spotStatusVal">BELUM DIBARKOT</span>
+        </div>
+        <button class="ghost-btn-full" id="spotToggleBtn" onclick="toggleSpotlightBal()">
+          Tandai Sudah Ditempel
+        </button>
       </div>
-      <div class="spotlight-barkot-wrap">
-        <div class="barkot-label">BARKOT YANG HARUS DITEMPEL:</div>
-        <div class="barkot-value" id="spotBarkotVal">943605</div>
-      </div>
-      <div class="spotlight-details">
-        <span id="spotKgVal">⚖️ Berat: 50 kg</span>
-        <span id="spotStatusVal">⏳ Status: Belum Dibarkot</span>
-      </div>
-      <button class="btn-spotlight-toggle" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-        ✓ TANDAI SUDAH DITEMPEL BARKOT
-      </button>
     </div>
   </div>
 
-  <!-- Filter Tabs Bar -->
-  <div class="filter-tabs-bar">
-    <div class="filter-tabs">
-      <button class="tab-btn active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
-      <button class="tab-btn" onclick="setFilter('pending', this)" id="tabPending">⏳ Belum (0)</button>
-      <button class="tab-btn" onclick="setFilter('done', this)" id="tabDone">✓ Sudah (0)</button>
+  <!-- Filter Controls -->
+  <div class="filter-bar">
+    <div class="filter-pills">
+      <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
+      <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
+      <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
     </div>
-    <button class="btn-scan-small" onclick="startScanner()">📷 Scan</button>
+    <button class="ghost-btn" style="padding:4px 10px; font-size:11px;" onclick="startScanner()">Scan Kamera</button>
   </div>
 
-  <!-- Grid Bal Tembakau -->
-  <div class="grid-container" id="balGrid"></div>
-  <div class="empty-msg" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
+  <!-- Main Bal Exhibition Grid -->
+  <div class="bal-grid" id="balGrid"></div>
+  <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
 
-  <!-- Management Panel: Upload Excel & Sharing -->
-  <div class="panel-card">
-    <h3>📁 Upload Excel & Kelola Data</h3>
-    <p style="font-size:11.5px; color:var(--paper-sub); margin:0 0 8px;">
-      Pilih file <b>Excel (.xlsx)</b> Buku Grade Induk harian untuk tanggal baru atau lampau:
+  <!-- Management Panel (Obsidian Panel Style) -->
+  <div class="panel-obsidian">
+    <h3>Pengelolaan Berkas & Cloud Sync</h3>
+    <p style="font-size:12px; color:var(--color-smoke); margin:0 0 12px;">
+      Unggah berkas Excel harian untuk memuat nomor bal baru ke sistem dan database:
     </p>
-    <div class="panel-actions">
-      <label class="btn btn-gold" style="cursor:pointer;">
-        📥 Upload Excel (.xlsx)
+    <div class="obsidian-actions">
+      <label class="ghost-btn-dark" style="cursor:pointer;">
+        Upload Excel (.xlsx)
         <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
       </label>
-      <button class="btn btn-outline" onclick="syncAllLocalToCloud()">⚡ Upload Semua ke Cloud</button>
-      <button class="btn btn-outline" onclick="copyWaSummary()">📋 Salin Laporan WA</button>
-      <button class="btn btn-outline" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
+      <button class="ghost-btn-dark" onclick="syncAllLocalToCloud()">Upload Semua ke Cloud</button>
+      <button class="ghost-btn-dark" onclick="copyWaSummary()">Salin Rekap WA</button>
+      <button class="ghost-btn-dark" onclick="refreshCurrentDateData()">Muat Ulang</button>
     </div>
 
-    <details style="margin-top:10px; font-size:11.5px; color:var(--paper-dim);">
-      <summary style="cursor:pointer; font-weight:700; color:var(--gold);">➕ Tambah / Tempel Manual</summary>
-      <textarea id="manualInput" style="width:100%; height:55px; margin-top:6px; background:var(--wood-dark); border:1.5px solid var(--wood-border); color:#fff; border-radius:8px; padding:6px; font-family:var(--mono); font-size:12px;" placeholder="Format: 107, 943605, 50 atau cukup nomor saja: 107 112 123"></textarea>
-      <div style="margin-top:5px;">
-        <button class="btn btn-gold" style="padding:5px 10px; font-size:11.5px;" onclick="addManualEntries()">+ Tambah ke Tanggal Ini</button>
-      </div>
-    </details>
-
-    <div class="panel-actions" style="border-top:1px solid var(--wood-border); padding-top:8px; margin-top:10px;">
-      <button class="btn btn-outline" onclick="resetChecks()">🔄 Reset Centang Hari Ini</button>
-      <button class="btn btn-danger-outline" onclick="clearCurrentDateData()">🗑️ Hapus Data Tanggal Ini</button>
+    <div style="margin-top:16px; pt-16; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:8px;">
+      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px;" onclick="resetChecks()">Reset Centang Hari Ini</button>
+      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px; border-color:var(--color-danger);" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
     </div>
   </div>
 </main>
 
 <!-- Modal Setup Supabase -->
 <div class="modal-overlay" id="configModal">
-  <div class="modal-box">
-    <h3>⚙️ Pengaturan Database Supabase</h3>
-    <p style="font-size:12px; color:var(--paper-sub); margin:0 0 10px;">
-      Masukkan Project URL & Anon Key dari dashboard Supabase Anda (<b>Settings -> API</b>):
-    </p>
-    <label style="font-size:11px; color:var(--gold); font-weight:700;">SUPABASE PROJECT URL:</label>
-    <input type="text" id="cfgUrl" placeholder="https://xyzcompany.supabase.co" autocapitalize="none" autocomplete="off" autocorrect="off">
+  <div class="modal-card">
+    <h3 class="modal-title">Konfigurasi Supabase</h3>
+    <label style="font-family:var(--font-mono); font-size:10px; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Project URL:</label>
+    <input type="text" id="cfgUrl" class="modal-input" placeholder="https://xyz.supabase.co" autocapitalize="none" autocomplete="off">
 
-    <label style="font-size:11px; color:var(--gold); font-weight:700;">SUPABASE ANON KEY:</label>
-    <input type="password" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." autocapitalize="none" autocomplete="off" autocorrect="off">
+    <label style="font-family:var(--font-mono); font-size:10px; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Anon Public Key:</label>
+    <input type="password" id="cfgKey" class="modal-input" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
 
-    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px;">
-      <button class="btn btn-outline" onclick="closeConfigModal()">Tutup</button>
-      <button class="btn btn-gold" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button class="ghost-btn" onclick="closeConfigModal()">Batal</button>
+      <button class="ghost-btn" style="background:var(--color-obsidian); color:var(--color-bone);" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
     </div>
   </div>
 </div>
 
 <!-- Modal Camera Barcode Scanner -->
 <div class="modal-overlay" id="scannerModal">
-  <div class="modal-box" style="text-align:center;">
-    <h3>📷 Arahkan Kamera ke Barcode</h3>
-    <video id="scannerVideo" playsinline autoplay muted></video>
-    <p id="scannerStatus" style="font-size:12px; color:var(--paper-sub); margin:8px 0;">Mencari barcode...</p>
-    <div style="margin-top:12px;">
-      <button class="btn btn-outline" onclick="stopScanner()">Tutup Scanner</button>
-    </div>
+  <div class="modal-card" style="text-align:center;">
+    <h3 class="modal-title">Pindai Barcode</h3>
+    <video id="scannerVideo" playsinline autoplay muted style="width:100%; border-radius:8px; background:#000;"></video>
+    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:11px; color:var(--color-smoke); margin:8px 0;">Mencari barcode...</p>
+    <button class="ghost-btn" onclick="stopScanner()">Tutup</button>
   </div>
 </div>
 
@@ -869,7 +797,7 @@
 
 <script>
 // ==========================================
-// DATASET BAWAAN DARI FILE EXCEL (23, 24, 26, 27 AGUSTUS)
+// DATASET BAWAAN EXCEL
 // ==========================================
 const SEED_DATA = {
   "2026-08-27": [
@@ -2072,7 +2000,7 @@ const SEED_DATA = {
   ]
 };
 
-let currentDate = '2026-08-27'; // Default tanggal data terbaru
+let currentDate = '2026-08-27';
 let state = {
   list: [],
   doneMap: {}
@@ -2101,19 +2029,18 @@ function initSupabase() {
       updateCloudBadge(false, 'Config Error');
     }
   } else {
-    updateCloudBadge(false, 'Lokal (Klik Setup)');
+    updateCloudBadge(false, 'Lokal (Setup)');
   }
 }
 
 function updateCloudBadge(isConnected, text) {
-  const badge = document.getElementById('cloudStatusBadge');
   const txt = document.getElementById('cloudStatusText');
   if (isConnected) {
-    badge.className = 'cloud-status connected';
     txt.textContent = text || 'Live Sync';
+    txt.style.color = '#2e7d32';
   } else {
-    badge.className = 'cloud-status offline';
     txt.textContent = text || 'Offline';
+    txt.style.color = 'var(--color-smoke)';
   }
 }
 
@@ -2150,7 +2077,7 @@ function handleRealtimeUpdate(payload) {
 }
 
 // ==========================================
-// iOS SAFARI AUDIO & HAPTIC FEEDBACK
+// AUDIO FEEDBACK
 // ==========================================
 function initAudio() {
   if (!audioCtx) {
@@ -2177,20 +2104,18 @@ function playBeep(isSuccess = true) {
     gain.connect(audioCtx.destination);
     
     if (isSuccess) {
-      // Melodic iOS success tone
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, now); // A5
-      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08); // E6
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc.start(now);
-      osc.stop(now + 0.18);
+      osc.stop(now + 0.16);
     } else {
-      // iOS Taptic-like subtle tap click
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(320, now);
       osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
-      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.setValueAtTime(0.15, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc.start(now);
       osc.stop(now + 0.07);
@@ -2201,20 +2126,20 @@ function playBeep(isSuccess = true) {
 function toggleSound() {
   initAudio();
   soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Bip' : '🔇 Bip';
+  document.getElementById('soundBtn').textContent = soundEnabled ? 'Bip: ON' : 'Bip: OFF';
   showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
 }
 
-function showToast(msg, isSuccess = false) {
+function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = 'toast show' + (isSuccess ? ' success' : '');
+  t.className = 'toast show';
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(() => t.className = 'toast', 1600);
 }
 
 // ==========================================
-// TANGGAL & STATE MANAGEMENT (INSTANT ZERO-LAG CACHE-FIRST)
+// TANGGAL & STATE (INSTANT 0ms DISPLAY)
 // ==========================================
 function formatDateIndo(dateStr) {
   if (!dateStr) return '';
@@ -2230,7 +2155,7 @@ function onDateChanged(newDate) {
   document.getElementById('datePicker').value = currentDate;
   document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 
-  document.querySelectorAll('.date-chip').forEach(chip => {
+  document.querySelectorAll('.date-pill').forEach(chip => {
     const chipText = chip.textContent;
     const isCurrent = (currentDate === '2026-08-23' && chipText.includes('23')) ||
                       (currentDate === '2026-08-24' && chipText.includes('24')) ||
@@ -2249,9 +2174,7 @@ function saveLocalState() {
   } catch(e) {}
 }
 
-// FUNGSI LOAD DATA: INSTANT 0ms DISPLAY DARI CACHE LALU SYNC CLOUD DI BACKGROUND
 async function loadDataForCurrentDate() {
-  // 1. CEK LOCALSTORAGE (INSTANT 0ms)
   let found = false;
   const raw = localStorage.getItem('barkot_local:' + currentDate);
   if (raw) {
@@ -2265,7 +2188,6 @@ async function loadDataForCurrentDate() {
     } catch(e) {}
   }
 
-  // 2. JIKA BELUM ADA DI LOCALSTORAGE, AMBIL DARI SEED_DATA EXCEL (INSTANT 0ms)
   if (!found && SEED_DATA[currentDate]) {
     state = {
       list: SEED_DATA[currentDate].map(x => ({ ...x, is_done: false })),
@@ -2279,10 +2201,8 @@ async function loadDataForCurrentDate() {
     state = { list: [], doneMap: {} };
   }
 
-  // ⚡ TAMPILKAN KE LAYAR LANGSUNG DETIK ITU JUGA TANPA MENUNGGU KONEKSI
   render();
 
-  // 3. JIKA SUPABASE TERHUBUNG, SYNC DATA TERBARU DI BACKGROUND (TIDAK MEMBLOKIR LAYAR)
   if (supabaseClient) {
     try {
       const { data, error } = await supabaseClient
@@ -2301,30 +2221,23 @@ async function loadDataForCurrentDate() {
         render();
       }
     } catch(err) {
-      console.warn('Supabase fetch failed, tetap menggunakan data lokal', err);
+      console.warn('Supabase fetch background err', err);
     }
   }
 }
 
 // ==========================================
-// PENCARIAN CERDAS NO GUD & NO BARKOT (FIELD WORKFLOW)
+// PENCARIAN & SPOTLIGHT
 // ==========================================
 function handleSearchInput(type) {
   const nogudInput = document.getElementById('searchNoGudInput');
   const barkotInput = document.getElementById('searchBarkotInput');
-  const clearNoGud = document.getElementById('clearNoGudBtn');
-  const clearBarkot = document.getElementById('clearBarkotBtn');
-
-  clearNoGud.style.display = nogudInput.value ? 'flex' : 'none';
-  clearBarkot.style.display = barkotInput.value ? 'flex' : 'none';
-
   let match = null;
 
   if (type === 'nogud') {
     const val = nogudInput.value.trim();
     if (val) {
       barkotInput.value = '';
-      clearBarkot.style.display = 'none';
       match = state.list.find(x => String(x.no_gud) === val) || 
               state.list.find(x => String(x.no_gud).startsWith(val));
     }
@@ -2332,7 +2245,6 @@ function handleSearchInput(type) {
     const val = barkotInput.value.trim();
     if (val) {
       nogudInput.value = '';
-      clearNoGud.style.display = 'none';
       match = state.list.find(x => x.barkot === val) || 
               state.list.find(x => x.barkot && x.barkot.includes(val));
     }
@@ -2347,25 +2259,13 @@ function handleSearchInput(type) {
   render();
 }
 
-function clearSearch(type) {
-  if (type === 'nogud') {
-    document.getElementById('searchNoGudInput').value = '';
-    document.getElementById('clearNoGudBtn').style.display = 'none';
-  } else {
-    document.getElementById('searchBarkotInput').value = '';
-    document.getElementById('clearBarkotBtn').style.display = 'none';
-  }
-  hideSpotlight();
-  render();
-}
-
 function showSpotlight(item) {
   activeSpotlightBal = item;
   const spotlight = document.getElementById('spotlightCard');
   document.getElementById('spotNoGudVal').textContent = item.no_gud;
-  document.getElementById('spotBarkotVal').textContent = item.barkot || '— (Belum Ada Barkot)';
-  document.getElementById('spotGradeVal').textContent = item.grade ? `Grade ${item.grade}` : 'Grade —';
-  document.getElementById('spotKgVal').textContent = item.kg ? `⚖️ Berat: ${item.kg} kg` : '⚖️ Berat: —';
+  document.getElementById('spotBarkotVal').textContent = item.barkot || '—';
+  document.getElementById('spotGradeVal').textContent = item.grade ? `GRADE ${item.grade}` : 'GRADE —';
+  document.getElementById('spotKgVal').textContent = item.kg ? `${item.kg} KG` : '— KG';
   
   updateSpotlightUI();
   spotlight.style.display = 'block';
@@ -2378,13 +2278,13 @@ function updateSpotlightUI() {
   const status = document.getElementById('spotStatusVal');
 
   if (isDone) {
-    status.innerHTML = '<span style="color:#81c784; font-weight:800;">✓ SUDAH DIBARKOT</span>';
-    btn.textContent = 'BATALKAN CENTANG';
-    btn.className = 'btn-spotlight-toggle is-done-btn';
+    status.textContent = 'SUDAH DIBARKOT';
+    btn.textContent = 'Batalkan Centang';
+    btn.className = 'ghost-btn-full btn-done';
   } else {
-    status.innerHTML = '<span style="color:#ffb74d;">⏳ Belum Dibarkot</span>';
-    btn.textContent = '✓ TANDAI SUDAH DITEMPEL BARKOT';
-    btn.className = 'btn-spotlight-toggle';
+    status.textContent = 'BELUM DIBARKOT';
+    btn.textContent = 'Tandai Sudah Ditempel';
+    btn.className = 'ghost-btn-full';
   }
 }
 
@@ -2400,19 +2300,18 @@ function toggleSpotlightBal() {
 }
 
 // ==========================================
-// TOGGLE PENCET NO GUD
+// TOGGLE BAL
 // ==========================================
 async function toggleBal(no_gud) {
   initAudio();
   const isCurrentlyDone = Boolean(state.doneMap[no_gud]);
   const newStatus = !isCurrentlyDone;
 
-  // Update State Lokal
   if (newStatus) {
     state.doneMap[no_gud] = true;
     playBeep(true);
     if (navigator.vibrate) navigator.vibrate(30);
-    showToast(`✓ No Gud ${no_gud} SUDAH DIBARKOT`, true);
+    showToast(`No Gud ${no_gud} ditandai selesai`);
   } else {
     delete state.doneMap[no_gud];
     playBeep(false);
@@ -2425,7 +2324,6 @@ async function toggleBal(no_gud) {
   render();
   updateSpotlightUI();
 
-  // Sinkronkan ke Supabase jika terhubung
   if (supabaseClient) {
     try {
       await supabaseClient
@@ -2440,17 +2338,17 @@ async function toggleBal(no_gud) {
           done_at: newStatus ? new Date().toISOString() : null
         }, { onConflict: 'tanggal,no_gud' });
     } catch(err) {
-      console.error('Gagal update ke Supabase', err);
+      console.error('Supabase update err', err);
     }
   }
 }
 
 // ==========================================
-// RENDER TAMPILAN
+// RENDER EXHIBITION GRID
 // ==========================================
 function setFilter(type, elem) {
   currentFilter = type;
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
   if (elem) elem.classList.add('active');
   render();
 }
@@ -2468,19 +2366,16 @@ function render() {
   const remainCount = Math.max(0, total - doneCount);
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
-  // Counter
   document.getElementById('countDone').textContent = doneCount;
   document.getElementById('countTotal').textContent = total;
   document.getElementById('countRemain').textContent = remainCount;
   document.getElementById('pctLabel').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
 
-  // Tab label
   document.getElementById('tabAll').textContent = `Semua (${total})`;
-  document.getElementById('tabPending').textContent = `⏳ Belum (${remainCount})`;
-  document.getElementById('tabDone').textContent = `✓ Sudah (${doneCount})`;
+  document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
+  document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
 
-  // Filter items
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
     if (currentFilter === 'pending' && isDone) return false;
@@ -2498,8 +2393,8 @@ function render() {
   if (filtered.length === 0) {
     emptyMsg.style.display = 'block';
     emptyMsg.textContent = total === 0 ? 
-      `Belum ada data bal untuk tanggal ${currentDate}. Silakan upload file Excel.` : 
-      'Tidak ada data bal yang cocok dengan filter / pencarian.';
+      `Belum ada data bal untuk tanggal ${currentDate}.` : 
+      'Tidak ada data bal yang cocok dengan kriteria pencarian.';
   } else {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
@@ -2507,24 +2402,24 @@ function render() {
       const isSearchMatch = (nogudQ && String(item.no_gud) === nogudQ) || 
                             (barkotQ && item.barkot === barkotQ);
 
-      const chip = document.createElement('div');
-      chip.className = 'chip' + (isDone ? ' done' : '') + (isSearchMatch ? ' highlight' : '');
+      const card = document.createElement('div');
+      card.className = 'bal-card' + (isDone ? ' done' : '') + (isSearchMatch ? ' highlight' : '');
 
-      const barkotHtml = item.barkot ? `<span class="pill pill-barkot">🏷️ ${item.barkot}</span>` : '';
-      const gradeHtml = item.grade ? `<span class="pill pill-grade">Gr: ${item.grade}</span>` : '';
-      const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="pill">${item.kg} kg</span>` : '';
+      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '';
+      const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
+      const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
 
-      chip.innerHTML = `
-        ${isDone ? '<div class="stamp-check">✓</div>' : ''}
-        <div class="no-gud">${item.no_gud}</div>
-        <div class="sub-info">${barkotHtml}${gradeHtml}${kgHtml}</div>
-        <div class="status-badge">${isDone ? 'SUDAH DIBARKOT' : 'NO GUD'}</div>
+      card.innerHTML = `
+        ${isDone ? '<span class="check-mark">✓</span>' : ''}
+        <div class="card-no">${item.no_gud}</div>
+        <div class="card-meta">${barkotHtml}${gradeHtml}${kgHtml}</div>
+        <div class="card-status-label">${isDone ? 'SELESAI' : 'NO GUD'}</div>
       `;
-      chip.onclick = () => {
+      card.onclick = () => {
         showSpotlight(item);
         toggleBal(item.no_gud);
       };
-      grid.appendChild(chip);
+      grid.appendChild(card);
     }
   }
 }
@@ -2613,7 +2508,6 @@ function handleExcelUpload(event) {
         document.getElementById('datePicker').value = currentDate;
         document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 
-        // Simpan langsung ke lokal
         state = {
           list: parsedItems.sort((a,b) => a.no_gud - b.no_gud),
           doneMap: {}
@@ -2630,11 +2524,11 @@ function handleExcelUpload(event) {
           if (error) console.error('Supabase bulk upload err', error);
         }
 
-        showToast(`Berhasil memuat ${parsedItems.length} bal tembakau!`, true);
+        showToast(`Berhasil memuat ${parsedItems.length} bal tembakau!`);
       }
     } catch(err) {
       console.error(err);
-      showToast('Gagal memproses file Excel. Pastikan format kolom benar.');
+      showToast('Gagal memproses file Excel.');
     }
   };
   reader.readAsArrayBuffer(file);
@@ -2643,10 +2537,10 @@ function handleExcelUpload(event) {
 // Sync All Local to Cloud
 async function syncAllLocalToCloud() {
   if (!supabaseClient) {
-    showToast('Hubungkan Supabase dulu lewat menu ⚙️ Setup');
+    showToast('Hubungkan Supabase dulu lewat tombol Setup');
     return;
   }
-  showToast('Mengunggah seluruh tanggal Excel ke Supabase...');
+  showToast('Mengunggah data ke Supabase...');
   try {
     const allRows = [];
     for (const tgl of Object.keys(SEED_DATA)) {
@@ -2666,52 +2560,11 @@ async function syncAllLocalToCloud() {
       .upsert(allRows, { onConflict: 'tanggal,no_gud' });
 
     if (error) throw error;
-    showToast(`Berhasil mengunggah ${allRows.length} bal ke Cloud!`, true);
+    showToast(`Berhasil mengunggah ${allRows.length} bal ke Cloud!`);
     await loadDataForCurrentDate();
   } catch(err) {
     console.error(err);
-    showToast('Gagal sinkronisasi ke Cloud. Cek konfigurasi.');
-  }
-}
-
-// Tambah Manual
-async function addManualEntries() {
-  const text = document.getElementById('manualInput').value.trim();
-  if (!text) return;
-  const lines = text.split(/[\n;]+/);
-  const newItems = [];
-
-  for (const line of lines) {
-    const parts = line.split(/[,\t]+|\s+/).map(s => s.trim()).filter(Boolean);
-    if (parts.length > 0 && /^\d+$/.test(parts[0])) {
-      const no_gud = parseInt(parts[0], 10);
-      const barkot = parts[1] || '';
-      const kg = parts[2] ? parseFloat(parts[2]) : null;
-      newItems.push({
-        tanggal: currentDate,
-        no_gud: no_gud,
-        grade: '',
-        barkot: barkot,
-        kg: kg,
-        is_done: false
-      });
-    }
-  }
-
-  if (newItems.length > 0) {
-    newItems.forEach(item => {
-      const existing = state.list.find(x => x.no_gud === item.no_gud);
-      if (!existing) state.list.push(item);
-    });
-    state.list.sort((a,b) => a.no_gud - b.no_gud);
-    saveLocalState();
-    render();
-
-    if (supabaseClient) {
-      await supabaseClient.from('barkot_data').upsert(newItems, { onConflict: 'tanggal,no_gud' });
-    }
-    document.getElementById('manualInput').value = '';
-    showToast(`+${newItems.length} bal ditambahkan`, true);
+    showToast('Gagal sinkronisasi ke Cloud.');
   }
 }
 
@@ -2733,7 +2586,7 @@ ${remainNos.length > 0 ? `*Sisa No Gud Belum Dibarkot:* \n${remainNos.join(', ')
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      showToast('Laporan WA disalin ke Clipboard! Siap dipaste', true);
+      showToast('Laporan WA disalin ke Clipboard!');
     });
   } else {
     prompt('Salin teks laporan di bawah ini:', text);
@@ -2777,7 +2630,7 @@ function refreshCurrentDateData() {
 }
 
 // ==========================================
-// PENGATURAN SUPABASE MODAL
+// MODAL SETUP
 // ==========================================
 function openConfigModal() {
   document.getElementById('cfgUrl').value = localStorage.getItem('supabase_url') || '';
@@ -2799,7 +2652,7 @@ function saveSupabaseConfig() {
     closeConfigModal();
     initSupabase();
     loadDataForCurrentDate();
-    showToast('Supabase terhubung!', true);
+    showToast('Supabase terhubung!');
   } else {
     localStorage.removeItem('supabase_url');
     localStorage.removeItem('supabase_anon_key');
@@ -2856,7 +2709,7 @@ async function startScanner() {
       }, 400);
     }
   } catch(err) {
-    status.textContent = 'Gagal membuka kamera (pastikan izin kamera diaktifkan).';
+    status.textContent = 'Gagal membuka kamera.';
   }
 }
 
@@ -2870,9 +2723,7 @@ function stopScanner() {
   }
 }
 
-// ==========================================
-// STARTUP: INSTANT 0ms DISPLAY
-// ==========================================
+// Inisialisasi awal
 document.getElementById('datePicker').value = currentDate;
 document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 initSupabase();
