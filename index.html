@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#160e08">
+<title>Cek Barkot Tembakau — Cloud & Realtime</title>
+
+<!-- Library SheetJS untuk baca Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- Library Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root{
+    --wood-dark: #140d07;
+    --wood-mid: #25180e;
+    --wood-card: #332215;
+    --wood-border: #4a3421;
+    --paper: #f5eedf;
+    --paper-dim: #e4d7be;
+    --paper-sub: #baa586;
+    --gold: #e5a93c;
+    --gold-bright: #ffc453;
+    --done-bg: #1c5229;
+    --done-border: #388e3c;
+    --done-bright: #4caf50;
+    --danger: #c62828;
+    --danger-border: #ef5350;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--wood-dark);
+    color: var(--paper);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* Header & Navigation */
+  header {
+    background: linear-gradient(180deg, #100904 0%, var(--wood-mid) 100%);
+    border-bottom: 2px solid var(--wood-border);
+    padding: 12px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cloud-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--wood-border);
+  }
+  .cloud-status.connected { color: #81c784; border-color: #388e3c; }
+  .cloud-status.offline { color: #ffb74d; border-color: #f57c00; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  .hdr-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .icon-btn {
+    background: var(--wood-card);
+    border: 1px solid var(--wood-border);
+    color: var(--paper);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .icon-btn:active { transform: scale(0.94); }
+
+  /* Date Switcher Bar */
+  .date-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--wood-border);
+    border-radius: 8px;
+    padding: 6px 10px;
+  }
+  .date-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .date-input {
+    background: var(--wood-card);
+    border: 1px solid var(--wood-border);
+    color: var(--gold-bright);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Progress Bar */
+  .progress-section {
+    margin-top: 8px;
+  }
+  .progress-bar-bg {
+    height: 9px;
+    background: #0b0704;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--wood-border);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2e7d32, #4caf50);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+    font-size: 11px;
+    font-family: var(--mono);
+  }
+  .stat-highlight { font-weight: 800; color: var(--gold-bright); }
+  .stat-done { color: #81c784; font-weight: 800; }
+  .stat-remain { color: #ffb74d; font-weight: 700; }
+
+  /* Main Area */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 10px 12px;
+  }
+
+  /* Sticky Search & Tabs */
+  .sticky-tools {
+    position: sticky;
+    top: 154px;
+    z-index: 35;
+    background: var(--wood-dark);
+    padding: 6px 0;
+    margin-bottom: 10px;
+  }
+  .search-box {
+    display: flex;
+    gap: 6px;
+  }
+  .search-box input {
+    flex: 1;
+    background: var(--wood-card);
+    border: 1.5px solid var(--wood-border);
+    color: #fff;
+    font-size: 14px;
+    font-family: var(--mono);
+    padding: 9px 12px;
+    border-radius: 10px;
+    outline: none;
+  }
+  .search-box input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(229, 169, 60, 0.2);
+  }
+  .btn-scan {
+    background: linear-gradient(135deg, var(--gold), #c98a3d);
+    color: #140d07;
+    border: none;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 0 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Filter Tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+  }
+  .tab-btn {
+    flex: 1;
+    text-align: center;
+    background: var(--wood-card);
+    border: 1px solid var(--wood-border);
+    color: var(--paper-sub);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 7px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: var(--paper);
+    color: var(--wood-dark);
+    border-color: var(--paper);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  /* Grid Bal Tembakau */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(102px, 1fr));
+    gap: 9px;
+  }
+  @media (min-width: 480px) {
+    .grid-container {
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 10px;
+    }
+  }
+
+  /* Chip No Gud */
+  .chip {
+    background: var(--wood-card);
+    border: 2px solid var(--wood-border);
+    border-radius: 12px;
+    padding: 10px 4px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: transform 0.08s ease, background 0.18s, border-color 0.18s;
+    min-height: 94px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  }
+  .chip:active { transform: scale(0.93); }
+
+  .chip .no-gud {
+    font-family: var(--mono);
+    font-size: 23px;
+    font-weight: 900;
+    line-height: 1;
+    color: #ffffff;
+  }
+  .chip .sub-info {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+  }
+  .chip .pill {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.45);
+    color: var(--paper-dim);
+  }
+  .chip .pill-grade {
+    background: rgba(229, 169, 60, 0.2);
+    color: var(--gold-bright);
+  }
+  .chip .status-badge {
+    margin-top: 4px;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--paper-sub);
+  }
+
+  /* Status Done */
+  .chip.done {
+    background: linear-gradient(145deg, #184824 0%, var(--done-bg) 100%);
+    border-color: var(--done-bright);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.35);
+  }
+  .chip.done .no-gud { color: #e8f5e9; }
+  .chip.done .status-badge { color: #a5d6a7; }
+  .chip.done .pill { background: rgba(0,0,0,0.3); color: #e8f5e9; }
+  .chip.done .stamp-check {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    font-size: 16px;
+    color: #4caf50;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .chip.highlight {
+    outline: 3px solid var(--gold-bright);
+    animation: pulse 1s infinite alternate;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+  }
+
+  /* Management Panel */
+  .panel-card {
+    background: var(--wood-card);
+    border: 1px solid var(--wood-border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-top: 16px;
+  }
+  .panel-card h3 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+  }
+  .panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  button.btn {
+    font-family: var(--sans);
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: transform 0.05s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  button.btn:active { transform: scale(0.95); }
+  .btn-gold { background: var(--gold); color: #140d07; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--wood-border); color: var(--paper); }
+  .btn-danger-outline { background: transparent; border: 1.5px solid var(--danger-border); color: #ef5350; }
+
+  /* Modals */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: var(--wood-card);
+    border: 2px solid var(--wood-border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 440px;
+    padding: 16px;
+  }
+  .modal-box h3 { margin: 0 0 10px; color: var(--gold); }
+  .modal-box input[type=text], .modal-box input[type=password] {
+    width: 100%;
+    background: var(--wood-dark);
+    border: 1px solid var(--wood-border);
+    color: #fff;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    margin-bottom: 10px;
+    outline: none;
+  }
+  #scannerVideo {
+    width: 100%;
+    max-height: 250px;
+    border-radius: 10px;
+    background: #000;
+    object-fit: cover;
+    border: 2px solid var(--gold);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: var(--gold);
+    color: #140d07;
+    font-weight: 800;
+    font-size: 12.5px;
+    padding: 9px 18px;
+    border-radius: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 150;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #4caf50; color: #fff; }
+
+  .empty-msg {
+    text-align: center;
+    padding: 40px 10px;
+    font-family: var(--mono);
+    color: var(--paper-sub);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand-title">
+      🌿 Cek Barkot
+      <span class="cloud-status offline" id="cloudStatusBadge" title="Status Koneksi Supabase">
+        <span class="dot"></span> <span id="cloudStatusText">Offline</span>
+      </span>
+    </div>
+    <div class="hdr-controls">
+      <button class="icon-btn" id="soundBtn" onclick="toggleSound()" title="Bunyi Bip">🔊 Bip</button>
+      <button class="icon-btn" onclick="openConfigModal()" title="Pengaturan Database Supabase">⚙️ Setup</button>
+    </div>
+  </div>
+
+  <!-- Date Switcher -->
+  <div class="date-bar">
+    <div class="date-selector">
+      <span style="font-size:12px; color:var(--paper-sub);">📅 Tanggal:</span>
+      <input type="date" id="datePicker" class="date-input" onchange="onDateChanged(this.value)">
+    </div>
+    <div style="font-size:11px; color:var(--gold);" id="dateDisplayLabel"></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-section">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-stats">
+      <span>Sudah: <b class="stat-done" id="countDone">0</b> / <span id="countTotal">0</span></span>
+      <span>Sisa: <b class="stat-remain" id="countRemain">0</b></span>
+      <span class="stat-highlight" id="pctLabel">0%</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Search & Filter Sticky Bar -->
+  <div class="sticky-tools">
+    <div class="search-box">
+      <input type="text" id="searchInput" inputmode="numeric" placeholder="Ketik No Gud / Barkot (misal: 107)..." autocomplete="off">
+      <button class="btn-scan" onclick="startScanner()">📷 Scan</button>
+    </div>
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
+      <button class="tab-btn" onclick="setFilter('pending', this)" id="tabPending">⏳ Belum (0)</button>
+      <button class="tab-btn" onclick="setFilter('done', this)" id="tabDone">✓ Sudah (0)</button>
+    </div>
+  </div>
+
+  <!-- Grid Bal Tembakau -->
+  <div class="grid-container" id="balGrid"></div>
+  <div class="empty-msg" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
+
+  <!-- Management Panel: Upload Excel & Sharing -->
+  <div class="panel-card">
+    <h3>📁 Upload Excel & Kelola Data</h3>
+    <p style="font-size:12px; color:var(--paper-sub); margin:0 0 10px;">
+      Pilih file <b>Excel (.xlsx)</b> Buku Grade Induk. Sistem otomatis mendeteksi tanggal & mengunggah ke Supabase:
+    </p>
+    <div class="panel-actions">
+      <label class="btn btn-gold" style="cursor:pointer;">
+        📥 Upload Excel (.xlsx)
+        <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
+      </label>
+      <button class="btn btn-outline" onclick="copyWaSummary()">📋 Salin Laporan WA</button>
+      <button class="btn btn-outline" onclick="refreshCurrentDateData()">🔄 Muat Ulang Cloud</button>
+    </div>
+
+    <details style="margin-top:12px; font-size:12px; color:var(--paper-dim);">
+      <summary style="cursor:pointer; font-weight:700; color:var(--gold);">➕ Tambah / Tempel Manual</summary>
+      <textarea id="manualInput" style="width:100%; height:60px; margin-top:8px; background:var(--wood-dark); border:1px solid var(--wood-border); color:#fff; border-radius:8px; padding:6px; font-family:var(--mono);" placeholder="Format: 107, 943605, 50 atau cukup nomor saja: 107 112 123"></textarea>
+      <div style="margin-top:6px;">
+        <button class="btn btn-gold" style="padding:5px 10px; font-size:11.5px;" onclick="addManualEntries()">+ Tambah ke Tanggal Ini</button>
+      </div>
+    </details>
+
+    <div class="panel-actions" style="border-top:1px solid var(--wood-border); padding-top:10px; margin-top:12px;">
+      <button class="btn btn-outline" onclick="resetChecks()">🔄 Reset Centang Hari Ini</button>
+      <button class="btn btn-danger-outline" onclick="clearCurrentDateData()">🗑️ Hapus Data Tanggal Ini</button>
+    </div>
+  </div>
+</main>
+
+<!-- Modal Setup Supabase -->
+<div class="modal-overlay" id="configModal">
+  <div class="modal-box">
+    <h3>⚙️ Pengaturan Database Supabase</h3>
+    <p style="font-size:12px; color:var(--paper-sub); margin:0 0 10px;">
+      Masukkan Project URL & Anon Key dari dashboard Supabase Anda (<b>Settings -> API</b>):
+    </p>
+    <label style="font-size:11px; color:var(--gold); font-weight:700;">SUPABASE PROJECT URL:</label>
+    <input type="text" id="cfgUrl" placeholder="https://xyzcompany.supabase.co">
+
+    <label style="font-size:11px; color:var(--gold); font-weight:700;">SUPABASE ANON KEY:</label>
+    <input type="password" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px;">
+      <button class="btn btn-outline" onclick="closeConfigModal()">Tutup</button>
+      <button class="btn btn-gold" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Camera Barcode Scanner -->
+<div class="modal-overlay" id="scannerModal">
+  <div class="modal-box" style="text-align:center;">
+    <h3>📷 Arahkan Kamera ke Barcode</h3>
+    <video id="scannerVideo" playsinline></video>
+    <p id="scannerStatus" style="font-size:12px; color:var(--paper-sub); margin:8px 0;">Mencari barcode...</p>
+    <div style="margin-top:12px;">
+      <button class="btn btn-outline" onclick="stopScanner()">Tutup Scanner</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==========================================
+// INISIALISASI VARIABEL & STATE
+// ==========================================
+let currentDate = '2026-08-27'; // Default tanggal data awal
+let state = {
+  list: [], // Array objek: { id, tanggal, no_gud, grade, barkot, kg, is_done }
+  doneMap: {} // no_gud -> boolean
+};
+let currentFilter = 'all';
+let soundEnabled = true;
+let audioCtx = null;
+let supabaseClient = null;
+let realtimeChannel = null;
+
+// Initial Dataset bawaan (27-08-2026) jika offline / awal
+const SEED_27_AUG = [
+  {"no_gud":4,"grade":"67","barkot":"943614","kg":38},
+  {"no_gud":19,"grade":"60","barkot":"943617","kg":41},
+  {"no_gud":23,"grade":"60","barkot":"32958","kg":43},
+  {"no_gud":32,"grade":"68","barkot":"943608","kg":48},
+  {"no_gud":36,"grade":"63","barkot":"32956","kg":49},
+  {"no_gud":37,"grade":"62","barkot":"32954","kg":49},
+  {"no_gud":99,"grade":"62","barkot":"30379","kg":47},
+  {"no_gud":107,"grade":"68","barkot":"943605","kg":50},
+  {"no_gud":108,"grade":"68","barkot":"943604","kg":50},
+  {"no_gud":111,"grade":"68","barkot":"943607","kg":44},
+  {"no_gud":112,"grade":"68","barkot":"943606","kg":43},
+  {"no_gud":116,"grade":"68","barkot":"32731","kg":40},
+  {"no_gud":122,"grade":"68","barkot":"943618","kg":43},
+  {"no_gud":123,"grade":"68","barkot":"943603","kg":42},
+  {"no_gud":124,"grade":"68","barkot":"943602","kg":42},
+  {"no_gud":125,"grade":"68","barkot":"943610","kg":40},
+  {"no_gud":154,"grade":"67","barkot":"943615","kg":35},
+  {"no_gud":164,"grade":"68","barkot":"943611","kg":43},
+  {"no_gud":171,"grade":"67","barkot":"32732","kg":37},
+  {"no_gud":183,"grade":"67","barkot":"943612","kg":36},
+  {"no_gud":214,"grade":"65","barkot":"943609","kg":30},
+  {"no_gud":343,"grade":"53","barkot":"943613","kg":45},
+  {"no_gud":489,"grade":"68","barkot":"34202","kg":34},
+  {"no_gud":490,"grade":"68","barkot":"34201","kg":37},
+  {"no_gud":491,"grade":"68","barkot":"34203","kg":43},
+  {"no_gud":492,"grade":"60","barkot":"34088","kg":31},
+  {"no_gud":493,"grade":"60","barkot":"34089","kg":34},
+  {"no_gud":494,"grade":"58","barkot":"34092","kg":32},
+  {"no_gud":495,"grade":"58","barkot":"34091","kg":38},
+  {"no_gud":496,"grade":"60","barkot":"34093","kg":41},
+  {"no_gud":497,"grade":"58","barkot":"34094","kg":34},
+  {"no_gud":498,"grade":"60","barkot":"34090","kg":40},
+  {"no_gud":499,"grade":"67","barkot":"34204","kg":33},
+  {"no_gud":500,"grade":"68","barkot":"34205","kg":33},
+  {"no_gud":501,"grade":"52","barkot":"33807","kg":40},
+  {"no_gud":502,"grade":"52","barkot":"33806","kg":48},
+  {"no_gud":503,"grade":"55","barkot":"34095","kg":40},
+  {"no_gud":504,"grade":"57","barkot":"34098","kg":36},
+  {"no_gud":505,"grade":"53","barkot":"34096","kg":39},
+  {"no_gud":506,"grade":"52","barkot":"34097","kg":39},
+  {"no_gud":508,"grade":"60","barkot":"33951","kg":47},
+  {"no_gud":509,"grade":"53","barkot":"33435","kg":45},
+  {"no_gud":510,"grade":"65","barkot":"34209","kg":46},
+  {"no_gud":511,"grade":"63","barkot":"34210","kg":50},
+  {"no_gud":514,"grade":"68","barkot":"32955","kg":45},
+  {"no_gud":515,"grade":"66","barkot":"32957","kg":36},
+  {"no_gud":516,"grade":"68","barkot":"34208","kg":38},
+  {"no_gud":517,"grade":"68","barkot":"34207","kg":44},
+  {"no_gud":518,"grade":"68","barkot":"34206","kg":36},
+  {"no_gud":520,"grade":"66","barkot":"34087","kg":41}
+];
+
+// ==========================================
+// SUPABASE CLIENT SETUP
+// ==========================================
+function initSupabase() {
+  const url = localStorage.getItem('supabase_url') || '';
+  const key = localStorage.getItem('supabase_anon_key') || '';
+
+  if (url && key && window.supabase) {
+    try {
+      supabaseClient = window.supabase.createClient(url, key);
+      updateCloudBadge(true, 'Live Sync');
+      setupRealtime();
+    } catch(err) {
+      console.error('Supabase init err', err);
+      updateCloudBadge(false, 'Config Error');
+    }
+  } else {
+    updateCloudBadge(false, 'Lokal (Klik Setup)');
+  }
+}
+
+function updateCloudBadge(isConnected, text) {
+  const badge = document.getElementById('cloudStatusBadge');
+  const txt = document.getElementById('cloudStatusText');
+  if (isConnected) {
+    badge.className = 'cloud-status connected';
+    txt.textContent = text || 'Live Sync';
+  } else {
+    badge.className = 'cloud-status offline';
+    txt.textContent = text || 'Offline';
+  }
+}
+
+function setupRealtime() {
+  if (!supabaseClient) return;
+  if (realtimeChannel) supabaseClient.removeChannel(realtimeChannel);
+
+  realtimeChannel = supabaseClient.channel('realtime_barkot')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'barkot_data' }, (payload) => {
+      if (payload.new && payload.new.tanggal === currentDate) {
+        handleRealtimeUpdate(payload);
+      }
+    })
+    .subscribe();
+}
+
+function handleRealtimeUpdate(payload) {
+  const updatedRow = payload.new;
+  const index = state.list.findIndex(x => x.no_gud === updatedRow.no_gud);
+  if (index !== -1) {
+    state.list[index] = { ...state.list[index], ...updatedRow };
+  } else {
+    state.list.push(updatedRow);
+    state.list.sort((a,b) => a.no_gud - b.no_gud);
+  }
+  if (updatedRow.is_done) {
+    state.doneMap[updatedRow.no_gud] = true;
+  } else {
+    delete state.doneMap[updatedRow.no_gud];
+  }
+  saveLocalState();
+  render();
+}
+
+// ==========================================
+// AUDIO & TOAST
+// ==========================================
+function initAudio() {
+  if (!audioCtx) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) audioCtx = new AudioContext();
+  }
+}
+
+function playBeep(isSuccess = true) {
+  if (!soundEnabled) return;
+  try {
+    initAudio();
+    if (!audioCtx) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    if (isSuccess) {
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    } else {
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+  } catch(e) {}
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Bip' : '🔇 Bip';
+  showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
+}
+
+function showToast(msg, isSuccess = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isSuccess ? ' success' : '');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.className = 'toast', 1600);
+}
+
+// ==========================================
+// TANGGAL & STATE MANAGEMENT
+// ==========================================
+function formatDateIndo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()];
+  const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()];
+  return `${hari}, ${d.getDate()} ${bulan} ${d.getFullYear()}`;
+}
+
+async function onDateChanged(newDate) {
+  if (!newDate) return;
+  currentDate = newDate;
+  document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+  await loadDataForCurrentDate();
+}
+
+function saveLocalState() {
+  try {
+    localStorage.setItem('barkot_local:' + currentDate, JSON.stringify(state));
+  } catch(e) {}
+}
+
+async function loadDataForCurrentDate() {
+  state = { list: [], doneMap: {} };
+
+  // 1. Coba ambil dari Supabase jika terhubung
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('barkot_data')
+        .select('*')
+        .eq('tanggal', currentDate)
+        .order('no_gud', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        state.list = data;
+        state.doneMap = {};
+        data.forEach(x => {
+          if (x.is_done) state.doneMap[x.no_gud] = true;
+        });
+        saveLocalState();
+        render();
+        return;
+      }
+    } catch(err) {
+      console.warn('Supabase fetch failed, fallback to local', err);
+    }
+  }
+
+  // 2. Coba ambil dari LocalStorage
+  const raw = localStorage.getItem('barkot_local:' + currentDate);
+  if (raw) {
+    try {
+      state = JSON.parse(raw);
+      render();
+      return;
+    } catch(e) {}
+  }
+
+  // 3. Jika tanggal adalah 2026-08-27 dan kosong, isi seed awal
+  if (currentDate === '2026-08-27') {
+    state.list = SEED_27_AUG.map(x => ({ ...x, tanggal: '2026-08-27', is_done: false }));
+    state.doneMap = {};
+    saveLocalState();
+    if (supabaseClient) syncSeedToSupabase();
+  }
+
+  render();
+}
+
+async function syncSeedToSupabase() {
+  if (!supabaseClient) return;
+  try {
+    const rows = state.list.map(x => ({
+      tanggal: x.tanggal,
+      no_gud: x.no_gud,
+      grade: x.grade,
+      barkot: x.barkot,
+      kg: x.kg,
+      is_done: false
+    }));
+    await supabaseClient.from('barkot_data').upsert(rows, { onConflict: 'tanggal,no_gud' });
+  } catch(e) {}
+}
+
+// ==========================================
+// TOGGLE PENCET NO GUD
+// ==========================================
+async function toggleBal(no_gud) {
+  initAudio();
+  const currentStatus = !!state.doneMap[no_gud];
+  const newStatus = !currentStatus;
+
+  // Update State Lokal
+  if (newStatus) {
+    state.doneMap[no_gud] = true;
+    playBeep(true);
+    if (navigator.vibrate) navigator.vibrate(30);
+    showToast(`✓ No Gud ${no_gud} SUDAH DIBARKOT`, true);
+  } else {
+    delete state.doneMap[no_gud];
+    playBeep(false);
+    showToast(`No Gud ${no_gud} dibatalkan`);
+  }
+
+  const target = state.list.find(x => x.no_gud === no_gud);
+  if (target) target.is_done = newStatus;
+  saveLocalState();
+  render();
+
+  // Sinkronkan ke Supabase jika terhubung
+  if (supabaseClient) {
+    try {
+      await supabaseClient
+        .from('barkot_data')
+        .upsert({
+          tanggal: currentDate,
+          no_gud: no_gud,
+          grade: target ? target.grade : '',
+          barkot: target ? target.barkot : '',
+          kg: target ? target.kg : null,
+          is_done: newStatus,
+          done_at: newStatus ? new Date().toISOString() : null
+        }, { onConflict: 'tanggal,no_gud' });
+    } catch(err) {
+      console.error('Gagal update ke Supabase', err);
+    }
+  }
+}
+
+// ==========================================
+// RENDER TAMPILAN
+// ==========================================
+function setFilter(type, elem) {
+  currentFilter = type;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  if (elem) elem.classList.add('active');
+  render();
+}
+
+function render() {
+  const grid = document.getElementById('balGrid');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  grid.innerHTML = '';
+
+  const total = state.list.length;
+  const doneCount = Object.keys(state.doneMap).length;
+  const remainCount = Math.max(0, total - doneCount);
+  const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+
+  // Counter
+  document.getElementById('countDone').textContent = doneCount;
+  document.getElementById('countTotal').textContent = total;
+  document.getElementById('countRemain').textContent = remainCount;
+  document.getElementById('pctLabel').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  // Tab label
+  document.getElementById('tabAll').textContent = `Semua (${total})`;
+  document.getElementById('tabPending').textContent = `⏳ Belum (${remainCount})`;
+  document.getElementById('tabDone').textContent = `✓ Sudah (${doneCount})`;
+
+  // Filter items
+  const filtered = state.list.filter(item => {
+    const isDone = !!state.doneMap[item.no_gud];
+    if (currentFilter === 'pending' && isDone) return false;
+    if (currentFilter === 'done' && !isDone) return false;
+    if (query) {
+      const matchNo = String(item.no_gud).includes(query);
+      const matchBarkot = item.barkot && item.barkot.toLowerCase().includes(query);
+      const matchGrade = item.grade && item.grade.toLowerCase().includes(query);
+      return matchNo || matchBarkot || matchGrade;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    emptyMsg.style.display = 'block';
+    emptyMsg.textContent = total === 0 ? 
+      `Belum ada data bal untuk tanggal ${currentDate}. Silakan upload file Excel.` : 
+      'Tidak ada data bal yang cocok dengan filter / pencarian.';
+  } else {
+    emptyMsg.style.display = 'none';
+    for (const item of filtered) {
+      const isDone = !!state.doneMap[item.no_gud];
+      const isSearchExact = query && (String(item.no_gud) === query || item.barkot === query);
+
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (isDone ? ' done' : '') + (isSearchExact ? ' highlight' : '');
+
+      const gradeHtml = item.grade ? `<span class="pill pill-grade">Gr: ${item.grade}</span>` : '';
+      const barkotHtml = item.barkot ? `<span class="pill">📊 ${item.barkot}</span>` : '';
+      const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="pill">${item.kg} kg</span>` : '';
+
+      chip.innerHTML = `
+        ${isDone ? '<div class="stamp-check">✓</div>' : ''}
+        <div class="no-gud">${item.no_gud}</div>
+        <div class="sub-info">${gradeHtml}${barkotHtml}${kgHtml}</div>
+        <div class="status-badge">${isDone ? 'SUDAH DIBARKOT' : 'NO GUD'}</div>
+      `;
+      chip.onclick = () => toggleBal(item.no_gud);
+      grid.appendChild(chip);
+    }
+  }
+}
+
+// Fast Enter Key in Search Input
+document.getElementById('searchInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const q = e.target.value.trim();
+    if (!q) return;
+    const match = state.list.find(x => String(x.no_gud) === q || (x.barkot && x.barkot === q));
+    if (match) {
+      toggleBal(match.no_gud);
+      e.target.value = '';
+      render();
+    } else {
+      showToast(`Nomor ${q} tidak ditemukan pada ${currentDate}`);
+    }
+  }
+});
+document.getElementById('searchInput').addEventListener('input', render);
+
+// ==========================================
+// UPLOAD EXCEL MULTI-TANGGAL
+// ==========================================
+function handleExcelUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const rawJson = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      let detectedDate = currentDate;
+
+      // 1. Coba deteksi tanggal dari nama file, misal "buku_grade_induk_27-8-2026.xlsx"
+      const nameMatch = file.name.match(/(\d{1,2})[-_](\d{1,2})[-_](\d{4})/);
+      if (nameMatch) {
+        const d = nameMatch[1].padStart(2, '0');
+        const m = nameMatch[2].padStart(2, '0');
+        const y = nameMatch[3];
+        detectedDate = `${y}-${m}-${d}`;
+      } else {
+        // Coba deteksi dari isi cell baris awal, misal "TANGGAL: 27-8 ... TAHUN: 2026"
+        for (let r = 0; r < Math.min(5, rawJson.length); r++) {
+          const rowText = (rawJson[r] || []).join(' ');
+          const dateCellMatch = rowText.match(/TANGGAL:\s*(\d{1,2})[-/](\d{1,2}).*?TAHUN:\s*(\d{4})/i);
+          if (dateCellMatch) {
+            detectedDate = `${dateCellMatch[3]}-${dateCellMatch[2].padStart(2, '0')}-${dateCellMatch[1].padStart(2, '0')}`;
+            break;
+          }
+        }
+      }
+
+      // 2. Parse Baris Data
+      const parsedItems = [];
+      let startRow = 0;
+
+      for (let r = 0; r < rawJson.length; r++) {
+        const row = rawJson[r];
+        if (row && row.some(cell => String(cell).toUpperCase().includes('NO GUD'))) {
+          startRow = r + 1;
+          break;
+        }
+      }
+
+      for (let r = startRow; r < rawJson.length; r++) {
+        const row = rawJson[r];
+        if (!row || row.length === 0) continue;
+        const noVal = row[0];
+        if (noVal !== undefined && noVal !== null && /^\d+$/.test(String(noVal).trim())) {
+          const no_gud = parseInt(String(noVal).trim(), 10);
+          const grade = row[1] !== undefined && row[1] !== null ? String(row[1]).trim() : '';
+          const barkot = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '';
+          const kg = row[4] !== undefined && row[4] !== null ? row[4] : null;
+          parsedItems.push({
+            tanggal: detectedDate,
+            no_gud: no_gud,
+            grade: grade,
+            barkot: barkot,
+            kg: kg,
+            is_done: false
+          });
+        }
+      }
+
+      if (parsedItems.length === 0) {
+        showToast('Tidak ada data No Gud yang terbaca di file Excel');
+        return;
+      }
+
+      const confirmMsg = `Ditemukan ${parsedItems.length} bal untuk tanggal ${detectedDate} dari file "${file.name}". Muat sekarang?`;
+      if (confirm(confirmMsg)) {
+        currentDate = detectedDate;
+        document.getElementById('datePicker').value = currentDate;
+        document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+
+        // Jika ada di Supabase, lakukan upsert
+        if (supabaseClient) {
+          showToast('Mengunggah ke database Supabase...');
+          const { error } = await supabaseClient
+            .from('barkot_data')
+            .upsert(parsedItems, { onConflict: 'tanggal,no_gud' });
+
+          if (error) console.error('Supabase bulk upload err', error);
+        }
+
+        await loadDataForCurrentDate();
+        showToast(`Berhasil memuat ${parsedItems.length} bal tembakau!`, true);
+      }
+    } catch(err) {
+      console.error(err);
+      showToast('Gagal memproses file Excel. Pastikan format kolom benar.');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// Tambah Manual
+async function addManualEntries() {
+  const text = document.getElementById('manualInput').value.trim();
+  if (!text) return;
+  const lines = text.split(/[\n;]+/);
+  const newItems = [];
+
+  for (const line of lines) {
+    const parts = line.split(/[,\t]+|\s+/).map(s => s.trim()).filter(Boolean);
+    if (parts.length > 0 && /^\d+$/.test(parts[0])) {
+      const no_gud = parseInt(parts[0], 10);
+      const barkot = parts[1] || '';
+      const kg = parts[2] ? parseFloat(parts[2]) : null;
+      newItems.push({
+        tanggal: currentDate,
+        no_gud: no_gud,
+        grade: '',
+        barkot: barkot,
+        kg: kg,
+        is_done: false
+      });
+    }
+  }
+
+  if (newItems.length > 0) {
+    if (supabaseClient) {
+      await supabaseClient.from('barkot_data').upsert(newItems, { onConflict: 'tanggal,no_gud' });
+    }
+    document.getElementById('manualInput').value = '';
+    await loadDataForCurrentDate();
+    showToast(`+${newItems.length} bal ditambahkan`, true);
+  }
+}
+
+// WhatsApp Summary
+function copyWaSummary() {
+  const total = state.list.length;
+  const doneNos = Object.keys(state.doneMap).map(k => parseInt(k,10));
+  const remainNos = state.list.filter(x => !state.doneMap[x.no_gud]).map(x => x.no_gud);
+  const pct = total > 0 ? Math.round((doneNos.length / total) * 100) : 0;
+
+  const text = 
+`📊 *LAPORAN CEK BARKOT GUDANG*
+📅 Tanggal: ${formatDateIndo(currentDate)}
+📦 Total Bal: ${total} Bal
+✅ Sudah Dibarkot: ${doneNos.length} Bal (${pct}%)
+⏳ Belum Selesai: ${remainNos.length} Bal
+
+${remainNos.length > 0 ? `*Sisa No Gud Belum Dibarkot:* \n${remainNos.join(', ')}` : '🎉 SEMUA BAL SUDAH DIBARKOT LENGKAP!'}`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Laporan WA disalin ke Clipboard! Siap dipaste', true);
+    });
+  } else {
+    prompt('Salin teks laporan di bawah ini:', text);
+  }
+}
+
+async function resetChecks() {
+  if (confirm(`Kosongkan semua centang untuk tanggal ${currentDate}?`)) {
+    state.doneMap = {};
+    saveLocalState();
+    if (supabaseClient) {
+      await supabaseClient
+        .from('barkot_data')
+        .update({ is_done: false, done_at: null })
+        .eq('tanggal', currentDate);
+    }
+    render();
+    showToast('Centang hari ini dikosongkan');
+  }
+}
+
+async function clearCurrentDateData() {
+  if (confirm(`Hapus SELURUH daftar bal untuk tanggal ${currentDate}?`)) {
+    state = { list: [], doneMap: {} };
+    saveLocalState();
+    if (supabaseClient) {
+      await supabaseClient
+        .from('barkot_data')
+        .delete()
+        .eq('tanggal', currentDate);
+    }
+    render();
+    showToast('Data tanggal ini dihapus');
+  }
+}
+
+function refreshCurrentDateData() {
+  loadDataForCurrentDate();
+  showToast('Memuat ulang data dari Cloud...');
+}
+
+// ==========================================
+// PENGATURAN SUPABASE MODAL
+// ==========================================
+function openConfigModal() {
+  document.getElementById('cfgUrl').value = localStorage.getItem('supabase_url') || '';
+  document.getElementById('cfgKey').value = localStorage.getItem('supabase_anon_key') || '';
+  document.getElementById('configModal').classList.add('open');
+}
+
+function closeConfigModal() {
+  document.getElementById('configModal').classList.remove('open');
+}
+
+function saveSupabaseConfig() {
+  const url = document.getElementById('cfgUrl').value.trim();
+  const key = document.getElementById('cfgKey').value.trim();
+
+  if (url && key) {
+    localStorage.setItem('supabase_url', url);
+    localStorage.setItem('supabase_anon_key', key);
+    closeConfigModal();
+    initSupabase();
+    loadDataForCurrentDate();
+    showToast('Supabase terhubung!', true);
+  } else {
+    localStorage.removeItem('supabase_url');
+    localStorage.removeItem('supabase_anon_key');
+    supabaseClient = null;
+    updateCloudBadge(false, 'Lokal');
+    closeConfigModal();
+    showToast('Konfigurasi Supabase dihapus');
+  }
+}
+
+// ==========================================
+// CAMERA BARCODE SCANNER
+// ==========================================
+let videoStream = null;
+let scanInterval = null;
+
+async function startScanner() {
+  const modal = document.getElementById('scannerModal');
+  const video = document.getElementById('scannerVideo');
+  const status = document.getElementById('scannerStatus');
+
+  modal.classList.add('open');
+  status.textContent = 'Membuka kamera...';
+
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
+    video.srcObject = videoStream;
+    await video.play();
+    status.textContent = 'Arahkan kamera ke stiker barcode...';
+
+    if ('BarcodeDetector' in window) {
+      const barcodeDetector = new BarcodeDetector({
+        formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'upc_a', 'upc_e', 'itf']
+      });
+
+      scanInterval = setInterval(async () => {
+        try {
+          const barcodes = await barcodeDetector.detect(video);
+          if (barcodes.length > 0) {
+            const code = barcodes[0].rawValue.trim();
+            status.textContent = `Terdeteksi: ${code}`;
+            const match = state.list.find(x => x.barkot === code || String(x.no_gud) === code);
+            if (match) {
+              toggleBal(match.no_gud);
+              stopScanner();
+            } else {
+              status.textContent = `Barcode ${code} tidak ada di tanggal ini`;
+            }
+          }
+        } catch(e) {}
+      }, 400);
+    }
+  } catch(err) {
+    status.textContent = 'Gagal membuka kamera (pastikan izin kamera diaktifkan).';
+  }
+}
+
+function stopScanner() {
+  const modal = document.getElementById('scannerModal');
+  modal.classList.remove('open');
+  if (scanInterval) clearInterval(scanInterval);
+  if (videoStream) {
+    videoStream.getTracks().forEach(track => track.stop());
+    videoStream = null;
+  }
+}
+
+// ==========================================
+// STARTUP
+// ==========================================
+document.getElementById('datePicker').value = currentDate;
+document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+initSupabase();
+loadDataForCurrentDate();
+</script>
+
+</body>
+</html>
