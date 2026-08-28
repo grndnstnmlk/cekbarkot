@@ -8,14 +8,14 @@
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Cek Barkot">
-<meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — Pencarian Global Seluruh Data & Grade Induk</title>
+<meta name="apple-mobile-web-app-title" content="Cek Barkot — Oryzo Editorial">
+<meta name="theme-color" content="#100904">
+<title>ORYZO — Buku Grade Induk & Cek Barkot</title>
 
-<!-- Google Fonts: Inter & Roboto Mono (High Legibility) -->
+<!-- Google Fonts: Inter (Halyard/Söhne Alternative) & Roboto Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
 
 <!-- SheetJS, Supabase JS & HTML5-QRCode Scanner Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -24,37 +24,38 @@
 
 <style>
   :root {
-    /* Palette & Tokens */
-    --color-parchment: #faf6f3;
-    --color-ash: #e2e5e9;
-    --color-ash-dark: #cbd5e1;
-    --color-smoke: #64748b;
-    --color-ink: #0f172a;
-    --color-bone: #ffffff;
-    --color-olive-charcoal: #2c3327;
-    --color-obsidian: #1e231c;
-    --color-saffron: #ea580c;
-    --color-saffron-bg: #ffedd5;
-    --color-saffron-border: #fdba74;
-    --color-done-bg: #14532d;
-    --color-done-border: #166534;
-    --color-done-text: #f0fdf4;
-    --color-done-subtext: #86efac;
-    
-    /* Typography */
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    /* ORYZO Design System Tokens — Colors */
+    --color-warm-cream: #ffedd7;
+    --color-walnut-shadow: #100904;
+    --color-bark-brown: #382416;
+    --color-cork-border: #40372e;
+    --color-driftwood: #6c5f51;
+    --color-ember-accent: #dc5000;
+    --color-pure-black: #000000;
 
-    /* Radius */
-    --radius-cards: 16px;
-    --radius-buttons: 10px;
-    --radius-pills: 9999px;
+    /* Surfaces */
+    --surface-walnut-shadow: #100904;
+    --surface-bark-brown: #382416;
+    --surface-cork-border: #40372e;
+    --surface-warm-cream: #ffedd7;
+
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', ui-monospace, Menlo, Consolas, monospace;
+    --font-legal: 'Arial', system-ui, sans-serif;
+
+    /* Border Radius Vocabulary */
+    --radius-cards: 12px;
+    --radius-inputs: 0px;
+    --radius-full-round: 9999px;
+    --radius-buttons-pill: 36px;
+    --radius-buttons-outlined: 22.5px;
 
     /* Accessibility / Font Scale Tokens (Default: A16 & iPhone Adaptive) */
     --ui-scale: 1;
-    --card-no-size: 33px;
-    --card-barkot-size: 16px;
-    --card-min-h: 126px;
+    --card-no-size: 34px;
+    --card-barkot-size: 15px;
+    --card-min-h: 130px;
     --touch-target: 48px;
 
     /* Safe Area insets (iPhone Dynamic Island & Home Bar) */
@@ -66,21 +67,21 @@
 
   /* Size Modes */
   body.font-mode-normal {
-    --card-no-size: 26px;
-    --card-barkot-size: 14px;
-    --card-min-h: 105px;
+    --card-no-size: 27px;
+    --card-barkot-size: 13px;
+    --card-min-h: 110px;
     --touch-target: 44px;
   }
   body.font-mode-a16 {
-    --card-no-size: 33px;
-    --card-barkot-size: 16px;
-    --card-min-h: 126px;
-    --touch-target: 50px;
+    --card-no-size: 34px;
+    --card-barkot-size: 15px;
+    --card-min-h: 130px;
+    --touch-target: 48px;
   }
   body.font-mode-lansia {
-    --card-no-size: 40px;
-    --card-barkot-size: 19px;
-    --card-min-h: 148px;
+    --card-no-size: 42px;
+    --card-barkot-size: 18px;
+    --card-min-h: 154px;
     --touch-target: 56px;
   }
 
@@ -93,22 +94,24 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--color-parchment);
-    color: var(--color-ink);
+    background: var(--color-walnut-shadow);
+    color: var(--color-warm-cream);
     font-family: var(--font-sans);
     min-height: 100vh;
     min-height: -webkit-fill-available;
     padding-bottom: calc(var(--sab) + 40px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 500;
   }
 
-  /* Announcement Top Bar */
-  .announcement-bar {
-    background: var(--color-bone);
-    border-bottom: 1px solid var(--color-ash);
-    padding-top: calc(var(--sat) + 6px);
+  /* Fixed Top Navigation — ORYZO Editorial */
+  .top-nav {
+    background: rgba(16, 9, 4, 0.95);
+    border-bottom: 1px dashed var(--color-cork-border);
+    padding-top: calc(var(--sat) + 8px);
     padding-bottom: 8px;
     padding-left: calc(var(--sal) + 16px);
     padding-right: calc(var(--sar) + 16px);
@@ -116,161 +119,184 @@
     align-items: center;
     justify-content: space-between;
     font-size: 12px;
-    font-weight: 600;
-    color: var(--color-ink);
-    flex-wrap: wrap;
-    gap: 6px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
-  .announcement-left {
+  .nav-wordmark {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--color-warm-cream);
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .saffron-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-pills);
-    background: var(--color-saffron);
-    display: inline-block;
-    flex-shrink: 0;
+  .nav-credit {
+    color: var(--color-ember-accent);
+    font-size: 10px;
+    font-family: var(--font-legal);
+    letter-spacing: 0.08em;
   }
-
-  /* Sticky Header */
-  header {
-    background: rgba(250, 246, 243, 0.96);
-    padding: 12px calc(var(--sal) + 14px) 12px calc(var(--sar) + 14px);
-    border-bottom: 2px solid var(--color-ash);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-  
-  .header-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .title-group {
-    flex: 1;
-    min-width: 160px;
-  }
-  .display-title {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: var(--color-ink);
-  }
-  .display-subtitle {
-    margin: 3px 0 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-smoke);
+  .cloud-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-driftwood);
     display: flex;
     align-items: center;
     gap: 5px;
   }
+  .cloud-pill.live {
+    color: #86efac;
+  }
 
+  /* Header Section — Sculptural Uppercase Typography */
+  header {
+    background: var(--color-walnut-shadow);
+    padding: 16px calc(var(--sal) + 16px) 14px calc(var(--sar) + 16px);
+    border-bottom: 1px dashed var(--color-cork-border);
+  }
+
+  .tagline {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-driftwood);
+    letter-spacing: 0.1em;
+    margin: 0 0 4px;
+  }
+  .display-title {
+    margin: 0;
+    font-size: 38px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 0.92;
+    color: var(--color-warm-cream);
+    text-transform: uppercase;
+  }
+  @media (min-width: 768px) {
+    .display-title { font-size: 51px; line-height: 0.9; }
+  }
+
+  .display-subtitle {
+    margin: 8px 0 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--color-warm-cream);
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Action Controls — Pill (Filled) & Outlined Ghost Buttons */
   .header-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
+    margin-top: 14px;
     flex-wrap: wrap;
   }
 
-  /* Buttons & Controls (High Touch Target & Contrast) */
-  .ghost-btn {
-    background: var(--color-bone);
-    border: 1.5px solid var(--color-ink);
-    color: var(--color-ink);
-    border-radius: var(--radius-buttons);
-    padding: 8px 12px;
+  /* Primary Solid CTA — Pill Button */
+  .btn-pill-filled {
+    background: var(--color-bark-brown);
+    color: var(--color-warm-cream);
+    border: 1px solid var(--color-cork-border);
+    border-radius: var(--radius-buttons-pill);
+    padding: 10px 20px;
     min-height: var(--touch-target);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12.5px;
-    font-weight: 700;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.06em;
     cursor: pointer;
-    transition: all 0.1s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    transition: background 0.15s ease;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
-  .ghost-btn:active {
-    transform: scale(0.96);
-    background: var(--color-ash);
-  }
-  .ghost-btn.active-lock {
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    border-color: var(--color-obsidian);
-  }
-  .ghost-btn.btn-scanner-highlight {
-    background: #0284c7;
-    color: #ffffff;
-    border-color: #0369a1;
-    box-shadow: 0 2px 5px rgba(2, 132, 199, 0.3);
-  }
-  .ghost-btn.btn-scanner-highlight:active {
-    background: #0369a1;
+  .btn-pill-filled:active {
+    background: var(--color-cork-border);
   }
 
-  /* Date Bar & Large Chips */
+  /* Outlined Ghost Button */
+  .btn-ghost-outlined {
+    background: transparent;
+    color: var(--color-warm-cream);
+    border: 1px solid var(--color-warm-cream);
+    border-radius: var(--radius-buttons-outlined);
+    padding: 8px 16px;
+    min-height: var(--touch-target);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .btn-ghost-outlined:active {
+    background: rgba(255, 237, 215, 0.1);
+  }
+  .btn-ghost-outlined.active-lock {
+    background: var(--color-warm-cream);
+    color: var(--color-walnut-shadow);
+    border-color: var(--color-warm-cream);
+  }
+
+  /* Date Bar & Horizontal Scrolling Date Pills */
   .date-section {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 6px;
+    margin-top: 14px;
   }
-  .date-selector-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .date-picker {
-    background: var(--color-bone);
-    border: 1.5px solid var(--color-ash-dark);
-    border-radius: var(--radius-buttons);
-    padding: 6px 10px;
-    min-height: 40px;
+  .date-picker-minimal {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-warm-cream);
+    border-radius: 0px;
+    padding: 6px 4px;
     font-family: var(--font-mono);
     font-size: 13px;
-    font-weight: 700;
-    color: var(--color-ink);
+    font-weight: 500;
+    color: var(--color-warm-cream);
     outline: none;
+    text-transform: uppercase;
   }
   .quick-dates-bar {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    padding: 2px 0 4px;
+    padding: 4px 0;
   }
   .quick-dates-bar::-webkit-scrollbar { display: none; }
 
-  .date-pill {
+  .date-pill-editorial {
     font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 700;
-    background: var(--color-bone);
-    color: var(--color-ink);
-    border: 1.5px solid var(--color-ash-dark);
-    border-radius: var(--radius-pills);
-    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    background: transparent;
+    color: var(--color-driftwood);
+    border: 1px dashed var(--color-cork-border);
+    border-radius: var(--radius-buttons-outlined);
+    padding: 6px 14px;
     min-height: 36px;
     display: inline-flex;
     align-items: center;
@@ -278,30 +304,26 @@
     white-space: nowrap;
     transition: all 0.12s ease;
     flex-shrink: 0;
+    text-transform: uppercase;
   }
-  .date-pill:active {
-    transform: scale(0.95);
-  }
-  .date-pill.active {
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    border-color: var(--color-obsidian);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+  .date-pill-editorial.active {
+    background: var(--color-bark-brown);
+    color: var(--color-warm-cream);
+    border: 1px solid var(--color-warm-cream);
   }
 
-  /* Progress Bar (High Visibility) */
+  /* Hairline Progress Indicator */
   .progress-container {
-    margin-top: 8px;
+    margin-top: 14px;
   }
   .progress-track {
-    height: 7px;
-    background: var(--color-ash);
-    border-radius: var(--radius-pills);
+    height: 3px;
+    background: var(--color-cork-border);
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
-    background: #15803d;
+    background: var(--color-warm-cream);
     width: 0%;
     transition: width 0.25s ease;
   }
@@ -310,176 +332,143 @@
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--color-smoke);
-    margin-top: 4px;
+    font-size: 11px;
+    color: var(--color-driftwood);
+    margin-top: 6px;
+    text-transform: uppercase;
   }
   .progress-label-row b {
-    color: var(--color-ink);
-    font-weight: 800;
-  }
-  .pct-badge {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
-    padding: 1px 6px;
-    border-radius: 4px;
-    color: var(--color-ink);
+    color: var(--color-warm-cream);
   }
 
-  /* Main Container */
+  /* Main Void Container */
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 12px calc(var(--sal) + 12px) 30px calc(var(--sar) + 12px);
+    padding: 16px calc(var(--sal) + 16px) 30px calc(var(--sar) + 16px);
   }
 
-  /* Missing Bal Alert Strip (Belum Ditempel / Belum Ketemu) */
+  /* Missing Bal Alert — Ember Accent Editorial Strip */
   .missing-bal-banner {
-    background: #fff7ed;
-    border: 2px solid #ea580c;
+    background: #190e06;
+    border: 1px dashed var(--color-ember-accent);
     border-radius: var(--radius-cards);
-    padding: 12px 14px;
-    margin-bottom: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
-    box-shadow: 0 2px 5px rgba(234, 88, 12, 0.08);
-  }
-  .missing-banner-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .missing-banner-icon {
-    font-size: 22px;
-    line-height: 1;
   }
   .missing-banner-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: #9a3412;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ember-accent);
     margin: 0;
+    letter-spacing: 0.05em;
   }
   .missing-banner-sub {
-    font-size: 12px;
-    font-weight: 500;
-    color: #c2410c;
-    margin: 2px 0 0;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--color-driftwood);
+    margin: 4px 0 0;
+    font-family: var(--font-mono);
   }
   .btn-missing-action {
-    background: #ea580c;
-    color: #ffffff;
-    border: none;
-    border-radius: var(--radius-buttons);
-    padding: 8px 14px;
-    min-height: 40px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
+    background: transparent;
+    color: var(--color-ember-accent);
+    border: 1px solid var(--color-ember-accent);
+    border-radius: var(--radius-buttons-outlined);
+    padding: 8px 16px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
-    box-shadow: 0 2px 4px rgba(234, 88, 12, 0.25);
   }
   .btn-missing-action:active {
-    transform: scale(0.96);
+    background: rgba(220, 80, 0, 0.15);
   }
 
-  /* EDITORIAL PANEL: PENCARIAN GLOBAL SEMUA DATA (ALL-DATES INSTANT FINDER) */
-  .editorial-panels {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
+  /* Section Divider (Dashed Hairline) */
+  .divider-dashed {
+    width: 100%;
+    height: 1px;
+    border: none;
+    border-top: 1px dashed var(--color-cork-border);
+    margin: 16px 0;
   }
 
-  .panel-olive {
-    background: var(--color-olive-charcoal);
-    color: var(--color-parchment);
+  /* Editorial Search Panel — Underline Form Inputs */
+  .panel-editorial-search {
+    background: var(--surface-walnut-shadow);
+    border: 1px dashed var(--color-cork-border);
     border-radius: var(--radius-cards);
-    padding: 16px 14px;
-    border: 1px solid rgba(255,255,255,0.1);
+    padding: 18px 16px;
+    margin-bottom: 18px;
   }
   .panel-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     flex-wrap: wrap;
     gap: 6px;
   }
   .panel-eyebrow {
-    font-family: var(--font-sans);
-    font-size: 11.5px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #a3b899;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-driftwood);
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .global-badge {
-    background: #0284c7;
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
   }
   .panel-headline {
-    font-family: var(--font-sans);
-    font-size: 20px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    color: #ffffff;
-    margin: 0 0 12px;
-    line-height: 1.2;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-warm-cream);
+    margin: 0 0 14px;
+    line-height: 1.0;
   }
 
   .search-inputs-dual {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 14px;
   }
   .input-label-editorial {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    color: #f1f5f9;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--color-driftwood);
     text-transform: uppercase;
     display: block;
     margin-bottom: 4px;
   }
-  .editorial-input {
+  .editorial-underline-input {
     width: 100%;
-    background: rgba(0,0,0,0.35);
-    border: 2px solid rgba(255,255,255,0.25);
-    color: #ffffff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-warm-cream);
+    border-radius: 0px;
+    color: var(--color-warm-cream);
     font-family: var(--font-mono);
-    font-size: 18px;
-    font-weight: 700;
-    padding: 10px 10px;
-    min-height: 48px;
-    border-radius: var(--radius-buttons);
+    font-size: 19px;
+    font-weight: 500;
+    padding: 8px 2px;
+    min-height: 44px;
     outline: none;
     transition: border-color 0.15s ease;
   }
-  .editorial-input:focus {
-    border-color: #facc15;
-    background: rgba(0,0,0,0.5);
+  .editorial-underline-input:focus {
+    border-bottom-color: var(--color-ember-accent);
   }
 
   /* Global Search Match Cards Container */
   .global-matches-container {
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -487,10 +476,10 @@
     overflow-y: auto;
   }
   .global-match-card {
-    background: #0f140e;
-    border: 2px solid #38bdf8;
-    border-radius: 12px;
-    padding: 12px;
+    background: var(--color-bark-brown);
+    border: 1px solid var(--color-cork-border);
+    border-radius: var(--radius-cards);
+    padding: 12px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -500,56 +489,36 @@
   .global-match-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
   .global-match-title {
     font-family: var(--font-mono);
-    font-size: 17px;
-    font-weight: 800;
-    color: #facc15;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-warm-cream);
   }
   .global-match-sub {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: #e2e8f0;
-    font-weight: 600;
+    font-size: 11.5px;
+    color: var(--color-driftwood);
+    font-weight: 500;
   }
   .global-match-date-badge {
-    background: rgba(56, 189, 248, 0.2);
-    color: #38bdf8;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
+    color: var(--color-warm-cream);
+    font-family: var(--font-legal);
+    font-size: 10px;
+    border-bottom: 1px dashed var(--color-driftwood);
     display: inline-block;
     margin-top: 2px;
   }
-  .btn-global-jump {
-    background: #0284c7;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 14px;
-    min-height: 40px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .btn-global-jump:active {
-    transform: scale(0.96);
-  }
 
-  /* Spotlight Result Card */
+  /* Spotlight Inset Card */
   .spotlight-inset {
-    background: #0f140e;
-    border-radius: 14px;
-    border: 2px solid #4ade80;
-    padding: 14px;
-    margin-top: 12px;
+    background: var(--color-bark-brown);
+    border-radius: var(--radius-cards);
+    border: 1px solid var(--color-warm-cream);
+    padding: 16px;
+    margin-top: 14px;
     display: none;
     animation: fadeIn 0.2s ease;
   }
@@ -563,80 +532,42 @@
     align-items: center;
     font-family: var(--font-mono);
     font-size: 13px;
-    font-weight: 700;
-    color: #94a3b8;
+    color: var(--color-driftwood);
   }
   .spotlight-no-label {
-    color: #ffffff;
+    color: var(--color-warm-cream);
     font-size: 24px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    background: #15803d;
-    padding: 2px 10px;
-    border-radius: 6px;
+    border-bottom: 1px solid var(--color-warm-cream);
   }
   .spotlight-barcode-huge {
     font-family: var(--font-mono);
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    color: #facc15;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-warm-cream);
     text-align: center;
-    margin: 8px 0;
-    padding: 6px;
-    background: rgba(250, 204, 21, 0.1);
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px dashed var(--color-cork-border);
     border-radius: 8px;
-    border: 1px dashed rgba(250, 204, 21, 0.4);
   }
   .spotlight-meta-row {
     display: flex;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: #e2e8f0;
-    margin-bottom: 12px;
-  }
-  .ghost-btn-full {
-    width: 100%;
-    background: #22c55e;
-    border: 2px solid #16a34a;
-    color: #052e16;
-    border-radius: var(--radius-buttons);
-    padding: 12px;
-    min-height: 52px;
-    font-family: var(--font-sans);
-    font-size: 15px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-  }
-  .ghost-btn-full:active {
-    transform: scale(0.97);
-  }
-  .ghost-btn-full.btn-done {
-    background: #bbf7d0;
-    border-color: #86efac;
-    color: #14532d;
-  }
-  .ghost-btn-full.btn-locked {
-    background: #334155;
-    border-color: #475569;
-    color: #cbd5e1;
+    font-size: 13px;
+    color: var(--color-warm-cream);
+    margin-bottom: 14px;
   }
 
-  /* Filter Controls & Batch Actions Bar */
+  /* Filter Controls Bar */
   .filter-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     gap: 8px;
     flex-wrap: wrap;
   }
@@ -645,33 +576,30 @@
     gap: 6px;
     flex-wrap: wrap;
   }
-  .filter-pill {
-    background: var(--color-bone);
-    border: 1.5px solid var(--color-ash-dark);
-    color: var(--color-ink);
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 700;
-    padding: 6px 12px;
-    min-height: 38px;
-    border-radius: var(--radius-pills);
+  .filter-pill-editorial {
+    background: transparent;
+    border: 1px dashed var(--color-cork-border);
+    color: var(--color-driftwood);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    min-height: 36px;
+    border-radius: var(--radius-buttons-outlined);
     cursor: pointer;
     transition: all 0.12s ease;
     display: inline-flex;
     align-items: center;
+    text-transform: uppercase;
   }
-  .filter-pill:active {
-    transform: scale(0.96);
+  .filter-pill-editorial.active {
+    background: var(--color-bark-brown);
+    color: var(--color-warm-cream);
+    border: 1px solid var(--color-warm-cream);
   }
-  .filter-pill.active {
-    background: var(--color-ink);
-    color: var(--color-bone);
-    border-color: var(--color-ink);
-  }
-  .filter-pill.missing-pill.active {
-    background: #ea580c;
-    border-color: #ea580c;
-    color: #ffffff;
+  .filter-pill-editorial.missing-pill.active {
+    border-color: var(--color-ember-accent);
+    color: var(--color-ember-accent);
   }
 
   .batch-actions {
@@ -680,7 +608,7 @@
     flex-wrap: wrap;
   }
 
-  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & IPHONE ADAPTIVE) */
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (ORYZO EDITORIAL VOID) */
   .bal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -696,10 +624,10 @@
 
   /* Individual Bal Card */
   .bal-card {
-    background: var(--color-bone);
-    border: 2px solid var(--color-ash);
+    background: var(--surface-walnut-shadow);
+    border: 1px solid var(--color-cork-border);
     border-radius: var(--radius-cards);
-    padding: 14px 8px 10px;
+    padding: 16px 10px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -708,27 +636,26 @@
     user-select: none;
     -webkit-user-select: none;
     position: relative;
-    transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
     min-height: var(--card-min-h);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
   .bal-card:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   
-  /* Large, Crisp No Gud */
+  /* Large No Gud in Warm Cream */
   .bal-card .card-no {
     font-family: var(--font-mono);
     font-size: var(--card-no-size);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
-    color: var(--color-ink);
-    letter-spacing: -0.03em;
+    color: var(--color-warm-cream);
+    letter-spacing: -0.02em;
   }
   
   /* Meta tags row */
   .bal-card .card-meta {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
@@ -737,153 +664,118 @@
   }
   .meta-tag {
     font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 6px;
-    border-radius: 5px;
-    background: #f1f5f9;
-    color: #334155;
-    border: 1px solid var(--color-ash-dark);
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-driftwood);
+    border: 1px solid var(--color-cork-border);
   }
   .meta-tag-barcode {
     font-size: var(--card-barkot-size);
-    font-weight: 800;
-    color: var(--color-ink);
-    background: #f8fafc;
-    border: 1.5px solid #94a3b8;
-    letter-spacing: 0.02em;
+    font-weight: 700;
+    color: var(--color-warm-cream);
+    border: 1px dashed var(--color-cork-border);
+    letter-spacing: 0.03em;
     width: 95%;
     text-align: center;
   }
 
   .bal-card .card-status-label {
-    margin-top: 6px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
+    margin-top: 8px;
+    font-family: var(--font-sans);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #94a3b8;
+    color: var(--color-driftwood);
   }
 
   /* Card Missing Alert (Belum Ketemu) */
   .bal-card.missing-item {
-    border-color: #f97316;
-    background: #fffbf7;
+    border-color: var(--color-ember-accent);
   }
   .bal-card.missing-item .missing-flag {
     position: absolute;
     top: 5px;
     left: 7px;
-    font-size: 10px;
-    font-weight: 800;
-    font-family: var(--font-mono);
-    background: #ea580c;
-    color: #ffffff;
-    padding: 1px 5px;
-    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    color: var(--color-ember-accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
-  /* DONE STATE (VIBRANT FOREST GREEN & MOSS HIGH CONTRAST) */
+  /* DONE STATE (ELEVATED BARK BROWN SURFACE #382416) */
   .bal-card.done {
-    background: var(--color-done-bg);
-    border-color: var(--color-done-border);
-    color: var(--color-done-text);
-    box-shadow: 0 2px 6px rgba(20, 83, 45, 0.2);
+    background: var(--surface-bark-brown);
+    border-color: var(--color-warm-cream);
   }
   .bal-card.done .card-no {
-    color: #ffffff;
-  }
-  .bal-card.done .meta-tag {
-    background: rgba(0,0,0,0.35);
-    border-color: rgba(255,255,255,0.2);
-    color: #f0fdf4;
+    color: var(--color-warm-cream);
   }
   .bal-card.done .meta-tag-barcode {
-    background: #166534;
-    border-color: #86efac;
-    color: #ffffff;
+    border-color: var(--color-warm-cream);
+    color: var(--color-warm-cream);
   }
   .bal-card.done .card-status-label {
-    color: var(--color-done-subtext);
-    font-weight: 800;
+    color: var(--color-warm-cream);
   }
   .bal-card.done .badge-top-right {
     position: absolute;
-    top: 5px;
+    top: 6px;
     right: 8px;
-    font-size: 15px;
-    color: #86efac;
-    display: flex;
-    align-items: center;
-    gap: 2px;
+    font-size: 13px;
+    color: var(--color-warm-cream);
   }
 
   .bal-card.highlight {
-    border: 3px solid #eab308;
-    animation: pulseHighlight 1s infinite alternate;
-  }
-  @keyframes pulseHighlight {
-    from { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
-    to { box-shadow: 0 0 0 6px rgba(234, 179, 8, 0.1); }
+    border: 2px solid var(--color-ember-accent);
   }
 
-  /* Management Panel */
-  .panel-obsidian {
-    background: var(--color-obsidian);
-    color: var(--color-bone);
+  /* Management Panel — Darkroom Editorial Card */
+  .panel-management {
+    background: var(--surface-walnut-shadow);
+    border: 1px dashed var(--color-cork-border);
     border-radius: var(--radius-cards);
     padding: 18px 16px;
     margin-top: 24px;
   }
-  .panel-obsidian h3 {
-    font-family: var(--font-sans);
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #ffffff;
+  .panel-management h3 {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-warm-cream);
     margin: 0 0 6px;
   }
-  .obsidian-actions {
+  .panel-management p {
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: none; /* Conversational voice */
+    color: var(--color-driftwood);
+    margin: 0 0 14px;
+    line-height: 1.35;
+  }
+  .management-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 12px;
-  }
-  .ghost-btn-dark {
-    background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    color: #ffffff;
-    border-radius: var(--radius-buttons);
-    padding: 10px 14px;
-    min-height: 44px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.15s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .ghost-btn-dark:active {
-    background: rgba(255,255,255,0.2);
   }
 
   /* Modals */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(16, 9, 4, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 14px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -893,38 +785,35 @@
     pointer-events: auto;
   }
   .modal-card {
-    background: var(--color-bone);
+    background: var(--color-walnut-shadow);
     border-radius: var(--radius-cards);
     width: 100%;
     max-width: 480px;
     max-height: 92vh;
     overflow-y: auto;
-    padding: 18px 16px;
-    border: 2px solid var(--color-ash-dark);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    padding: 20px 18px;
+    border: 1px solid var(--color-cork-border);
   }
   .modal-title {
-    font-family: var(--font-sans);
     font-size: 18px;
-    font-weight: 800;
+    font-weight: 500;
     text-transform: uppercase;
-    color: var(--color-ink);
+    color: var(--color-warm-cream);
     margin: 0 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
   .modal-input {
     width: 100%;
-    background: var(--color-parchment);
-    border: 2px solid var(--color-ash-dark);
-    border-radius: var(--radius-buttons);
-    padding: 10px 12px;
-    min-height: 48px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-warm-cream);
+    border-radius: 0px;
+    padding: 8px 2px;
+    min-height: 44px;
     font-family: var(--font-mono);
     font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
+    font-weight: 500;
+    color: var(--color-warm-cream);
+    margin-bottom: 14px;
     outline: none;
   }
 
@@ -936,8 +825,8 @@
     margin: 12px 0;
   }
   .missing-list-item {
-    background: #fff7ed;
-    border: 1.5px solid #fed7aa;
+    background: var(--color-bark-brown);
+    border: 1px dashed var(--color-ember-accent);
     border-radius: 10px;
     padding: 10px 12px;
     display: flex;
@@ -951,26 +840,14 @@
   }
   .missing-barkot-code {
     font-family: var(--font-mono);
-    font-size: 18px;
-    font-weight: 800;
-    color: #ea580c;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-ember-accent);
   }
   .missing-meta-desc {
     font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #78350f;
-  }
-  .btn-jump-bal {
-    background: #ea580c;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 700;
-    cursor: pointer;
+    font-size: 11px;
+    color: var(--color-warm-cream);
   }
 
   /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER */
@@ -978,11 +855,11 @@
     position: relative;
     width: 100%;
     background: #000000;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
     margin-bottom: 10px;
     min-height: 240px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    border: 1px solid var(--color-cork-border);
   }
   #scannerReader {
     width: 100% !important;
@@ -992,8 +869,6 @@
     height: auto !important;
     max-height: 52vh;
     object-fit: cover;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
   }
 
   /* Visual Red Laser Line */
@@ -1002,9 +877,9 @@
     top: 50%;
     left: 8%;
     right: 8%;
-    height: 3px;
-    background: #ef4444;
-    box-shadow: 0 0 12px 2px #ef4444;
+    height: 2px;
+    background: var(--color-ember-accent);
+    box-shadow: 0 0 10px 2px var(--color-ember-accent);
     z-index: 10;
     pointer-events: none;
     animation: scanLaser 1.8s infinite ease-in-out alternate;
@@ -1024,45 +899,23 @@
   }
 
   .scanner-result-popup {
-    background: #0f172a;
-    color: #ffffff;
+    background: var(--color-bark-brown);
+    color: var(--color-warm-cream);
     border-radius: 12px;
     padding: 12px;
     margin: 10px 0;
     text-align: center;
-    border: 2px solid #22c55e;
+    border: 1px solid var(--color-warm-cream);
     display: none;
     animation: fadeIn 0.15s ease;
   }
   .scanner-result-nogud {
     font-family: var(--font-mono);
     font-size: 40px;
-    font-weight: 800;
-    color: #4ade80;
+    font-weight: 700;
+    color: var(--color-warm-cream);
     letter-spacing: -0.02em;
     margin: 2px 0;
-  }
-
-  .scanner-manual-box {
-    background: #f8fafc;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 8px;
-    text-align: left;
-  }
-  .scanner-manual-input {
-    width: 100%;
-    background: #ffffff;
-    border: 2px solid #94a3b8;
-    border-radius: 8px;
-    padding: 10px;
-    font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    outline: none;
-    color: #0f172a;
   }
 
   /* Toast Notification */
@@ -1071,20 +924,19 @@
     bottom: calc(var(--sab) + 20px);
     left: 50%;
     transform: translateX(-50%) translateY(50px);
-    background: var(--color-obsidian);
-    color: var(--color-bone);
+    background: var(--color-bark-brown);
+    color: var(--color-warm-cream);
     font-family: var(--font-sans);
-    font-size: 13.5px;
-    font-weight: 700;
-    padding: 10px 20px;
-    border-radius: var(--radius-pills);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius-buttons-pill);
     opacity: 0;
     pointer-events: none;
     transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 150;
     white-space: nowrap;
-    border: 2px solid rgba(255,255,255,0.25);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid var(--color-warm-cream);
   }
   .toast.show {
     opacity: 1;
@@ -1095,59 +947,55 @@
     text-align: center;
     padding: 40px 10px;
     font-family: var(--font-mono);
-    color: var(--color-smoke);
-    font-size: 14px;
-    font-weight: 600;
+    color: var(--color-driftwood);
+    font-size: 13px;
+    font-weight: 500;
   }
 </style>
 </head>
 <body class="font-mode-a16">
 
-<!-- Announcement Strip -->
-<div class="announcement-bar">
-  <div class="announcement-left">
-    <span class="saffron-dot"></span>
-    <span>Buku Grade Induk · Realtime Field Log</span>
+<!-- Fixed Top Navigation — ORYZO Minimal Editorial -->
+<nav class="top-nav">
+  <div class="nav-wordmark">
+    <span>ORYZO</span>
+    <span class="nav-credit">GRADE INDUK</span>
   </div>
-  <div class="cloud-status-indicator" id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:11px;">
-    <span id="cloudStatusText">Offline</span>
+  <div class="cloud-pill" id="cloudStatusBadge">
+    <span id="cloudStatusText">OFFLINE</span>
   </div>
-</div>
+</nav>
 
 <header>
-  <div class="header-main">
-    <div class="title-group">
-      <h1 class="display-title">Cek Barkot</h1>
-      <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
-    </div>
-    <div class="header-actions">
-      <!-- Tombol Scan Barcode Kamera Cepat -->
-      <button class="ghost-btn btn-scanner-highlight" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN</button>
-      <!-- Tombol Ukuran Teks / Mode -->
-      <button class="ghost-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16</button>
-      <!-- Tombol Mode Kunci Anti Salah Pencet -->
-      <button class="ghost-btn active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
-      <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">🔔 Bip: ON</button>
-      <button class="ghost-btn" onclick="openConfigModal()">⚙️ Setup</button>
-    </div>
+  <p class="tagline">FIELD LOGGING & REALTIME VERIFICATION</p>
+  <h1 class="display-title">CEK BARKOT</h1>
+  <p class="display-subtitle" id="dateDisplayLabel">MEMUAT TANGGAL...</p>
+
+  <!-- Controls: Pill CTA & Outlined Ghost Buttons -->
+  <div class="header-actions">
+    <button class="btn-pill-filled" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN BARKOT</button>
+    <button class="btn-ghost-outlined" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16 (L)</button>
+    <button class="btn-ghost-outlined active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang">🔒 KUNCI: ON</button>
+    <button class="btn-ghost-outlined" id="soundBtn" onclick="toggleSound()">🔔 BIP: ON</button>
+    <button class="btn-ghost-outlined" onclick="openConfigModal()">⚙️ SETUP</button>
   </div>
 
-  <!-- Date Selection & Quick Date Badges (All Dates from 21 to 27 August) -->
+  <!-- Date Selection & Quick Date Badges -->
   <div class="date-section">
-    <div class="date-selector-row">
-      <input type="date" id="datePicker" class="date-picker" onchange="onDateChanged(this.value)">
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <input type="date" id="datePicker" class="date-picker-minimal" onchange="onDateChanged(this.value)">
       <div class="quick-dates-bar" id="quickDatesContainer">
-        <span class="date-pill" onclick="onDateChanged('2026-08-21')">21 Ags (58)</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-22')">22 Ags (57)</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
-        <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
+        <span class="date-pill-editorial" onclick="onDateChanged('2026-08-21')">21 AGS (58)</span>
+        <span class="date-pill-editorial" onclick="onDateChanged('2026-08-22')">22 AGS (57)</span>
+        <span class="date-pill-editorial" onclick="onDateChanged('2026-08-23')">23 AGS (50)</span>
+        <span class="date-pill-editorial" onclick="onDateChanged('2026-08-24')">24 AGS (28)</span>
+        <span class="date-pill-editorial" onclick="onDateChanged('2026-08-26')">26 AGS (42)</span>
+        <span class="date-pill-editorial active" onclick="onDateChanged('2026-08-27')">27 AGS (50)</span>
       </div>
     </div>
   </div>
 
-  <!-- Progress Track -->
+  <!-- Hairline Progress Track -->
   <div class="progress-container">
     <div class="progress-track">
       <div class="progress-fill" id="progressBar"></div>
@@ -1155,119 +1003,116 @@
     <div class="progress-label-row">
       <span>SELESAI: <b id="countDone">0</b> / <span id="countTotal">0</span></span>
       <span>SISA: <b id="countRemain">0</b></span>
-      <span class="pct-badge" id="pctLabel">0%</span>
+      <span id="pctLabel">0%</span>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- Missing Bales Alert Banner (Belum Ditempel / Belum Ketemu) -->
+  <!-- Missing Bales Alert Banner — Ember Accent -->
   <div class="missing-bal-banner" id="missingBanner">
-    <div class="missing-banner-left">
-      <div class="missing-banner-icon">⚠️</div>
-      <div>
-        <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
-        <p class="missing-banner-sub">31155, 33419, 33422, 33743, 33744, 32277, 32278, 943613</p>
-      </div>
+    <div>
+      <h4 class="missing-banner-title">⚠️ 8 BAL BELUM DITEMPEL (BELUM KETEMU)</h4>
+      <p class="missing-banner-sub">31155, 33419, 33422, 33743, 33744, 32277, 32278, 943613</p>
     </div>
-    <button class="btn-missing-action" onclick="openMissingModal()">Lihat Detail (8)</button>
+    <button class="btn-missing-action" onclick="openMissingModal()">LIHAT DETAIL (8)</button>
   </div>
 
-  <!-- EDITORIAL PANEL (PENCARIAN INSTAN LINTAS SEMUA DATA 21-27 AGUSTUS) -->
-  <div class="editorial-panels">
-    <div class="panel-olive">
-      <div class="panel-header-row">
-        <p class="panel-eyebrow"><span class="saffron-dot"></span> PENCARIAN GLOBAL INSTAN</p>
-        <span class="global-badge">🌐 Cari di Seluruh Tanggal</span>
+  <!-- EDITORIAL SEARCH PANEL (PENCARIAN GLOBAL SELURUH DATA) -->
+  <div class="panel-editorial-search">
+    <div class="panel-header-row">
+      <p class="panel-eyebrow">PENCARIAN GLOBAL INSTAN</p>
+      <span style="font-family:var(--font-legal); font-size:9px; color:var(--color-driftwood); letter-spacing:0.08em;">* SEMUA TANGGAL 21–27 AGS</span>
+    </div>
+    <h2 class="panel-headline">CARI NO GUD / NO BARKOT</h2>
+    
+    <div class="search-inputs-dual">
+      <div>
+        <label class="input-label-editorial">NO GUD (PEKERJA):</label>
+        <input type="text" id="searchNoGudInput" class="editorial-underline-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleGlobalSearch('nogud')">
       </div>
-      <h2 class="panel-headline">Cari No Gud / No Barkot</h2>
-      
-      <div class="search-inputs-dual">
-        <div>
-          <label class="input-label-editorial">No Gud (Pekerja):</label>
-          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleGlobalSearch('nogud')">
-        </div>
-        <div>
-          <label class="input-label-editorial">No Barkot (Stiker):</label>
-          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleGlobalSearch('barkot')">
-        </div>
+      <div>
+        <label class="input-label-editorial">NO BARKOT (STIKER):</label>
+        <input type="text" id="searchBarkotInput" class="editorial-underline-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleGlobalSearch('barkot')">
       </div>
+    </div>
 
-      <!-- Global Search Matches List (If found in multiple dates or other dates) -->
-      <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
+    <!-- Global Search Matches List -->
+    <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
 
-      <!-- Spotlight Inset Card for Single / Selected Match -->
-      <div class="spotlight-inset" id="spotlightCard">
-        <div class="spotlight-top-row">
-          <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
-          <span id="spotGradeVal">GRADE 68</span>
-        </div>
-        <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
-        <div class="spotlight-meta-row">
-          <span id="spotKgVal">50 KG</span>
-          <span id="spotStatusVal">BELUM DIBARKOT</span>
-        </div>
-        <button class="ghost-btn-full" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-          ✓ Tandai Sudah Ditempel
-        </button>
+    <!-- Spotlight Inset Card -->
+    <div class="spotlight-inset" id="spotlightCard">
+      <div class="spotlight-top-row">
+        <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
+        <span id="spotGradeVal">GRADE 68</span>
       </div>
+      <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
+      <div class="spotlight-meta-row">
+        <span id="spotKgVal">50 KG</span>
+        <span id="spotStatusVal">BELUM DIBARKOT</span>
+      </div>
+      <button class="btn-pill-filled" style="width:100%; justify-content:center;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
+        ✓ TANDAI SUDAH DITEMPEL
+      </button>
     </div>
   </div>
 
   <!-- Filter Controls & Batch Actions -->
   <div class="filter-bar">
     <div class="filter-pills">
-      <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
-      <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
-      <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
-      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Belum Ketemu (0)</button>
+      <button class="filter-pill-editorial active" onclick="setFilter('all', this)" id="tabAll">SEMUA (0)</button>
+      <button class="filter-pill-editorial" onclick="setFilter('pending', this)" id="tabPending">BELUM (0)</button>
+      <button class="filter-pill-editorial" onclick="setFilter('done', this)" id="tabDone">SUDAH (0)</button>
+      <button class="filter-pill-editorial missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ BELUM KETEMU (0)</button>
     </div>
     <div class="batch-actions">
-      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="checkAllBal()" title="Centang Semua Bal Hari Ini">✓ Centang Semua</button>
-      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="uncheckAllBal()" title="Batalkan Centang Semua Bal">↺ Reset</button>
-      <button class="ghost-btn btn-scanner-highlight" style="padding:6px 10px; font-size:12px;" onclick="startScanner()">📷 Scan Barkot</button>
+      <button class="btn-ghost-outlined" style="padding:6px 12px; font-size:11px;" onclick="checkAllBal()">✓ CENTANG SEMUA</button>
+      <button class="btn-ghost-outlined" style="padding:6px 12px; font-size:11px;" onclick="uncheckAllBal()">↺ RESET</button>
+      <button class="btn-ghost-outlined" style="padding:6px 12px; font-size:11px;" onclick="startScanner()">📷 SCAN</button>
     </div>
   </div>
 
-  <!-- Main 2-Column Bal Grid (Samsung A16 & iPhone Adaptive) -->
+  <!-- Main 2-Column Bal Card Grid -->
   <div class="bal-grid" id="balGrid"></div>
-  <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
+  <div class="empty-state" id="emptyMsg" style="display:none;">TIDAK ADA DATA BAL UNTUK TANGGAL INI.</div>
 
-  <!-- Management Panel (Obsidian Style) -->
-  <div class="panel-obsidian">
-    <h3>Pengelolaan Berkas & Cloud Sync</h3>
-    <p style="font-size:13px; color:#cbd5e1; margin:0 0 12px;">
+  <hr class="divider-dashed">
+
+  <!-- Management Panel — Warm Editorial Card -->
+  <div class="panel-management">
+    <h3>PENGELOLAAN BERKAS & CLOUD SYNC</h3>
+    <p>
       Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru atau salin rekap laporan ke WhatsApp:
     </p>
-    <div class="obsidian-actions">
-      <label class="ghost-btn-dark" style="cursor:pointer;">
-        📥 Upload Excel (.xlsx)
+    <div class="management-actions">
+      <label class="btn-ghost-outlined" style="cursor:pointer;">
+        📥 UPLOAD EXCEL (.XLSX)
         <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
       </label>
-      <button class="ghost-btn-dark" onclick="syncAllLocalToCloud()">☁️ Upload ke Cloud</button>
-      <button class="ghost-btn-dark" onclick="copyWaSummary()">📋 Salin Rekap WA</button>
-      <button class="ghost-btn-dark" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
+      <button class="btn-ghost-outlined" onclick="syncAllLocalToCloud()">☁️ UPLOAD CLOUD</button>
+      <button class="btn-ghost-outlined" onclick="copyWaSummary()">📋 SALIN REKAP WA</button>
+      <button class="btn-ghost-outlined" onclick="refreshCurrentDateData()">🔄 MUAT ULANG</button>
     </div>
 
-    <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.15); display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="ghost-btn-dark" style="font-size:11px; padding:6px 10px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
-      <button class="ghost-btn-dark" style="font-size:11px; padding:6px 10px; border-color:#ef4444; color:#ef4444;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
+    <div style="margin-top:14px; padding-top:12px; border-top:1px dashed var(--color-cork-border); display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-ghost-outlined" style="font-size:10.5px; padding:6px 10px;" onclick="uncheckAllBal()">RESET CENTANG HARI INI</button>
+      <button class="btn-ghost-outlined" style="font-size:10.5px; padding:6px 10px; border-color:var(--color-ember-accent); color:var(--color-ember-accent);" onclick="clearCurrentDateData()">HAPUS DATA HARI INI</button>
     </div>
   </div>
 </main>
 
-<!-- Modal 8 Bal Belum Ditempel (Belum Ketemu) -->
+<!-- Modal 8 Bal Belum Ditempel -->
 <div class="modal-overlay" id="missingModal">
   <div class="modal-card">
-    <h3 class="modal-title">⚠️ 8 Bal Belum Ketemu</h3>
-    <p style="font-size:13px; color:var(--color-smoke); margin:0 0 10px;">
+    <h3 class="modal-title">⚠️ 8 BAL BELUM KETEMU</h3>
+    <p style="font-size:12.5px; color:var(--color-driftwood); margin:0 0 10px; text-transform:none;">
       Daftar 8 barcode yang belum ditempel karena bal tembakau belum ditemukan di gudang:
     </p>
     <div class="missing-list-group" id="missingListContainer">
       <!-- Populated via JS -->
     </div>
     <div style="display:flex; justify-content:flex-end; margin-top:14px;">
-      <button class="ghost-btn" onclick="closeMissingModal()">Tutup</button>
+      <button class="btn-ghost-outlined" onclick="closeMissingModal()">TUTUP</button>
     </div>
   </div>
 </div>
@@ -1275,26 +1120,26 @@
 <!-- Modal Setup Supabase -->
 <div class="modal-overlay" id="configModal">
   <div class="modal-card">
-    <h3 class="modal-title">Konfigurasi Cloud Supabase</h3>
-    <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Project URL:</label>
+    <h3 class="modal-title">KONFIGURASI CLOUD SUPABASE</h3>
+    <label style="font-size:10.5px; color:var(--color-driftwood); display:block; margin-bottom:4px;">PROJECT URL:</label>
     <input type="text" id="cfgUrl" class="modal-input" placeholder="https://jrpklibocgicubevyshm.supabase.co" autocapitalize="none" autocomplete="off">
 
-    <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Anon Public Key:</label>
+    <label style="font-size:10.5px; color:var(--color-driftwood); display:block; margin-bottom:4px;">ANON PUBLIC KEY:</label>
     <input type="password" id="cfgKey" class="modal-input" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
 
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-      <button class="ghost-btn" onclick="closeConfigModal()">Batal</button>
-      <button class="ghost-btn" style="background:var(--color-obsidian); color:var(--color-bone);" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
+      <button class="btn-ghost-outlined" onclick="closeConfigModal()">BATAL</button>
+      <button class="btn-pill-filled" onclick="saveSupabaseConfig()">SIMPAN & HUBUNGKAN</button>
     </div>
   </div>
 </div>
 
-<!-- Modal Camera Barcode Scanner (Universal iOS Safari & Android Pro) -->
+<!-- Modal Camera Barcode Scanner -->
 <div class="modal-overlay" id="scannerModal">
   <div class="modal-card" style="text-align:center; max-width:500px; padding:16px 14px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <h3 class="modal-title" style="margin:0;">📷 SCAN BARCODE</h3>
-      <button class="ghost-btn" style="min-height:36px; padding:4px 10px; font-size:11px;" onclick="stopScanner()">✕ TUTUP</button>
+      <button class="btn-ghost-outlined" style="min-height:36px; padding:4px 10px; font-size:11px;" onclick="stopScanner()">✕ TUTUP</button>
     </div>
 
     <!-- Scanner Viewfinder Box with Laser Line -->
@@ -1305,28 +1150,28 @@
 
     <!-- Controls: Senter & Kamera -->
     <div class="scanner-toolbar">
-      <button class="ghost-btn" id="torchBtn" style="flex:1; min-height:42px; font-size:12px;" onclick="toggleTorch()">🔦 Nyalakan Senter</button>
-      <button class="ghost-btn" style="flex:1; min-height:42px; font-size:12px;" onclick="switchCamera()">🔄 Ganti Kamera</button>
+      <button class="btn-ghost-outlined" id="torchBtn" style="flex:1; min-height:40px; font-size:11.5px;" onclick="toggleTorch()">🔦 NYALAKAN SENTER</button>
+      <button class="btn-ghost-outlined" style="flex:1; min-height:40px; font-size:11.5px;" onclick="switchCamera()">🔄 GANTI KAMERA</button>
     </div>
 
     <!-- Instant Result Box -->
     <div class="scanner-result-popup" id="scannerResultBox">
-      <div style="font-size:12px; text-transform:uppercase; color:#94a3b8; font-weight:700;">HASIL SCAN DITEMUKAN:</div>
+      <div style="font-size:11px; color:var(--color-driftwood);">HASIL SCAN DITEMUKAN:</div>
       <div class="scanner-result-nogud" id="scanFoundNoGud">NO GUD 107</div>
-      <div style="font-family:var(--font-mono); font-size:15px; color:#facc15; font-weight:700;" id="scanFoundBarkot">Barkot: 943605</div>
-      <div style="font-size:13px; color:#e2e8f0; margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
+      <div style="font-family:var(--font-mono); font-size:15px; color:var(--color-warm-cream);" id="scanFoundBarkot">Barkot: 943605</div>
+      <div style="font-size:12px; color:var(--color-driftwood); margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
     </div>
 
-    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--color-smoke); margin:6px 0;">
-      Arahkan garis merah melintang ke stiker barcode (jarak ~15-20 cm)...
+    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:11.5px; color:var(--color-driftwood); margin:6px 0;">
+      Arahkan garis merah melintang ke stiker barcode...
     </p>
 
-    <!-- Quick Manual Input in Scanner (If barcode is wrinkled/dark) -->
-    <div class="scanner-manual-box">
-      <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:#475569; display:block; margin-bottom:4px; text-transform:uppercase;">
-        Atau ketik angka barkot di sini:
+    <!-- Quick Manual Input in Scanner -->
+    <div style="background:var(--color-bark-brown); border:1px dashed var(--color-cork-border); border-radius:10px; padding:10px; margin-top:8px; text-align:left;">
+      <label style="font-size:10px; color:var(--color-driftwood); display:block; margin-bottom:4px;">
+        ATAU KETIK ANGKA BARKOT DI SINI:
       </label>
-      <input type="text" id="scannerQuickInput" class="scanner-manual-input" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 34088" autocomplete="off" oninput="handleQuickScannerInput(this.value)">
+      <input type="text" id="scannerQuickInput" class="editorial-underline-input" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 34088" autocomplete="off" oninput="handleQuickScannerInput(this.value)">
     </div>
   </div>
 </div>
@@ -3386,11 +3231,11 @@ function cycleFontSize() {
   localStorage.setItem('barkot_font_mode', currentFontSizeMode);
   applyFontSize(currentFontSizeMode);
   const labels = {
-    'a16': 'Mode Teks: Besar (Samsung A16)',
-    'lansia': 'Mode Teks: Sangat Besar (Lansia)',
-    'normal': 'Mode Teks: Standar'
+    'a16': 'MODE TEKS: BESAR (A16)',
+    'lansia': 'MODE TEKS: SANGAT BESAR (LANSIA)',
+    'normal': 'MODE TEKS: STANDAR'
   };
-  showToast(labels[currentFontSizeMode] || 'Mode Teks Diperbarui');
+  showToast(labels[currentFontSizeMode] || 'MODE TEKS DIPERBARUI');
 }
 
 function applyFontSize(mode) {
@@ -3398,8 +3243,8 @@ function applyFontSize(mode) {
   document.body.classList.add('font-mode-' + mode);
   const btn = document.getElementById('fontSizeBtn');
   if (btn) {
-    if (mode === 'lansia') btn.textContent = '🔤 Lansia (XL)';
-    else if (mode === 'normal') btn.textContent = '🔤 Normal';
+    if (mode === 'lansia') btn.textContent = '🔤 LANSIA (XL)';
+    else if (mode === 'normal') btn.textContent = '🔤 NORMAL';
     else btn.textContent = '🔤 A16 (L)';
   }
 }
@@ -3427,10 +3272,10 @@ function openMissingModal() {
     itemEl.className = 'missing-list-item';
     itemEl.innerHTML = `
       <div class="missing-item-left">
-        <span class="missing-barkot-code">Barkot ${it.barkot}</span>
-        <span class="missing-meta-desc">Tgl: ${formatDateIndo(it.tgl)} · No Gud: ${it.no_gud} · GR: ${it.grade} · ${it.kg || '-'}kg</span>
+        <span class="missing-barkot-code">BARKOT ${it.barkot}</span>
+        <span class="missing-meta-desc">TGL: ${formatDateIndo(it.tgl)} · NO GUD: ${it.no_gud} · GR: ${it.grade} · ${it.kg || '-'}KG</span>
       </div>
-      <button class="btn-jump-bal" onclick="jumpToMissingBal('${it.tgl}', ${it.no_gud})">🔍 Buka</button>
+      <button class="btn-ghost-outlined" style="padding:4px 10px; font-size:11px;" onclick="jumpToMissingBal('${it.tgl}', ${it.no_gud})">🔍 BUKA</button>
     `;
     container.appendChild(itemEl);
   });
@@ -3465,25 +3310,26 @@ function initSupabase() {
   if (url && key && window.supabase) {
     try {
       supabaseClient = window.supabase.createClient(url, key);
-      updateCloudBadge(true, 'Live Sync');
+      updateCloudBadge(true, 'LIVE SYNC');
       setupRealtime();
     } catch(err) {
       console.error('Supabase init err', err);
-      updateCloudBadge(false, 'Config Error');
+      updateCloudBadge(false, 'CONFIG ERROR');
     }
   } else {
-    updateCloudBadge(false, 'Lokal (Setup)');
+    updateCloudBadge(false, 'LOKAL');
   }
 }
 
 function updateCloudBadge(isConnected, text) {
   const txt = document.getElementById('cloudStatusText');
+  const badge = document.getElementById('cloudStatusBadge');
   if (isConnected) {
-    txt.textContent = text || 'Live Sync';
-    txt.style.color = '#15803d';
+    txt.textContent = text || 'LIVE SYNC';
+    badge.className = 'cloud-pill live';
   } else {
-    txt.textContent = text || 'Offline';
-    txt.style.color = 'var(--color-smoke)';
+    txt.textContent = text || 'OFFLINE';
+    badge.className = 'cloud-pill';
   }
 }
 
@@ -3520,7 +3366,7 @@ function handleRealtimeUpdate(payload) {
 }
 
 // ==========================================
-// AUDIO & HAPTIC FEEDBACK (IOS COMPATIBLE)
+// AUDIO & HAPTIC FEEDBACK
 // ==========================================
 function initAudio() {
   if (!audioCtx) {
@@ -3569,8 +3415,8 @@ function playBeep(isSuccess = true) {
 function toggleSound() {
   initAudio();
   soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? '🔔 Bip: ON' : '🔕 Bip: OFF';
-  showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔔 BIP: ON' : '🔕 BIP: OFF';
+  showToast(soundEnabled ? 'SUARA BIP AKTIF' : 'SUARA BIP NONAKTIF');
 }
 
 // ==========================================
@@ -3592,20 +3438,20 @@ function toggleLockMode() {
   updateSpotlightUI();
   
   if (lockModeEnabled) {
-    showToast('🔒 Mode Kunci AKTIF — No Gud selesai terlindungi');
+    showToast('🔒 MODE KUNCI AKTIF');
   } else {
-    showToast('🔓 Mode Kunci NONAKTIF — Anda bisa membatalkan centang');
+    showToast('🔓 MODE KUNCI NONAKTIF');
   }
 }
 
 function updateLockBtnUI() {
   const btn = document.getElementById('lockBtn');
   if (lockModeEnabled) {
-    btn.textContent = '🔒 Kunci: ON';
-    btn.className = 'ghost-btn active-lock';
+    btn.textContent = '🔒 KUNCI: ON';
+    btn.className = 'btn-ghost-outlined active-lock';
   } else {
-    btn.textContent = '🔓 Kunci: OFF';
-    btn.className = 'ghost-btn';
+    btn.textContent = '🔓 KUNCI: OFF';
+    btn.className = 'btn-ghost-outlined';
   }
 }
 
@@ -3623,8 +3469,8 @@ function showToast(msg) {
 function formatDateIndo(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr + 'T00:00:00');
-  const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()];
-  const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][d.getMonth()];
+  const hari = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'][d.getDay()];
+  const bulan = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGU','SEP','OKT','NOV','DES'][d.getMonth()];
   return `${hari}, ${d.getDate()} ${bulan} ${d.getFullYear()}`;
 }
 
@@ -3634,10 +3480,10 @@ function onDateChanged(newDate) {
   document.getElementById('datePicker').value = currentDate;
   document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 
-  document.querySelectorAll('.date-pill').forEach(chip => {
+  document.querySelectorAll('.date-pill-editorial').forEach(chip => {
     const chipText = chip.textContent;
     const day = newDate.split('-')[2];
-    const isCurrent = chipText.includes(parseInt(day, 10) + ' Ags');
+    const isCurrent = chipText.includes(parseInt(day, 10) + ' AGS');
     chip.classList.toggle('active', isCurrent);
   });
 
@@ -3719,7 +3565,7 @@ async function loadDataForCurrentDate() {
 // ==========================================
 async function checkAllBal() {
   if (state.list.length === 0) {
-    showToast('Tidak ada data bal pada tanggal ini');
+    showToast('TIDAK ADA DATA BAL');
     return;
   }
   
@@ -3740,7 +3586,7 @@ async function checkAllBal() {
     render();
     updateSpotlightUI();
     
-    showToast(`✓ Semua ${state.list.length} bal ditandai selesai!`);
+    showToast(`✓ SEMUA ${state.list.length} BAL SELESAI`);
     
     if (supabaseClient) {
       try {
@@ -3757,7 +3603,7 @@ async function checkAllBal() {
 
 async function uncheckAllBal() {
   if (state.list.length === 0) {
-    showToast('Tidak ada data bal pada tanggal ini');
+    showToast('TIDAK ADA DATA BAL');
     return;
   }
   
@@ -3775,7 +3621,7 @@ async function uncheckAllBal() {
     render();
     updateSpotlightUI();
     
-    showToast('Centang semua bal dibatalkan');
+    showToast('CENTANG SEMUA DIBATALKAN');
     
     if (supabaseClient) {
       try {
@@ -3791,7 +3637,7 @@ async function uncheckAllBal() {
 }
 
 // ==========================================
-// PENCARIAN GLOBAL INSTAN SELURUH DATA (ALL-DATES SEARCH)
+// PENCARIAN GLOBAL INSTAN SELURUH DATA
 // ==========================================
 function handleGlobalSearch(type) {
   const nogudInput = document.getElementById('searchNoGudInput');
@@ -3815,10 +3661,8 @@ function handleGlobalSearch(type) {
     return;
   }
 
-  // Cari di seluruh tanggal (Global Multi-Date Search)
   const allMatches = [];
 
-  // Prioritas 1: Tanggal aktif
   state.list.forEach(item => {
     let match = false;
     if (type === 'nogud') {
@@ -3831,7 +3675,6 @@ function handleGlobalSearch(type) {
     }
   });
 
-  // Prioritas 2: Tanggal-tanggal lainnya di SEED_DATA
   for (const tgl of Object.keys(SEED_DATA)) {
     if (tgl === currentDate) continue;
     SEED_DATA[tgl].forEach(item => {
@@ -3850,17 +3693,15 @@ function handleGlobalSearch(type) {
   if (allMatches.length === 0) {
     matchesBox.style.display = 'block';
     matchesBox.innerHTML = `
-      <div style="padding:10px; text-align:center; font-family:var(--font-mono); font-size:13px; color:#cbd5e1;">
-        Tidak ada data No Gud / Barkot "${q}" di tanggal mana pun.
+      <div style="padding:10px; text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--color-driftwood);">
+        TIDAK ADA DATA UNTUK "${q}"
       </div>
     `;
     hideSpotlight();
   } else if (allMatches.length === 1 && allMatches[0].isCurrentDate) {
-    // 1 match di tanggal aktif langsung spotlight
     matchesBox.style.display = 'none';
     showSpotlight(allMatches[0]);
   } else {
-    // Tampilkan daftar hasil temuan lintas tanggal
     matchesBox.style.display = 'flex';
     matchesBox.innerHTML = '';
 
@@ -3871,14 +3712,14 @@ function handleGlobalSearch(type) {
 
       card.innerHTML = `
         <div class="global-match-info">
-          <span class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'}</span>
-          <span class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:#ea580c;">⚠️ Belum Ketemu</b>' : ''}</span>
+          <span class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'BARKOT ' + m.barkot : 'TANPA BARKOT'}</span>
+          <span class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:var(--color-ember-accent);">⚠️ BELUM KETEMU</b>' : ''}</span>
           <div>
-            <span class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</span>
+            <span class="global-match-date-badge">${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(HARI INI)' : ''}</span>
           </div>
         </div>
-        <button class="btn-global-jump" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
-          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka Tgl'}
+        <button class="btn-ghost-outlined" style="padding:6px 12px; font-size:11px;" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
+          ${m.isCurrentDate ? '🔍 SOROT' : '🚀 BUKA TGL'}
         </button>
       `;
       matchesBox.appendChild(card);
@@ -3928,20 +3769,20 @@ function updateSpotlightUI() {
 
   if (isDone) {
     status.innerHTML = lockModeEnabled ? 
-      '<span style="color:#86efac; font-weight:800;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
-      '<span style="color:#86efac; font-weight:800;">✓ SUDAH DIBARKOT</span>';
+      '<span style="color:var(--color-warm-cream); font-weight:700;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
+      '<span style="color:var(--color-warm-cream); font-weight:700;">✓ SUDAH DIBARKOT</span>';
     
     if (lockModeEnabled) {
-      btn.textContent = '🔒 Bal Terkunci (Buka Kunci untuk Edit)';
-      btn.className = 'ghost-btn-full btn-locked';
+      btn.textContent = '🔒 TERKUNCI (BUKA KUNCI UNTUK EDIT)';
+      btn.className = 'btn-ghost-outlined';
     } else {
-      btn.textContent = '↺ Batalkan Centang';
-      btn.className = 'ghost-btn-full btn-done';
+      btn.textContent = '↺ BATALKAN CENTANG';
+      btn.className = 'btn-ghost-outlined';
     }
   } else {
     status.textContent = 'BELUM DIBARKOT';
-    btn.textContent = '✓ Tandai Sudah Ditempel';
-    btn.className = 'ghost-btn-full';
+    btn.textContent = '✓ TANDAI SUDAH DITEMPEL';
+    btn.className = 'btn-pill-filled';
   }
 }
 
@@ -3973,7 +3814,7 @@ async function toggleBal(no_gud) {
   if (isCurrentlyDone && lockModeEnabled) {
     initAudio();
     if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
-    showToast(`🔒 No Gud ${no_gud} terkunci! Buka Kunci di atas jika ingin membatalkan.`);
+    showToast(`🔒 NO GUD ${no_gud} TERKUNCI`);
     return;
   }
 
@@ -3987,11 +3828,11 @@ async function forceToggleBal(no_gud, newStatus) {
     state.doneMap[no_gud] = true;
     playBeep(true);
     if (navigator.vibrate) navigator.vibrate(35);
-    showToast(`✓ No Gud ${no_gud} selesai (Terkunci 🔒)`);
+    showToast(`✓ NO GUD ${no_gud} SELESAI`);
   } else {
     delete state.doneMap[no_gud];
     playBeep(false);
-    showToast(`No Gud ${no_gud} dibatalkan`);
+    showToast(`NO GUD ${no_gud} DIBATALKAN`);
   }
 
   const target = state.list.find(x => x.no_gud === no_gud);
@@ -4027,7 +3868,7 @@ async function forceToggleBal(no_gud, newStatus) {
 // ==========================================
 function setFilter(type, elem) {
   currentFilter = type;
-  document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.filter-pill-editorial').forEach(btn => btn.classList.remove('active'));
   if (elem) elem.classList.add('active');
   render();
 }
@@ -4053,10 +3894,10 @@ function render() {
   document.getElementById('pctLabel').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
 
-  document.getElementById('tabAll').textContent = `Semua (${total})`;
-  document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
-  document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
-  document.getElementById('tabMissing').textContent = `⚠️ Belum Ketemu (${missingCountInDate})`;
+  document.getElementById('tabAll').textContent = `SEMUA (${total})`;
+  document.getElementById('tabPending').textContent = `BELUM (${remainCount})`;
+  document.getElementById('tabDone').textContent = `SUDAH (${doneCount})`;
+  document.getElementById('tabMissing').textContent = `⚠️ BELUM KETEMU (${missingCountInDate})`;
 
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
@@ -4078,8 +3919,8 @@ function render() {
   if (filtered.length === 0) {
     emptyMsg.style.display = 'block';
     emptyMsg.textContent = total === 0 ? 
-      `Belum ada data bal untuk tanggal ${currentDate}.` : 
-      'Tidak ada data bal yang cocok dengan filter / pencarian.';
+      `BELUM ADA DATA UNTUK ${currentDate}.` : 
+      'TIDAK ADA DATA YANG COCOK DENGAN FILTER.';
   } else {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
@@ -4096,10 +3937,10 @@ function render() {
 
       const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode">—</span>';
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
-      const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
+      const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}KG</span>` : '';
 
       const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
-      const missingBadge = (isMissing && !isDone) ? '<span class="missing-flag">⚠️ Belum Ketemu</span>' : '';
+      const missingBadge = (isMissing && !isDone) ? '<span class="missing-flag">⚠️ BELUM KETEMU</span>' : '';
 
       card.innerHTML = `
         ${missingBadge}
@@ -4195,7 +4036,7 @@ function handleExcelUpload(event) {
       }
 
       if (parsedItems.length === 0) {
-        showToast('Tidak ada data No Gud yang terbaca di file Excel');
+        showToast('TIDAK ADA DATA NO GUD');
         return;
       }
 
@@ -4213,7 +4054,7 @@ function handleExcelUpload(event) {
         render();
 
         if (supabaseClient) {
-          showToast('Mengunggah ke database Supabase...');
+          showToast('MENGUNGGAH KE CLOUD...');
           const { error } = await supabaseClient
             .from('barkot_data')
             .upsert(parsedItems, { onConflict: 'tanggal,no_gud' });
@@ -4221,11 +4062,11 @@ function handleExcelUpload(event) {
           if (error) console.error('Supabase bulk upload err', error);
         }
 
-        showToast(`Berhasil memuat ${parsedItems.length} bal tembakau!`);
+        showToast(`BERHASIL MEMUAT ${parsedItems.length} BAL`);
       }
     } catch(err) {
       console.error(err);
-      showToast('Gagal memproses file Excel.');
+      showToast('GAGAL MEMPROSES FILE');
     }
   };
   reader.readAsArrayBuffer(file);
@@ -4234,10 +4075,10 @@ function handleExcelUpload(event) {
 // Sync All Local to Cloud
 async function syncAllLocalToCloud() {
   if (!supabaseClient) {
-    showToast('Hubungkan Supabase dulu lewat tombol Setup');
+    showToast('HUBUNGKAN SUPABASE DI SETUP');
     return;
   }
-  showToast('Mengunggah data ke Supabase...');
+  showToast('MENGUNGGAH DATA KE CLOUD...');
   try {
     const allRows = [];
     for (const tgl of Object.keys(SEED_DATA)) {
@@ -4257,11 +4098,11 @@ async function syncAllLocalToCloud() {
       .upsert(allRows, { onConflict: 'tanggal,no_gud' });
 
     if (error) throw error;
-    showToast(`Berhasil mengunggah ${allRows.length} bal ke Cloud!`);
+    showToast(`BERHASIL UPLOAD ${allRows.length} BAL`);
     await loadDataForCurrentDate();
   } catch(err) {
     console.error(err);
-    showToast('Gagal sinkronisasi ke Cloud.');
+    showToast('GAGAL SINKRONISASI');
   }
 }
 
@@ -4283,7 +4124,7 @@ ${remainNos.length > 0 ? `*Sisa No Gud Belum Dibarkot:* \n${remainNos.join(', ')
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      showToast('Laporan WA disalin ke Clipboard!');
+      showToast('LAPORAN WA DISALIN');
     });
   } else {
     prompt('Salin teks laporan di bawah ini:', text);
@@ -4301,13 +4142,13 @@ async function clearCurrentDateData() {
         .delete()
         .eq('tanggal', currentDate);
     }
-    showToast('Data tanggal ini dihapus');
+    showToast('DATA TANGGAL INI DIHAPUS');
   }
 }
 
 function refreshCurrentDateData() {
   loadDataForCurrentDate();
-  showToast('Memuat ulang data...');
+  showToast('MEMUAT ULANG DATA...');
 }
 
 // ==========================================
@@ -4333,14 +4174,14 @@ function saveSupabaseConfig() {
     closeConfigModal();
     initSupabase();
     loadDataForCurrentDate();
-    showToast('Supabase terhubung!');
+    showToast('SUPABASE TERHUBUNG');
   } else {
     localStorage.removeItem('supabase_url');
     localStorage.removeItem('supabase_anon_key');
     supabaseClient = null;
-    updateCloudBadge(false, 'Lokal');
+    updateCloudBadge(false, 'LOKAL');
     closeConfigModal();
-    showToast('Konfigurasi Supabase dihapus');
+    showToast('KONFIGURASI DIHAPUS');
   }
 }
 
@@ -4355,7 +4196,6 @@ let nativeDetector = null;
 let nativeScanTimer = null;
 let isProcessingScan = false;
 
-// Format Barcode Prioritas Tinggi (Stiker Bal Tembakau)
 const BARCODE_FORMATS = [
   Html5QrcodeSupportedFormats.CODE_128,
   Html5QrcodeSupportedFormats.CODE_39,
@@ -4379,7 +4219,7 @@ async function startScanner() {
   resultBox.style.display = 'none';
   quickInput.value = '';
   isProcessingScan = false;
-  status.textContent = 'Membuka kamera...';
+  status.textContent = 'MEMBUKA KAMERA...';
 
   initAudio();
 
@@ -4450,10 +4290,10 @@ async function startScanner() {
 
     startNativeFrameScanner();
 
-    status.innerHTML = '🔍 Posisikan <b>garis merah</b> melintang pada barcode (jarak ~15–20 cm)';
+    status.innerHTML = '🔍 POSISIKAN GARIS MERAH PADA BARCODE (~15–20 CM)';
   } catch(err) {
     console.error('Camera scanner start err', err);
-    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera aktif di browser.</span>';
+    status.innerHTML = '<span style="color:var(--color-ember-accent);">GAGAL MEMBUKA KAMERA. PERIKSA IZIN BROWSER.</span>';
   }
 }
 
@@ -4500,11 +4340,11 @@ async function toggleTorch() {
       advanced: [{ torch: isTorchOn }]
     });
     const btn = document.getElementById('torchBtn');
-    btn.textContent = isTorchOn ? '💡 Matikan Senter' : '🔦 Nyalakan Senter';
-    btn.style.background = isTorchOn ? '#facc15' : 'var(--color-bone)';
-    btn.style.color = isTorchOn ? '#000000' : 'var(--color-ink)';
+    btn.textContent = isTorchOn ? '💡 MATIKAN SENTER' : '🔦 NYALAKAN SENTER';
+    btn.style.background = isTorchOn ? 'var(--color-warm-cream)' : 'transparent';
+    btn.style.color = isTorchOn ? 'var(--color-walnut-shadow)' : 'var(--color-warm-cream)';
   } catch(e) {
-    showToast('Senter tidak didukung pada browser ini');
+    showToast('SENTER TIDAK DIDUKUNG');
   }
 }
 
@@ -4558,11 +4398,11 @@ async function processScannedCode(scannedCode, isManual = false) {
     if (navigator.vibrate) navigator.vibrate([70, 50, 70]);
 
     document.getElementById('scanFoundNoGud').textContent = `NO GUD ${match.no_gud}`;
-    document.getElementById('scanFoundBarkot').textContent = `Barkot: ${match.barkot || scannedCode}`;
+    document.getElementById('scanFoundBarkot').textContent = `BARKOT: ${match.barkot || scannedCode}`;
     document.getElementById('scanFoundMeta').textContent = `GRADE ${match.grade || '—'} · ${match.kg ? match.kg + ' KG' : '— KG'} · ${formatDateIndo(matchedDate)}`;
     resultBox.style.display = 'block';
 
-    status.innerHTML = `<span style="color:#4ade80; font-weight:800;">✓ KETEMU: NO GUD ${match.no_gud} (Tgl: ${formatDateIndo(matchedDate)})</span>`;
+    status.innerHTML = `<span style="color:var(--color-warm-cream); font-weight:700;">✓ KETEMU: NO GUD ${match.no_gud} (${formatDateIndo(matchedDate)})</span>`;
 
     setTimeout(async () => {
       await stopScanner();
@@ -4581,12 +4421,12 @@ async function processScannedCode(scannedCode, isManual = false) {
         if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 150);
 
-      showToast(`✓ Scan: No Gud ${match.no_gud} (Barkot ${match.barkot})`);
+      showToast(`✓ SCAN: NO GUD ${match.no_gud} (BARKOT ${match.barkot})`);
     }, isManual ? 400 : 900);
 
   } else {
     if (!isManual) {
-      status.innerHTML = `<span style="color:#f87171; font-weight:800;">⚠️ Barcode "${scannedCode}" tidak ada di database</span>`;
+      status.innerHTML = `<span style="color:var(--color-ember-accent); font-weight:700;">⚠️ BARCODE "${scannedCode}" TIDAK ADA</span>`;
     }
   }
 }
