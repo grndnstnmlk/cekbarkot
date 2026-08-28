@@ -596,6 +596,11 @@
     border-color: var(--color-eucalyptus);
     color: var(--color-pure-canvas);
   }
+  .filter-pill.out-pill.active {
+    background: #e11d48;
+    border-color: #e11d48;
+    color: var(--color-pure-canvas);
+  }
   .batch-actions {
     display: flex;
     gap: 4px;
@@ -709,6 +714,33 @@
     border-radius: var(--radius-pills);
     text-transform: uppercase;
     letter-spacing: 0.03em;
+  }
+
+  /* Card OUT State */
+  .bal-card.out-item {
+    border-color: #f43f5e;
+    background: #fffafa;
+  }
+  .bal-card.out-item .card-no {
+    color: #be123c;
+  }
+  .bal-card.out-item .out-flag {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: 8.5px;
+    font-weight: 700;
+    font-family: var(--font-space);
+    background: #e11d48;
+    color: #ffffff;
+    padding: 1px 6px;
+    border-radius: var(--radius-pills);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .bal-card.out-item .card-status-label {
+    color: #e11d48;
+    font-weight: 700;
   }
 
   /* DONE STATE (OEVRA SAGE HARMONY) */
@@ -926,7 +958,7 @@
         <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
         <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
         <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
-        <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
+        <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (54)</span>
       </div>
     </div>
   </div>
@@ -949,9 +981,9 @@
   <div class="missing-bal-banner" id="missingBanner" onclick="openMissingModal()">
     <div class="missing-banner-left">
       <span style="font-size:12px;">⚠️</span>
-      <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
+      <h4 class="missing-banner-title" id="missingBannerTitle">7 Bal Belum Ditempel (Belum Ketemu)</h4>
     </div>
-    <span class="missing-link-btn">Lihat (8) →</span>
+    <span class="missing-link-btn" id="missingBannerBtn">Lihat & Kelola (7) →</span>
   </div>
 
   <!-- UNIFIED COMPACT SEARCH BAR -->
@@ -969,7 +1001,7 @@
     <!-- Global Search Matches List -->
     <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
 
-    <!-- Spotlight Inset Card -->
+    <!-- Spotlight Inset Card (Lengkap dengan Aksi OUT & Edit Barkot) -->
     <div class="spotlight-inset" id="spotlightCard">
       <div class="spotlight-top-row">
         <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
@@ -980,9 +1012,22 @@
         <span id="spotKgVal">50 KG</span>
         <span id="spotStatusVal">BELUM DIBARKOT</span>
       </div>
-      <button class="oevra-btn-filled" style="width:100%; min-height:40px; font-size:12px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-        ✓ Tandai Sudah Ditempel
-      </button>
+      
+      <!-- Spotlight Multi-Action Buttons -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+        <button class="oevra-btn-filled" style="width:100%; min-height:38px; font-size:11.5px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
+          ✓ Tandai Selesai
+        </button>
+        <button class="oevra-btn-ghost" style="width:100%; min-height:38px; font-size:11.5px; border-color:#e11d48; color:#e11d48;" id="spotOutBtn" onclick="toggleSpotlightOut()">
+          🚫 Status: OUT
+        </button>
+      </div>
+
+      <!-- Quick Edit/Assign Barcode -->
+      <div style="display:flex; gap:6px;">
+        <input type="text" id="spotManualBarkotInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Isi / Ubah No Barkot..." style="font-size:11.5px; min-height:30px; padding:3px 8px;">
+        <button class="oevra-btn-ghost" style="padding:3px 8px; font-size:10.5px; min-height:30px; white-space:nowrap; border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="saveSpotlightBarkot()">💾 Simpan Barkot</button>
+      </div>
     </div>
   </div>
 
@@ -990,6 +1035,9 @@
   <div class="filter-bar">
     <div class="filter-pills">
       <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
+      <button class="filter-pill" onclick="setFilter('with_barkot', this)" id="tabWithBarkot">Berbarkot (0)</button>
+      <button class="filter-pill" onclick="setFilter('no_barkot', this)" id="tabNoBarkot">Tanpa Barkot (0)</button>
+      <button class="filter-pill out-pill" onclick="setFilter('out', this)" id="tabOut">🚫 OUT (0)</button>
       <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
       <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
       <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Hilang (0)</button>
@@ -1009,7 +1057,7 @@
     <p style="font-family:var(--font-space); font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--color-eucalyptus); margin:0 0 4px;">Sinkronisasi Cloud & Berkas</p>
     <h3>Pengelolaan Berkas Excel</h3>
     <p style="font-size:12px; color:var(--color-graphite); margin:0 0 12px;">
-      Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru atau salin rekap laporan ke WhatsApp:
+      Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru (termasuk bal tanpa barkot & bal OUT):
     </p>
     <div style="display:flex; flex-wrap:wrap; gap:6px;">
       <label class="oevra-btn-ghost" style="cursor:pointer;">
@@ -1028,16 +1076,31 @@
   </div>
 </main>
 
-<!-- Modal 8 Bal Belum Ditempel -->
+<!-- Modal Bal Belum Ketemu (Dinamis: Bisa Tambah & Hapus) -->
 <div class="modal-overlay" id="missingModal">
   <div class="modal-card">
-    <p style="font-family:var(--font-space); font-size:10.5px; font-weight:600; text-transform:uppercase; color:var(--color-eucalyptus); margin:0 0 2px;">Belum Ditempel</p>
-    <h3 class="modal-title">8 Bal Belum Ketemu</h3>
-    <p style="font-size:12px; color:var(--color-graphite); margin:0 0 12px;">
-      Daftar 8 barcode yang belum ditempel karena bal tembakau belum ditemukan di gudang:
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+      <div>
+        <p style="font-family:var(--font-space); font-size:10.5px; font-weight:600; text-transform:uppercase; color:var(--color-eucalyptus); margin:0 0 2px;">Daftar Belum Ditempel</p>
+        <h3 class="modal-title" id="missingModalTitle" style="margin:0;">Bal Belum Ketemu</h3>
+      </div>
+      <button class="oevra-btn-ghost" style="padding:3px 8px; font-size:11px; min-height:26px;" onclick="closeMissingModal()">✕</button>
+    </div>
+    <p style="font-size:12px; color:var(--color-graphite); margin:0 0 10px;">
+      Daftar barcode yang belum ditempel fisik balnya. Anda dapat menghapus barcode yang sudah ditemukan atau menambah barcode baru:
     </p>
-    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
-    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+
+    <!-- Form Tambah Barcode Belum Ketemu -->
+    <div style="display:flex; gap:6px; margin-bottom:12px;">
+      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot baru (misal: 31155)..." style="font-size:12px; min-height:32px; padding:4px 10px;">
+      <button class="oevra-btn-filled" style="padding:4px 12px; font-size:11px; min-height:32px; white-space:nowrap;" onclick="addNewMissingBarcode()">+ Tambah</button>
+    </div>
+
+    <!-- List Item Belum Ketemu -->
+    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto;"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid var(--color-mist);">
+      <button class="oevra-btn-ghost" style="font-size:10.5px; padding:4px 8px; color:var(--color-graphite);" onclick="resetMissingBarcodesDefault()">↺ Reset Default</button>
       <button class="oevra-btn-ghost" onclick="closeMissingModal()">Tutup</button>
     </div>
   </div>
@@ -1109,6 +1172,42 @@ const SEED_DATA = {
       "grade": "67",
       "barkot": "943614",
       "kg": 38
+    },
+    {
+      "tanggal": "2026-08-27",
+      "no_gud": 43,
+      "grade": "58",
+      "barkot": "",
+      "kg": 45,
+      "is_out": true,
+      "ket": "oot mote"
+    },
+    {
+      "tanggal": "2026-08-27",
+      "no_gud": 114,
+      "grade": "68",
+      "barkot": "",
+      "kg": 43,
+      "is_out": true,
+      "ket": "oot mote"
+    },
+    {
+      "tanggal": "2026-08-27",
+      "no_gud": 118,
+      "grade": "68",
+      "barkot": "",
+      "kg": 50,
+      "is_out": true,
+      "ket": "oot"
+    },
+    {
+      "tanggal": "2026-08-27",
+      "no_gud": 507,
+      "grade": "58",
+      "barkot": "",
+      "kg": 50,
+      "is_out": true,
+      "ket": "oot mote"
     },
     {
       "tanggal": "2026-08-27",
@@ -3111,7 +3210,79 @@ const SEED_DATA = {
   ]
 };
 
-const MISSING_BARCODES = ["31155", "33419", "33422", "33743", "33744", "32277", "32278", "943613"];
+const DEFAULT_MISSING_BARCODES = ["31155", "33419", "33422", "33743", "33744", "32277", "32278"];
+
+function getMissingBarcodesList() {
+  try {
+    const raw = localStorage.getItem('barkot_missing_list');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch(e) {}
+  return [...DEFAULT_MISSING_BARCODES];
+}
+
+function saveMissingBarcodesList(arr) {
+  try {
+    localStorage.setItem('barkot_missing_list', JSON.stringify(arr));
+  } catch(e) {}
+  updateMissingBannerCount();
+  render();
+}
+
+function updateMissingBannerCount() {
+  const list = getMissingBarcodesList();
+  const count = list.length;
+  const banner = document.getElementById('missingBanner');
+  const title = document.getElementById('missingBannerTitle');
+  const btn = document.getElementById('missingBannerBtn');
+  const modalTitle = document.getElementById('missingModalTitle');
+  
+  if (count === 0) {
+    if (banner) banner.style.display = 'none';
+  } else {
+    if (banner) banner.style.display = 'flex';
+    if (title) title.textContent = `${count} Bal Belum Ditempel (Belum Ketemu)`;
+    if (btn) btn.textContent = `Lihat & Kelola (${count}) →`;
+  }
+  if (modalTitle) modalTitle.textContent = `${count} Bal Belum Ketemu`;
+}
+
+function removeMissingBarcode(code) {
+  const currentList = getMissingBarcodesList();
+  const updated = currentList.filter(b => b !== code);
+  saveMissingBarcodesList(updated);
+  openMissingModal();
+  showToast(`✓ Barkot ${code} ditandai ketemu & dihapus dari list`);
+}
+
+function addNewMissingBarcode() {
+  const input = document.getElementById('newMissingInput');
+  const code = (input?.value || '').trim();
+  if (!code) {
+    showToast('Ketik nomor barkot terlebih dahulu');
+    return;
+  }
+  const currentList = getMissingBarcodesList();
+  if (currentList.includes(code)) {
+    showToast(`Barkot ${code} sudah ada di daftar`);
+    return;
+  }
+  currentList.push(code);
+  saveMissingBarcodesList(currentList);
+  if (input) input.value = '';
+  openMissingModal();
+  showToast(`✓ Barkot ${code} ditambahkan ke daftar belum ketemu`);
+}
+
+function resetMissingBarcodesDefault() {
+  if (confirm('Kembalikan daftar barkot belum ketemu ke data bawaan (7 bal)?')) {
+    saveMissingBarcodesList([...DEFAULT_MISSING_BARCODES]);
+    openMissingModal();
+    showToast('Daftar di-reset ke bawaan default');
+  }
+}
 
 let currentDate = '2026-08-27';
 let state = {
@@ -3163,32 +3334,50 @@ function applyFontSize(mode) {
 }
 
 // ==========================================
-// MODAL 8 BAL BELUM KETEMU
+// MODAL BAL BELUM KETEMU (DINAMIS)
 // ==========================================
 function openMissingModal() {
+  updateMissingBannerCount();
   const container = document.getElementById('missingListContainer');
   container.innerHTML = '';
+  const currentMissing = getMissingBarcodesList();
 
-  const allFound = [];
-  for (const b of MISSING_BARCODES) {
+  if (currentMissing.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--color-graphite); font-size:12px;">Semua barcode sudah ditemukan! Tidak ada barcode hilang.</div>';
+    document.getElementById('missingModal').classList.add('open');
+    return;
+  }
+
+  currentMissing.forEach(code => {
+    let matchInfo = null;
     for (const tgl of Object.keys(SEED_DATA)) {
-      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === b);
+      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === code);
       if (match) {
-        allFound.push({ ...match, tgl: tgl });
+        matchInfo = { ...match, tgl: tgl };
         break;
       }
     }
-  }
+    if (!matchInfo && state.list) {
+      const match = state.list.find(x => String(x.barkot).trim() === code);
+      if (match) matchInfo = { ...match, tgl: currentDate };
+    }
 
-  allFound.forEach(it => {
     const itemEl = document.createElement('div');
-    itemEl.style.cssText = 'background:#fafbf8; border:1px solid var(--color-mist); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+    itemEl.style.cssText = 'background:#fafbf8; border:1px solid var(--color-mist); border-radius:8px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+    
+    const subText = matchInfo ? 
+      `Tgl: ${formatDateIndo(matchInfo.tgl)} · No Gud: ${matchInfo.no_gud} · GR: ${matchInfo.grade || '—'} · ${matchInfo.kg ? matchInfo.kg + 'kg' : '—'}` :
+      'Nomor barkot dicatat di lapangan';
+
     itemEl.innerHTML = `
-      <div style="display:flex; flex-direction:column;">
-        <span style="font-family:var(--font-mono); font-size:16px; font-weight:700; color:var(--color-eucalyptus-dark);">Barkot ${it.barkot}</span>
-        <span style="font-family:var(--font-space); font-size:11.5px; color:var(--color-graphite);">Tgl: ${formatDateIndo(it.tgl)} · No Gud: ${it.no_gud} · GR: ${it.grade} · ${it.kg || '-'}kg</span>
+      <div style="display:flex; flex-direction:column; min-width:0;">
+        <span style="font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--color-eucalyptus-dark);">Barkot ${code}</span>
+        <span style="font-family:var(--font-space); font-size:11px; color:var(--color-graphite); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${subText}</span>
       </div>
-      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11px; border-color:var(--color-eucalyptus);" onclick="jumpToMissingBal('${it.tgl}', ${it.no_gud})">🔍 Buka</button>
+      <div style="display:flex; gap:4px; flex-shrink:0;">
+        ${matchInfo ? `<button class="oevra-btn-ghost" style="padding:4px 8px; font-size:10.5px; border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="jumpToMissingBal('${matchInfo.tgl}', ${matchInfo.no_gud})">🔍 Buka</button>` : ''}
+        <button class="oevra-btn-ghost" style="padding:4px 8px; font-size:10.5px; border-color:#e11d48; color:#e11d48;" title="Hapus dari daftar (Sudah Ketemu)" onclick="removeMissingBarcode('${code}')">✓ Ketemu</button>
+      </div>
     `;
     container.appendChild(itemEl);
   });
@@ -3425,9 +3614,11 @@ async function loadDataForCurrentDate() {
 
   if (!found && SEED_DATA[currentDate]) {
     const doneMap = {};
+    const missingList = getMissingBarcodesList();
     const list = SEED_DATA[currentDate].map(x => {
-      const isMissing = MISSING_BARCODES.includes(String(x.barkot).trim());
-      const isDone = !isMissing;
+      const isMissing = missingList.includes(String(x.barkot || '').trim());
+      const isOut = Boolean(x.is_out);
+      const isDone = !isMissing && !isOut;
       if (isDone) doneMap[x.no_gud] = true;
       return {
         ...x,
@@ -3448,6 +3639,7 @@ async function loadDataForCurrentDate() {
   }
 
   render();
+  updateMissingBannerCount();
 
   if (supabaseClient) {
     try {
@@ -3576,6 +3768,7 @@ function handleUnifiedSearch(val) {
   if (barkotInput) barkotInput.value = q;
 
   const allMatches = [];
+  const missingList = getMissingBarcodesList();
 
   // Cari di tanggal aktif
   state.list.forEach(item => {
@@ -3616,11 +3809,12 @@ function handleUnifiedSearch(val) {
     allMatches.slice(0, 8).forEach(m => {
       const card = document.createElement('div');
       card.className = 'global-match-card';
-      const isMissing = MISSING_BARCODES.includes(String(m.barkot).trim());
+      const isMissing = missingList.includes(String(m.barkot || '').trim());
+      const isOut = Boolean(m.is_out);
 
       card.innerHTML = `
         <div>
-          <div class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'}</div>
+          <div class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'} ${isOut ? '<span style="color:#e11d48; font-weight:700;">[OUT]</span>' : ''}</div>
           <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:var(--color-eucalyptus-dark);">⚠️ Belum Ketemu</b>' : ''}</div>
           <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</div>
         </div>
@@ -3676,6 +3870,9 @@ function showSpotlight(item) {
   document.getElementById('spotGradeVal').textContent = item.grade ? `GRADE ${item.grade}` : 'GRADE —';
   document.getElementById('spotKgVal').textContent = item.kg ? `${item.kg} KG` : '— KG';
   
+  const manualInput = document.getElementById('spotManualBarkotInput');
+  if (manualInput) manualInput.value = item.barkot || '';
+
   updateSpotlightUI();
   spotlight.style.display = 'block';
 }
@@ -3683,14 +3880,37 @@ function showSpotlight(item) {
 function updateSpotlightUI() {
   if (!activeSpotlightBal) return;
   const isDone = Boolean(state.doneMap[activeSpotlightBal.no_gud]);
+  const isOut = Boolean(activeSpotlightBal.is_out);
   const btn = document.getElementById('spotToggleBtn');
+  const outBtn = document.getElementById('spotOutBtn');
   const status = document.getElementById('spotStatusVal');
+  const barkotVal = document.getElementById('spotBarkotVal');
+
+  if (barkotVal) barkotVal.textContent = activeSpotlightBal.barkot || '—';
+
+  if (isOut) {
+    status.innerHTML = '<span style="color:#e11d48; font-weight:700;">🚫 BAL OUT (TIDAK DIPROSES)</span>';
+    if (outBtn) {
+      outBtn.textContent = '✓ Jadikan Proses';
+      outBtn.style.color = 'var(--color-eucalyptus-dark)';
+      outBtn.style.borderColor = 'var(--color-eucalyptus)';
+    }
+  } else {
+    if (outBtn) {
+      outBtn.textContent = '🚫 Status: OUT';
+      outBtn.style.color = '#e11d48';
+      outBtn.style.borderColor = '#e11d48';
+    }
+    if (isDone) {
+      status.innerHTML = lockModeEnabled ? 
+        '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">🔒 SELESAI (TERKUNCI)</span>' : 
+        '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">✓ SELESAI DICEK</span>';
+    } else {
+      status.textContent = activeSpotlightBal.barkot ? 'BELUM DIBARKOT' : 'TANPA BARKOT';
+    }
+  }
 
   if (isDone) {
-    status.innerHTML = lockModeEnabled ? 
-      '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
-      '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">✓ SUDAH DIBARKOT</span>';
-    
     if (lockModeEnabled) {
       btn.textContent = '🔒 Bal Terkunci';
       btn.className = 'oevra-btn-ghost';
@@ -3699,8 +3919,7 @@ function updateSpotlightUI() {
       btn.className = 'oevra-btn-ghost';
     }
   } else {
-    status.textContent = 'BELUM DIBARKOT';
-    btn.textContent = '✓ Tandai Sudah Ditempel';
+    btn.textContent = '✓ Tandai Selesai';
     btn.className = 'oevra-btn-filled';
   }
 }
@@ -3722,6 +3941,78 @@ function toggleSpotlightBal() {
   }
   
   toggleBal(activeSpotlightBal.no_gud);
+}
+
+async function toggleSpotlightOut() {
+  if (!activeSpotlightBal) return;
+  initAudio();
+  const target = state.list.find(x => x.no_gud === activeSpotlightBal.no_gud);
+  if (!target) return;
+
+  target.is_out = !target.is_out;
+  activeSpotlightBal.is_out = target.is_out;
+
+  if (target.is_out) {
+    showToast(`🚫 No Gud ${target.no_gud} ditandai sebagai OUT`);
+  } else {
+    showToast(`✓ No Gud ${target.no_gud} dikembalikan ke status Diproses`);
+  }
+
+  saveLocalState();
+  render();
+  updateSpotlightUI();
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient
+        .from('barkot_data')
+        .upsert({
+          tanggal: currentDate,
+          no_gud: target.no_gud,
+          grade: target.grade || '',
+          barkot: target.barkot || '',
+          kg: target.kg || null,
+          is_done: Boolean(state.doneMap[target.no_gud]),
+          is_out: target.is_out
+        }, { onConflict: 'tanggal,no_gud' });
+    } catch(err) {
+      console.error('Supabase update out err', err);
+    }
+  }
+}
+
+async function saveSpotlightBarkot() {
+  if (!activeSpotlightBal) return;
+  const input = document.getElementById('spotManualBarkotInput');
+  const newBarkot = (input?.value || '').trim();
+  const target = state.list.find(x => x.no_gud === activeSpotlightBal.no_gud);
+  if (!target) return;
+
+  target.barkot = newBarkot;
+  activeSpotlightBal.barkot = newBarkot;
+  
+  saveLocalState();
+  render();
+  updateSpotlightUI();
+  showToast(`✓ No Barkot untuk No Gud ${target.no_gud} disimpan: ${newBarkot || '(Kosong)'}`);
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient
+        .from('barkot_data')
+        .upsert({
+          tanggal: currentDate,
+          no_gud: target.no_gud,
+          grade: target.grade || '',
+          barkot: target.barkot || '',
+          kg: target.kg || null,
+          is_done: Boolean(state.doneMap[target.no_gud]),
+          is_out: target.is_out
+        }, { onConflict: 'tanggal,no_gud' });
+    } catch(err) {
+      console.error('Supabase barkot update err', err);
+    }
+  }
 }
 
 // ==========================================
@@ -3774,7 +4065,8 @@ async function forceToggleBal(no_gud, newStatus) {
           barkot: target ? target.barkot : '',
           kg: target ? target.kg : null,
           is_done: newStatus,
-          done_at: newStatus ? new Date().toISOString() : null
+          done_at: newStatus ? new Date().toISOString() : null,
+          is_out: target ? Boolean(target.is_out) : false
         }, { onConflict: 'tanggal,no_gud' });
     } catch(err) {
       console.error('Supabase update err', err);
@@ -3800,11 +4092,15 @@ function render() {
   grid.innerHTML = '';
 
   const total = state.list.length;
+  const withBarkotCount = state.list.filter(x => x.barkot && String(x.barkot).trim() !== '' && !x.is_out).length;
+  const noBarkotCount = state.list.filter(x => (!x.barkot || String(x.barkot).trim() === '') && !x.is_out).length;
+  const outCount = state.list.filter(x => Boolean(x.is_out)).length;
   const doneCount = Object.keys(state.doneMap).length;
   const remainCount = Math.max(0, total - doneCount);
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
-  const missingCountInDate = state.list.filter(x => MISSING_BARCODES.includes(String(x.barkot).trim())).length;
+  const missingList = getMissingBarcodesList();
+  const missingCountInDate = state.list.filter(x => missingList.includes(String(x.barkot || '').trim())).length;
 
   document.getElementById('countDone').textContent = doneCount;
   document.getElementById('countTotal').textContent = total;
@@ -3812,15 +4108,31 @@ function render() {
   document.getElementById('pctLabel').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
 
-  document.getElementById('tabAll').textContent = `Semua (${total})`;
-  document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
-  document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
-  document.getElementById('tabMissing').textContent = `⚠️ Hilang (${missingCountInDate})`;
+  const tabAll = document.getElementById('tabAll');
+  const tabWithBarkot = document.getElementById('tabWithBarkot');
+  const tabNoBarkot = document.getElementById('tabNoBarkot');
+  const tabOut = document.getElementById('tabOut');
+  const tabPending = document.getElementById('tabPending');
+  const tabDone = document.getElementById('tabDone');
+  const tabMissing = document.getElementById('tabMissing');
+
+  if (tabAll) tabAll.textContent = `Semua (${total})`;
+  if (tabWithBarkot) tabWithBarkot.textContent = `Berbarkot (${withBarkotCount})`;
+  if (tabNoBarkot) tabNoBarkot.textContent = `Tanpa Barkot (${noBarkotCount})`;
+  if (tabOut) tabOut.textContent = `🚫 OUT (${outCount})`;
+  if (tabPending) tabPending.textContent = `Belum (${remainCount})`;
+  if (tabDone) tabDone.textContent = `Sudah (${doneCount})`;
+  if (tabMissing) tabMissing.textContent = `⚠️ Hilang (${missingCountInDate})`;
 
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
-    const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
+    const isMissing = missingList.includes(String(item.barkot || '').trim());
+    const hasBarkot = Boolean(item.barkot && String(item.barkot).trim() !== '');
+    const isOut = Boolean(item.is_out);
 
+    if (currentFilter === 'with_barkot' && (!hasBarkot || isOut)) return false;
+    if (currentFilter === 'no_barkot' && (hasBarkot || isOut)) return false;
+    if (currentFilter === 'out' && !isOut) return false;
     if (currentFilter === 'pending' && isDone) return false;
     if (currentFilter === 'done' && !isDone) return false;
     if (currentFilter === 'missing' && !isMissing) return false;
@@ -3842,24 +4154,41 @@ function render() {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
       const isDone = Boolean(state.doneMap[item.no_gud]);
-      const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
+      const isMissing = missingList.includes(String(item.barkot || '').trim());
+      const isOut = Boolean(item.is_out);
       const isSearchMatch = searchQ && (String(item.no_gud) === searchQ || (item.barkot && String(item.barkot).trim() === searchQ));
 
       const card = document.createElement('div');
       card.className = 'bal-card' + 
                        (isDone ? ' done' : '') + 
+                       (isOut ? ' out-item' : '') +
                        (isMissing && !isDone ? ' missing-item' : '') + 
                        (isSearchMatch ? ' highlight' : '');
 
-      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode">—</span>';
+      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode" style="color:var(--color-graphite); font-size:10px; font-style:italic;">Tanpa Barkot</span>';
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
       const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
 
       const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
-      const missingBadge = (isMissing && !isDone) ? '<span class="missing-flag">Belum Ketemu</span>' : '';
+      
+      let badgeHtml = '';
+      if (isOut) {
+        badgeHtml = '<span class="out-flag">OUT</span>';
+      } else if (isMissing && !isDone) {
+        badgeHtml = '<span class="missing-flag">Belum Ketemu</span>';
+      }
+
+      let statusLabel = 'NO GUD';
+      if (isOut) {
+        statusLabel = '🚫 OUT (TIDAK DIPROSES)';
+      } else if (isDone) {
+        statusLabel = lockModeEnabled ? 'TERKUNCI' : 'SELESAI';
+      } else if (isMissing) {
+        statusLabel = 'BELUM KETEMU';
+      }
 
       card.innerHTML = `
-        ${missingBadge}
+        ${badgeHtml}
         ${isDone ? `<span class="badge-top-right">${lockIndicator}</span>` : ''}
         <div class="card-no">${item.no_gud}</div>
         <div class="card-meta">
@@ -3867,11 +4196,13 @@ function render() {
           ${gradeHtml}
           ${kgHtml}
         </div>
-        <div class="card-status-label">${isDone ? (lockModeEnabled ? 'TERKUNCI' : 'SELESAI') : (isMissing ? 'BELUM KETEMU' : 'NO GUD')}</div>
+        <div class="card-status-label">${statusLabel}</div>
       `;
       card.onclick = () => {
         showSpotlight(item);
-        toggleBal(item.no_gud);
+        if (!isOut) {
+          toggleBal(item.no_gud);
+        }
       };
       grid.appendChild(card);
     }
@@ -3938,14 +4269,21 @@ function handleExcelUpload(event) {
           const g1 = row[1] !== undefined && row[1] !== null ? String(row[1]).trim() : '';
           const g2 = row[2] !== undefined && row[2] !== null ? String(row[2]).trim() : '';
           const grade = g1 || g2;
-          const barkot = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '';
+          const barkotRaw = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '';
+          const barkot = (barkotRaw === '-' || barkotRaw === '—' || barkotRaw.toLowerCase() === 'none') ? '' : barkotRaw;
           const kg = row[4] !== undefined && row[4] !== null ? row[4] : null;
+          const ket = row[5] !== undefined && row[5] !== null ? String(row[5]).trim() : '';
+
+          const isOut = ket.toLowerCase().includes('out') || ket.toLowerCase().includes('oot') || grade.toLowerCase().includes('out');
+
           parsedItems.push({
             tanggal: detectedDate,
             no_gud: no_gud,
             grade: grade,
             barkot: barkot,
             kg: kg,
+            ket: ket,
+            is_out: isOut,
             is_done: false
           });
         }
