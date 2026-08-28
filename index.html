@@ -913,7 +913,6 @@
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
       <button class="oevra-btn-ghost active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 ON</button>
       <button class="oevra-btn-ghost" id="soundBtn" onclick="toggleSound()" title="Suara Bip">🔔</button>
-      <button class="oevra-btn-ghost" onclick="openConfigModal()" title="Pengaturan">⚙️</button>
     </div>
   </div>
 
@@ -1044,24 +1043,6 @@
   </div>
 </div>
 
-<!-- Modal Setup Supabase -->
-<div class="modal-overlay" id="configModal">
-  <div class="modal-card">
-    <p class="section-label">Cloud Configuration</p>
-    <h3 class="modal-title">Pengaturan Supabase</h3>
-    
-    <label style="font-family:var(--font-space); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-graphite); display:block; margin-bottom:4px;">Project URL:</label>
-    <input type="text" id="cfgUrl" class="editorial-input" style="font-size:14px; margin-bottom:12px;" placeholder="https://jrpklibocgicubevyshm.supabase.co" autocapitalize="none" autocomplete="off">
-
-    <label style="font-family:var(--font-space); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-graphite); display:block; margin-bottom:4px;">Anon Public Key:</label>
-    <input type="password" id="cfgKey" class="editorial-input" style="font-size:14px; margin-bottom:16px;" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
-
-    <div style="display:flex; justify-content:flex-end; gap:8px;">
-      <button class="oevra-btn-ghost" onclick="closeConfigModal()">Batal</button>
-      <button class="oevra-btn-filled" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
-    </div>
-  </div>
-</div>
 
 <!-- Modal Camera Barcode Scanner -->
 <div class="modal-overlay" id="scannerModal">
