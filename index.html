@@ -26,11 +26,11 @@
   :root {
     /* Oevra Design Tokens */
     --color-eucalyptus: #778643;
-    --gradient-eucalyptus: radial-gradient(ellipse at 50% 25%, rgba(119,134,67,0.22) 0%, rgba(119,134,67,0.06) 50%, #ffffff 100%);
+    --gradient-eucalyptus: radial-gradient(ellipse at 50% 20%, rgba(119,134,67,0.16) 0%, rgba(119,134,67,0.03) 50%, #ffffff 100%);
     --color-ink-black: #000000;
     --color-pure-canvas: #ffffff;
     --color-graphite: #4e4e4e;
-    --color-mist: #c8c8c8;
+    --color-mist: #dcdfd8;
     --color-mist-light: #f4f6f1;
     --color-eucalyptus-wash: rgba(119, 134, 67, 0.12);
     --color-eucalyptus-dark: #586430;
@@ -41,16 +41,16 @@
     --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
     /* Border Radii (Oevra Standard) */
-    --radius-cards: 15px;
-    --radius-images: 15px;
-    --radius-buttons: 22.5px;
-    --radius-pills: 22.5px;
+    --radius-cards: 14px;
+    --radius-images: 14px;
+    --radius-buttons: 20px;
+    --radius-pills: 20px;
 
     /* Adaptive Typography & Sizing */
-    --card-no-size: 34px;
-    --card-barkot-size: 15px;
-    --card-min-h: 124px;
-    --touch-target: 48px;
+    --card-no-size: 32px;
+    --card-barkot-size: 14.5px;
+    --card-min-h: 112px;
+    --touch-target: 40px;
 
     /* Safe Area insets */
     --sat: env(safe-area-inset-top, 0px);
@@ -61,22 +61,22 @@
 
   /* Font Modes */
   body.font-mode-normal {
-    --card-no-size: 28px;
-    --card-barkot-size: 13.5px;
-    --card-min-h: 108px;
-    --touch-target: 44px;
+    --card-no-size: 26px;
+    --card-barkot-size: 12.5px;
+    --card-min-h: 96px;
+    --touch-target: 36px;
   }
   body.font-mode-a16 {
-    --card-no-size: 34px;
-    --card-barkot-size: 15.5px;
-    --card-min-h: 126px;
-    --touch-target: 50px;
+    --card-no-size: 32px;
+    --card-barkot-size: 14.5px;
+    --card-min-h: 112px;
+    --touch-target: 40px;
   }
   body.font-mode-lansia {
-    --card-no-size: 42px;
-    --card-barkot-size: 18px;
-    --card-min-h: 148px;
-    --touch-target: 56px;
+    --card-no-size: 38px;
+    --card-barkot-size: 16.5px;
+    --card-min-h: 132px;
+    --touch-target: 44px;
   }
 
   * {
@@ -95,25 +95,25 @@
     font-family: var(--font-space);
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    padding-bottom: calc(var(--sab) + 40px);
+    padding-bottom: calc(var(--sab) + 30px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.3;
   }
 
-  /* Oevra Micro Top Bar */
+  /* Oevra Micro Top Bar (Ultra Slim & Subtle) */
   .oevra-topbar {
     background: transparent;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    padding-top: calc(var(--sat) + 8px);
-    padding-bottom: 8px;
-    padding-left: calc(var(--sal) + 20px);
-    padding-right: calc(var(--sar) + 20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    padding-top: calc(var(--sat) + 4px);
+    padding-bottom: 4px;
+    padding-left: calc(var(--sal) + 14px);
+    padding-right: calc(var(--sar) + 14px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
     color: var(--color-graphite);
     text-transform: uppercase;
@@ -122,7 +122,7 @@
   .oevra-topbar-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   .eucalyptus-dot {
     width: 6px;
@@ -132,91 +132,87 @@
     display: inline-block;
   }
 
-  /* Header Section */
+  /* Header Section (Compact, Space-Optimized Sticky Bar) */
   header {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-mist);
-    padding: 18px calc(var(--sal) + 20px) 14px calc(var(--sar) + 20px);
+    padding: 8px calc(var(--sal) + 14px) 8px calc(var(--sar) + 14px);
     position: sticky;
     top: 0;
     z-index: 50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
   }
   
   .header-main {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 12px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
   }
   .title-group {
-    flex: 1;
-    min-width: 200px;
-  }
-  .section-label {
-    font-family: var(--font-space);
-    font-size: 10.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-eucalyptus);
-    margin: 0 0 4px;
     display: flex;
-    align-items: center;
-    gap: 6px;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
   }
   .display-title {
     margin: 0;
     font-family: var(--font-suisse);
-    font-size: 34px;
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
     color: var(--color-ink-black);
+    white-space: nowrap;
   }
   .display-subtitle {
-    margin: 4px 0 0;
+    margin: 0;
     font-family: var(--font-space);
-    font-size: 13.5px;
-    font-weight: 400;
+    font-size: 11.5px;
+    font-weight: 500;
     color: var(--color-graphite);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .header-actions {
     display: flex;
-    gap: 8px;
+    gap: 5px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-shrink: 0;
   }
 
-  /* Oevra Outlined Pill Buttons */
+  /* Oevra Outlined Pill Buttons (Compact & Crisp) */
   .oevra-btn-ghost {
     background: transparent;
     border: 1px solid var(--color-ink-black);
     color: var(--color-ink-black);
     border-radius: var(--radius-buttons);
-    padding: 9px 18px;
-    min-height: var(--touch-target);
+    padding: 5px 11px;
+    min-height: 32px;
     font-family: var(--font-space);
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 4px;
     user-select: none;
     -webkit-user-select: none;
+    white-space: nowrap;
   }
   .oevra-btn-ghost:active {
     background: var(--color-mist-light);
-    transform: scale(0.97);
+    transform: scale(0.96);
   }
   .oevra-btn-ghost.active-lock {
     border-color: var(--color-eucalyptus);
@@ -231,77 +227,80 @@
     border: 1px solid transparent;
     color: var(--color-pure-canvas);
     border-radius: var(--radius-buttons);
-    padding: 9px 20px;
-    min-height: var(--touch-target);
+    padding: 5px 13px;
+    min-height: 32px;
     font-family: var(--font-space);
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 4px;
     user-select: none;
     -webkit-user-select: none;
+    white-space: nowrap;
   }
   .oevra-btn-filled:active {
     background: var(--color-eucalyptus-dark);
-    transform: scale(0.97);
+    transform: scale(0.96);
   }
 
   /* Date Pills Row */
   .date-section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 6px;
+    gap: 4px;
   }
   .date-selector-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
   }
+  .date-selector-row::-webkit-scrollbar { display: none; }
+
   .date-picker {
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
     border-radius: var(--radius-buttons);
-    padding: 6px 14px;
-    min-height: 40px;
+    padding: 3px 8px;
+    min-height: 29px;
     font-family: var(--font-space);
-    font-size: 13px;
+    font-size: 11.5px;
     font-weight: 500;
     color: var(--color-ink-black);
     outline: none;
+    flex-shrink: 0;
   }
   .quick-dates-bar {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding: 2px 0 4px;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
   }
-  .quick-dates-bar::-webkit-scrollbar { display: none; }
 
   .date-pill {
     font-family: var(--font-space);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     background: var(--color-pure-canvas);
     color: var(--color-graphite);
     border: 1px solid var(--color-mist);
     border-radius: var(--radius-pills);
-    padding: 6px 14px;
-    min-height: 38px;
+    padding: 3px 10px;
+    min-height: 29px;
     display: inline-flex;
     align-items: center;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     flex-shrink: 0;
     letter-spacing: 0.02em;
   }
@@ -312,14 +311,15 @@
     background: var(--color-eucalyptus);
     color: var(--color-pure-canvas);
     border-color: var(--color-eucalyptus);
+    font-weight: 600;
   }
 
   /* Progress Track (Hairline Minimalist) */
   .progress-container {
-    margin-top: 10px;
+    margin-top: 5px;
   }
   .progress-track {
-    height: 3px;
+    height: 2.5px;
     background: var(--color-mist-light);
     border-radius: var(--radius-pills);
     overflow: hidden;
@@ -335,10 +335,10 @@
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-space);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 400;
     color: var(--color-graphite);
-    margin-top: 6px;
+    margin-top: 3px;
   }
   .progress-label-row b {
     color: var(--color-ink-black);
@@ -348,166 +348,162 @@
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
-    color: var(--color-eucalyptus);
+    color: var(--color-eucalyptus-dark);
   }
 
   /* Main Container */
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px calc(var(--sal) + 16px) 30px calc(var(--sar) + 16px);
+    padding: 10px calc(var(--sal) + 12px) 24px calc(var(--sar) + 12px);
   }
 
-  /* Missing Bal Banner (Oevra Botanical Clean) */
+  /* Missing Bal Alert Bar (Compact 1-Line Botanical Pill) */
   .missing-bal-banner {
-    background: var(--color-pure-canvas);
+    background: #fbfcf9;
     border: 1px solid var(--color-eucalyptus);
-    border-radius: var(--radius-cards);
-    padding: 16px 20px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 6px 12px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .missing-bal-banner:active {
+    background: var(--color-eucalyptus-wash);
   }
   .missing-banner-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
+    min-width: 0;
   }
   .missing-banner-title {
     font-family: var(--font-space);
-    font-size: 14px;
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--color-eucalyptus-dark);
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .missing-banner-sub {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--color-graphite);
-    margin: 2px 0 0;
-  }
-
-  /* Editorial Global Search Panel (Canvas on White) */
-  .editorial-panels {
-    margin-bottom: 22px;
-  }
-  .panel-oevra {
-    background: var(--color-pure-canvas);
-    border: 1px solid var(--color-ink-black);
-    border-radius: var(--radius-cards);
-    padding: 24px 20px;
-  }
-  .panel-eyebrow {
+  .missing-link-btn {
     font-family: var(--font-space);
     font-size: 11px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-eucalyptus);
-    margin: 0 0 6px;
+    color: var(--color-eucalyptus-dark);
+    white-space: nowrap;
+    text-decoration: underline;
+  }
+
+  /* Unified Compact Search Bar (Fast & Screen-Saving) */
+  .search-container-compact {
+    margin-bottom: 10px;
+  }
+  .search-input-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 6px;
+    width: 100%;
   }
-  .panel-headline {
-    font-family: var(--font-suisse);
-    font-size: 26px;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    color: var(--color-ink-black);
-    margin: 0 0 16px;
-    line-height: 1.15;
-  }
-
-  .search-inputs-dual {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .input-label-editorial {
-    font-family: var(--font-space);
-    font-size: 11px;
-    font-weight: 600;
+  .search-icon-badge {
+    position: absolute;
+    left: 12px;
+    font-size: 13px;
     color: var(--color-graphite);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: block;
-    margin-bottom: 6px;
+    pointer-events: none;
   }
-  .editorial-input {
+  .unified-search-input {
     width: 100%;
     background: #fafbf9;
     border: 1px solid var(--color-mist);
     color: var(--color-ink-black);
     font-family: var(--font-mono);
-    font-size: 18px;
+    font-size: 13.5px;
     font-weight: 600;
-    padding: 12px 14px;
-    min-height: 48px;
-    border-radius: 10px;
+    padding: 7px 32px 7px 34px;
+    min-height: 36px;
+    border-radius: var(--radius-buttons);
     outline: none;
-    transition: border-color 0.15s ease;
+    transition: all 0.15s ease;
   }
-  .editorial-input:focus {
+  .unified-search-input:focus {
     border-color: var(--color-eucalyptus);
     background: var(--color-pure-canvas);
+    box-shadow: 0 0 0 3px var(--color-eucalyptus-wash);
+  }
+  .search-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: #e2e5df;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--color-ink-black);
+    cursor: pointer;
   }
 
   /* Global Search Match Cards Container */
   .global-matches-container {
-    margin-top: 14px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-height: 380px;
+    gap: 6px;
+    max-height: 260px;
     overflow-y: auto;
   }
   .global-match-card {
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
-    border-radius: var(--radius-cards);
-    padding: 14px 16px;
+    border-radius: 10px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .global-match-title {
     font-family: var(--font-mono);
-    font-size: 16px;
+    font-size: 13.5px;
     font-weight: 700;
     color: var(--color-ink-black);
   }
   .global-match-sub {
     font-family: var(--font-space);
-    font-size: 12.5px;
+    font-size: 11.5px;
     color: var(--color-graphite);
   }
   .global-match-date-badge {
     font-family: var(--font-space);
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 500;
-    color: var(--color-eucalyptus);
+    color: var(--color-eucalyptus-dark);
     text-transform: uppercase;
   }
 
   /* Spotlight Result Card */
   .spotlight-inset {
-    background: var(--color-mist-light);
+    background: #f7f9f4;
     border: 1px solid var(--color-eucalyptus);
-    border-radius: var(--radius-cards);
-    padding: 18px;
-    margin-top: 16px;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 8px;
     display: none;
     animation: fadeIn 0.2s ease;
   }
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(-3px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .spotlight-top-row {
@@ -515,7 +511,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-space);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -523,30 +519,30 @@
   }
   .spotlight-no-label {
     color: var(--color-eucalyptus-dark);
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
   }
   .spotlight-barcode-huge {
     font-family: var(--font-mono);
-    font-size: 36px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: 0.02em;
     color: var(--color-ink-black);
     text-align: center;
-    margin: 10px 0;
-    padding: 10px;
+    margin: 6px 0;
+    padding: 6px;
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
-    border-radius: 10px;
+    border-radius: 8px;
   }
   .spotlight-meta-row {
     display: flex;
     justify-content: space-between;
     font-family: var(--font-space);
-    font-size: 13.5px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--color-graphite);
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
 
   /* Filter Controls */
@@ -554,31 +550,38 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    gap: 8px;
+    margin-bottom: 10px;
+    gap: 6px;
     flex-wrap: wrap;
   }
   .filter-pills {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
   }
+  .filter-pills::-webkit-scrollbar { display: none; }
+
   .filter-pill {
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
     color: var(--color-graphite);
     font-family: var(--font-space);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    padding: 7px 16px;
-    min-height: 38px;
+    padding: 4px 10px;
+    min-height: 29px;
     border-radius: var(--radius-pills);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
     display: inline-flex;
     align-items: center;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .filter-pill:active {
     transform: scale(0.96);
@@ -593,18 +596,25 @@
     border-color: var(--color-eucalyptus);
     color: var(--color-pure-canvas);
   }
+  .batch-actions {
+    display: flex;
+    gap: 4px;
+  }
 
   /* ADAPTIVE 2-COLUMN BAL CARD GRID (OEVRA SAGE & WHITE) */
   .bal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: 24px;
   }
-  @media (min-width: 600px) {
+  @media (min-width: 640px) {
+    .display-title {
+      font-size: 24px;
+    }
     .bal-grid {
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 12px;
     }
   }
 
@@ -613,7 +623,7 @@
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
     border-radius: var(--radius-cards);
-    padding: 16px 10px 12px;
+    padding: 10px 6px 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -642,19 +652,19 @@
   
   /* Meta tags row */
   .bal-card .card-meta {
-    margin-top: 10px;
+    margin-top: 6px;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 3px;
     justify-content: center;
     width: 100%;
   }
   .meta-tag {
     font-family: var(--font-space);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
-    padding: 3px 7px;
-    border-radius: 6px;
+    padding: 2px 5px;
+    border-radius: 4px;
     background: var(--color-mist-light);
     color: var(--color-graphite);
     border: 1px solid rgba(0,0,0,0.06);
@@ -667,17 +677,17 @@
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
     letter-spacing: 0.02em;
-    width: 95%;
+    width: 96%;
     text-align: center;
   }
 
   .bal-card .card-status-label {
-    margin-top: 8px;
+    margin-top: 5px;
     font-family: var(--font-space);
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     color: var(--color-mist);
   }
 
@@ -688,17 +698,17 @@
   }
   .bal-card.missing-item .missing-flag {
     position: absolute;
-    top: 6px;
-    left: 8px;
-    font-size: 9.5px;
+    top: 4px;
+    left: 6px;
+    font-size: 8.5px;
     font-weight: 600;
     font-family: var(--font-space);
     background: var(--color-eucalyptus);
     color: #ffffff;
-    padding: 2px 6px;
+    padding: 1px 5px;
     border-radius: var(--radius-pills);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
   }
 
   /* DONE STATE (OEVRA SAGE HARMONY) */
@@ -721,15 +731,15 @@
   }
   .bal-card.done .badge-top-right {
     position: absolute;
-    top: 6px;
-    right: 8px;
-    font-size: 13px;
+    top: 4px;
+    right: 6px;
+    font-size: 11px;
     color: var(--color-eucalyptus);
   }
 
   .bal-card.highlight {
     border: 2px solid var(--color-eucalyptus);
-    box-shadow: 0 0 0 4px var(--color-eucalyptus-wash);
+    box-shadow: 0 0 0 3px var(--color-eucalyptus-wash);
   }
 
   /* Management Panel (Quiet Editorial Canvas) */
@@ -737,16 +747,16 @@
     background: var(--color-pure-canvas);
     border: 1px solid var(--color-mist);
     border-radius: var(--radius-cards);
-    padding: 24px 20px;
-    margin-top: 28px;
+    padding: 16px 14px;
+    margin-top: 20px;
   }
   .panel-management h3 {
     font-family: var(--font-suisse);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     letter-spacing: -0.01em;
     color: var(--color-ink-black);
-    margin: 0 0 6px;
+    margin: 0 0 4px;
   }
 
   /* Modals (Minimalist Glassmorphism) */
@@ -760,7 +770,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 14px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -773,19 +783,19 @@
     background: var(--color-pure-canvas);
     border-radius: var(--radius-cards);
     width: 100%;
-    max-width: 480px;
-    max-height: 92vh;
+    max-width: 460px;
+    max-height: 90vh;
     overflow-y: auto;
-    padding: 24px 20px;
+    padding: 18px 16px;
     border: 1px solid var(--color-ink-black);
   }
   .modal-title {
     font-family: var(--font-suisse);
-    font-size: 20px;
-    font-weight: 300;
+    font-size: 18px;
+    font-weight: 400;
     letter-spacing: -0.02em;
     color: var(--color-ink-black);
-    margin: 0 0 10px;
+    margin: 0 0 8px;
   }
 
   /* Camera Scanner Viewfinder */
@@ -795,8 +805,8 @@
     background: #000000;
     border-radius: var(--radius-cards);
     overflow: hidden;
-    margin-bottom: 12px;
-    min-height: 240px;
+    margin-bottom: 10px;
+    min-height: 220px;
     border: 1px solid var(--color-ink-black);
   }
   #scannerReader {
@@ -805,7 +815,7 @@
   #scannerReader video {
     width: 100% !important;
     height: auto !important;
-    max-height: 50vh;
+    max-height: 48vh;
     object-fit: cover;
   }
   .laser-scanner-line {
@@ -821,23 +831,23 @@
     animation: scanLaser 1.8s infinite ease-in-out alternate;
   }
   @keyframes scanLaser {
-    0% { transform: translateY(-70px); opacity: 0.6; }
+    0% { transform: translateY(-60px); opacity: 0.6; }
     50% { opacity: 1; }
-    100% { transform: translateY(70px); opacity: 0.6; }
+    100% { transform: translateY(60px); opacity: 0.6; }
   }
 
   .scanner-result-popup {
     background: var(--color-mist-light);
     border: 1px solid var(--color-eucalyptus);
-    border-radius: 12px;
-    padding: 14px;
-    margin: 12px 0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 0;
     text-align: center;
     display: none;
   }
   .scanner-result-nogud {
     font-family: var(--font-suisse);
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 400;
     color: var(--color-eucalyptus-dark);
     margin: 2px 0;
@@ -846,19 +856,19 @@
   /* Toast Notification */
   .toast {
     position: fixed;
-    bottom: calc(var(--sab) + 24px);
+    bottom: calc(var(--sab) + 20px);
     left: 50%;
-    transform: translateX(-50%) translateY(50px);
+    transform: translateX(-50%) translateY(40px);
     background: var(--color-ink-black);
     color: var(--color-pure-canvas);
     font-family: var(--font-space);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    padding: 10px 22px;
+    padding: 8px 18px;
     border-radius: var(--radius-pills);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 150;
     white-space: nowrap;
   }
@@ -869,22 +879,22 @@
 
   .empty-state {
     text-align: center;
-    padding: 50px 10px;
+    padding: 40px 10px;
     font-family: var(--font-space);
     color: var(--color-graphite);
-    font-size: 14px;
+    font-size: 13px;
   }
 </style>
 </head>
 <body class="font-mode-a16">
 
-<!-- Oevra Quiet Topbar -->
+<!-- Oevra Micro Topbar -->
 <div class="oevra-topbar">
   <div class="oevra-topbar-left">
     <span class="eucalyptus-dot"></span>
     <span>Oevra Field Log · Grade Induk</span>
   </div>
-  <div id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:10.5px;">
+  <div id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:10px;">
     <span id="cloudStatusText">Offline</span>
   </div>
 </div>
@@ -892,9 +902,8 @@
 <header>
   <div class="header-main">
     <div class="title-group">
-      <p class="section-label">Field Inventory Record</p>
       <h1 class="display-title">Cek Barkot</h1>
-      <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
+      <span class="display-subtitle" id="dateDisplayLabel">27 Ags</span>
     </div>
     <div class="header-actions">
       <!-- Tombol Scan Barcode Kamera (Filled Green CTA) -->
@@ -902,9 +911,9 @@
       <!-- Tombol Ukuran Teks / Mode -->
       <button class="oevra-btn-ghost" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
-      <button class="oevra-btn-ghost active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
-      <button class="oevra-btn-ghost" id="soundBtn" onclick="toggleSound()">🔔 Bip: ON</button>
-      <button class="oevra-btn-ghost" onclick="openConfigModal()">⚙️ Setup</button>
+      <button class="oevra-btn-ghost active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 ON</button>
+      <button class="oevra-btn-ghost" id="soundBtn" onclick="toggleSound()" title="Suara Bip">🔔</button>
+      <button class="oevra-btn-ghost" onclick="openConfigModal()" title="Pengaturan">⚙️</button>
     </div>
   </div>
 
@@ -937,52 +946,44 @@
 </header>
 
 <main>
-  <!-- Missing Bales Alert Banner -->
-  <div class="missing-bal-banner" id="missingBanner">
+  <!-- Missing Bales Alert Banner (Compact 1-Line Pill) -->
+  <div class="missing-bal-banner" id="missingBanner" onclick="openMissingModal()">
     <div class="missing-banner-left">
-      <div>
-        <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
-        <p class="missing-banner-sub">31155, 33419, 33422, 33743, 33744, 32277, 32278, 943613</p>
-      </div>
+      <span style="font-size:12px;">⚠️</span>
+      <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
     </div>
-    <button class="oevra-btn-ghost" style="border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="openMissingModal()">Lihat Detail (8) →</button>
+    <span class="missing-link-btn">Lihat (8) →</span>
   </div>
 
-  <!-- EDITORIAL PANEL (PENCARIAN GLOBAL INSTAN) -->
-  <div class="editorial-panels">
-    <div class="panel-oevra">
-      <p class="panel-eyebrow"><span class="eucalyptus-dot"></span> Pencarian Lintas Seluruh Data</p>
-      <h2 class="panel-headline">Cari No Gud atau No Barkot</h2>
-      
-      <div class="search-inputs-dual">
-        <div>
-          <label class="input-label-editorial">No Gud (Pekerja):</label>
-          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleGlobalSearch('nogud')">
-        </div>
-        <div>
-          <label class="input-label-editorial">No Barkot (Stiker):</label>
-          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleGlobalSearch('barkot')">
-        </div>
-      </div>
+  <!-- UNIFIED COMPACT SEARCH BAR -->
+  <div class="search-container-compact">
+    <div class="search-input-wrapper">
+      <span class="search-icon-badge">🔍</span>
+      <input type="text" id="unifiedSearchInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Cari No Gud (107) atau Barkot (943605)..." autocomplete="off" oninput="handleUnifiedSearch(this.value)">
+      <button class="search-clear-btn" id="searchClearBtn" onclick="clearUnifiedSearch()" title="Hapus pencarian">✕</button>
+    </div>
+    
+    <!-- Hidden compatibility inputs -->
+    <input type="hidden" id="searchNoGudInput">
+    <input type="hidden" id="searchBarkotInput">
 
-      <!-- Global Search Matches List -->
-      <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
+    <!-- Global Search Matches List -->
+    <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
 
-      <!-- Spotlight Inset Card -->
-      <div class="spotlight-inset" id="spotlightCard">
-        <div class="spotlight-top-row">
-          <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
-          <span id="spotGradeVal">GRADE 68</span>
-        </div>
-        <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
-        <div class="spotlight-meta-row">
-          <span id="spotKgVal">50 KG</span>
-          <span id="spotStatusVal">BELUM DIBARKOT</span>
-        </div>
-        <button class="oevra-btn-filled" style="width:100%; min-height:50px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-          ✓ Tandai Sudah Ditempel
-        </button>
+    <!-- Spotlight Inset Card -->
+    <div class="spotlight-inset" id="spotlightCard">
+      <div class="spotlight-top-row">
+        <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
+        <span id="spotGradeVal">GRADE 68</span>
       </div>
+      <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
+      <div class="spotlight-meta-row">
+        <span id="spotKgVal">50 KG</span>
+        <span id="spotStatusVal">BELUM DIBARKOT</span>
+      </div>
+      <button class="oevra-btn-filled" style="width:100%; min-height:40px; font-size:12px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
+        ✓ Tandai Sudah Ditempel
+      </button>
     </div>
   </div>
 
@@ -992,12 +993,11 @@
       <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
       <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
       <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
-      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Belum Ketemu (0)</button>
+      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Hilang (0)</button>
     </div>
     <div class="batch-actions">
-      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11.5px;" onclick="checkAllBal()">✓ Centang Semua</button>
-      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11.5px;" onclick="uncheckAllBal()">↺ Reset</button>
-      <button class="oevra-btn-filled" style="padding:6px 14px; font-size:11.5px;" onclick="startScanner()">📷 Scan</button>
+      <button class="oevra-btn-ghost" style="padding:4px 8px; font-size:10.5px; min-height:29px;" onclick="checkAllBal()">✓ Semua</button>
+      <button class="oevra-btn-ghost" style="padding:4px 8px; font-size:10.5px; min-height:29px;" onclick="uncheckAllBal()">↺ Reset</button>
     </div>
   </div>
 
@@ -1007,12 +1007,12 @@
 
   <!-- Management Panel (Oevra Minimal Canvas) -->
   <div class="panel-management">
-    <p class="section-label">Sinkronisasi Cloud & Berkas</p>
+    <p style="font-family:var(--font-space); font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--color-eucalyptus); margin:0 0 4px;">Sinkronisasi Cloud & Berkas</p>
     <h3>Pengelolaan Berkas Excel</h3>
-    <p style="font-size:13.5px; color:var(--color-graphite); margin:0 0 16px;">
+    <p style="font-size:12px; color:var(--color-graphite); margin:0 0 12px;">
       Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru atau salin rekap laporan ke WhatsApp:
     </p>
-    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+    <div style="display:flex; flex-wrap:wrap; gap:6px;">
       <label class="oevra-btn-ghost" style="cursor:pointer;">
         📥 Upload Excel (.xlsx)
         <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
@@ -1022,9 +1022,9 @@
       <button class="oevra-btn-ghost" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
     </div>
 
-    <div style="margin-top:20px; padding-top:14px; border-top:1px solid var(--color-mist); display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="oevra-btn-ghost" style="font-size:11px; padding:6px 12px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
-      <button class="oevra-btn-ghost" style="font-size:11px; padding:6px 12px; border-color:#e11d48; color:#e11d48;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
+    <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--color-mist); display:flex; gap:6px; flex-wrap:wrap;">
+      <button class="oevra-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
+      <button class="oevra-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px; border-color:#e11d48; color:#e11d48;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
     </div>
   </div>
 </main>
@@ -1032,13 +1032,13 @@
 <!-- Modal 8 Bal Belum Ditempel -->
 <div class="modal-overlay" id="missingModal">
   <div class="modal-card">
-    <p class="section-label">Belum Ditempel</p>
+    <p style="font-family:var(--font-space); font-size:10.5px; font-weight:600; text-transform:uppercase; color:var(--color-eucalyptus); margin:0 0 2px;">Belum Ditempel</p>
     <h3 class="modal-title">8 Bal Belum Ketemu</h3>
-    <p style="font-size:13px; color:var(--color-graphite); margin:0 0 14px;">
+    <p style="font-size:12px; color:var(--color-graphite); margin:0 0 12px;">
       Daftar 8 barcode yang belum ditempel karena bal tembakau belum ditemukan di gudang:
     </p>
-    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
-    <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
       <button class="oevra-btn-ghost" onclick="closeMissingModal()">Tutup</button>
     </div>
   </div>
@@ -3570,52 +3570,48 @@ async function uncheckAllBal() {
 // ==========================================
 // PENCARIAN GLOBAL INSTAN SELURUH DATA
 // ==========================================
-function handleGlobalSearch(type) {
+function handleUnifiedSearch(val) {
+  const q = String(val || '').trim();
+  const clearBtn = document.getElementById('searchClearBtn');
+  const matchesBox = document.getElementById('globalMatchesBox');
   const nogudInput = document.getElementById('searchNoGudInput');
   const barkotInput = document.getElementById('searchBarkotInput');
-  const matchesBox = document.getElementById('globalMatchesBox');
-
-  let q = '';
-  if (type === 'nogud') {
-    q = nogudInput.value.trim();
-    if (q) barkotInput.value = '';
-  } else {
-    q = barkotInput.value.trim();
-    if (q) nogudInput.value = '';
-  }
+  
+  if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
 
   if (!q) {
-    matchesBox.style.display = 'none';
-    matchesBox.innerHTML = '';
+    if (nogudInput) nogudInput.value = '';
+    if (barkotInput) barkotInput.value = '';
+    if (matchesBox) {
+      matchesBox.style.display = 'none';
+      matchesBox.innerHTML = '';
+    }
     hideSpotlight();
     render();
     return;
   }
 
+  if (nogudInput) nogudInput.value = q;
+  if (barkotInput) barkotInput.value = q;
+
   const allMatches = [];
 
+  // Cari di tanggal aktif
   state.list.forEach(item => {
-    let match = false;
-    if (type === 'nogud') {
-      match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
-    } else {
-      match = (item.barkot && String(item.barkot).includes(q));
-    }
-    if (match) {
+    const isNoGudMatch = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+    const isBarkotMatch = item.barkot && String(item.barkot).includes(q);
+    if (isNoGudMatch || isBarkotMatch) {
       allMatches.push({ ...item, tanggal: currentDate, isCurrentDate: true });
     }
   });
 
+  // Cari di arsip tanggal lain
   for (const tgl of Object.keys(SEED_DATA)) {
     if (tgl === currentDate) continue;
     SEED_DATA[tgl].forEach(item => {
-      let match = false;
-      if (type === 'nogud') {
-        match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
-      } else {
-        match = (item.barkot && String(item.barkot).includes(q));
-      }
-      if (match) {
+      const isNoGudMatch = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+      const isBarkotMatch = item.barkot && String(item.barkot).includes(q);
+      if (isNoGudMatch || isBarkotMatch) {
         allMatches.push({ ...item, tanggal: tgl, isCurrentDate: false });
       }
     });
@@ -3624,7 +3620,7 @@ function handleGlobalSearch(type) {
   if (allMatches.length === 0) {
     matchesBox.style.display = 'block';
     matchesBox.innerHTML = `
-      <div style="padding:14px; text-align:center; font-family:var(--font-space); font-size:13px; color:var(--color-graphite);">
+      <div style="padding:10px 12px; text-align:center; font-family:var(--font-space); font-size:12px; color:var(--color-graphite);">
         Tidak ada data No Gud / Barkot "${q}" di seluruh arsip tanggal.
       </div>
     `;
@@ -3636,7 +3632,7 @@ function handleGlobalSearch(type) {
     matchesBox.style.display = 'flex';
     matchesBox.innerHTML = '';
 
-    allMatches.slice(0, 10).forEach(m => {
+    allMatches.slice(0, 8).forEach(m => {
       const card = document.createElement('div');
       card.className = 'global-match-card';
       const isMissing = MISSING_BARCODES.includes(String(m.barkot).trim());
@@ -3647,7 +3643,7 @@ function handleGlobalSearch(type) {
           <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:var(--color-eucalyptus-dark);">⚠️ Belum Ketemu</b>' : ''}</div>
           <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</div>
         </div>
-        <button class="oevra-btn-ghost" style="border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
+        <button class="oevra-btn-ghost" style="border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark); padding:4px 8px; font-size:11px; min-height:28px;" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
           ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka'}
         </button>
       `;
@@ -3662,6 +3658,19 @@ function handleGlobalSearch(type) {
   }
 
   render();
+}
+
+function clearUnifiedSearch() {
+  const input = document.getElementById('unifiedSearchInput');
+  if (input) input.value = '';
+  handleUnifiedSearch('');
+}
+
+function handleGlobalSearch(type) {
+  const nogudInput = document.getElementById('searchNoGudInput');
+  const barkotInput = document.getElementById('searchBarkotInput');
+  const q = (type === 'nogud' ? nogudInput?.value : barkotInput?.value) || '';
+  handleUnifiedSearch(q);
 }
 
 function jumpToGlobalBal(tgl, no_gud) {
@@ -3702,7 +3711,7 @@ function updateSpotlightUI() {
       '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">✓ SUDAH DIBARKOT</span>';
     
     if (lockModeEnabled) {
-      btn.textContent = '🔒 Bal Terkunci (Buka Kunci untuk Edit)';
+      btn.textContent = '🔒 Bal Terkunci';
       btn.className = 'oevra-btn-ghost';
     } else {
       btn.textContent = '↺ Batalkan Centang';
@@ -3805,8 +3814,7 @@ function setFilter(type, elem) {
 function render() {
   const grid = document.getElementById('balGrid');
   const emptyMsg = document.getElementById('emptyMsg');
-  const nogudQ = document.getElementById('searchNoGudInput').value.trim();
-  const barkotQ = document.getElementById('searchBarkotInput').value.trim();
+  const searchQ = (document.getElementById('unifiedSearchInput')?.value || document.getElementById('searchNoGudInput')?.value || '').trim();
 
   grid.innerHTML = '';
 
@@ -3826,7 +3834,7 @@ function render() {
   document.getElementById('tabAll').textContent = `Semua (${total})`;
   document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
   document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
-  document.getElementById('tabMissing').textContent = `⚠️ Belum Ketemu (${missingCountInDate})`;
+  document.getElementById('tabMissing').textContent = `⚠️ Hilang (${missingCountInDate})`;
 
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
@@ -3836,11 +3844,10 @@ function render() {
     if (currentFilter === 'done' && !isDone) return false;
     if (currentFilter === 'missing' && !isMissing) return false;
     
-    if (nogudQ) {
-      return String(item.no_gud).includes(nogudQ);
-    }
-    if (barkotQ) {
-      return item.barkot && String(item.barkot).includes(barkotQ);
+    if (searchQ) {
+      const matchGud = String(item.no_gud) === searchQ || String(item.no_gud).startsWith(searchQ);
+      const matchBarkot = item.barkot && String(item.barkot).includes(searchQ);
+      return matchGud || matchBarkot;
     }
     return true;
   });
@@ -3855,8 +3862,7 @@ function render() {
     for (const item of filtered) {
       const isDone = Boolean(state.doneMap[item.no_gud]);
       const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
-      const isSearchMatch = (nogudQ && String(item.no_gud) === nogudQ) || 
-                            (barkotQ && String(item.barkot).trim() === barkotQ);
+      const isSearchMatch = searchQ && (String(item.no_gud) === searchQ || (item.barkot && String(item.barkot).trim() === searchQ));
 
       const card = document.createElement('div');
       card.className = 'bal-card' + 
