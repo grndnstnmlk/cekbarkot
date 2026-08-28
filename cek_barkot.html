@@ -1039,6 +1039,7 @@
         <span id="spotKgVal">50 KG</span>
         <span id="spotStatusVal">BELUM DIBARKOT</span>
       </div>
+      <div id="spotKetVal" style="display:none; font-family:var(--font-roboto-mono); font-size:11.5px; font-weight:500; color:var(--color-bone); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:4px 8px; border-radius:4px; margin-bottom:8px; text-align:left;"></div>
       
       <!-- Spotlight Multi-Action Buttons (Draw Ghost Dark) -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
@@ -4136,7 +4137,8 @@ const SEED_DATA = {
       "grade": "66",
       "barkot": "34229",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 4kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4144,7 +4146,8 @@ const SEED_DATA = {
       "grade": "60",
       "barkot": "34328",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 3kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4152,7 +4155,8 @@ const SEED_DATA = {
       "grade": "64",
       "barkot": "34240",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 2kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4208,7 +4212,8 @@ const SEED_DATA = {
       "grade": "50",
       "barkot": "33445",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "tambah 2kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4224,7 +4229,8 @@ const SEED_DATA = {
       "grade": "55",
       "barkot": "943647",
       "kg": 50,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 2kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4232,7 +4238,8 @@ const SEED_DATA = {
       "grade": "66",
       "barkot": "34237",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 1,5 kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4249,7 +4256,7 @@ const SEED_DATA = {
       "barkot": "",
       "kg": 50,
       "is_out": true,
-      "ket": "out mote",
+      "ket": "out mote, kurangi 5kg",
       "is_done": false
     },
     {
@@ -4266,7 +4273,8 @@ const SEED_DATA = {
       "grade": "64",
       "barkot": "34417",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 4kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4274,7 +4282,8 @@ const SEED_DATA = {
       "grade": "66",
       "barkot": "34236",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 4kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4290,7 +4299,7 @@ const SEED_DATA = {
       "grade": "67",
       "barkot": "",
       "kg": 50,
-      "ket": "Tanpa Barkot",
+      "ket": "kurangi 7kg",
       "is_done": false
     },
     {
@@ -4299,7 +4308,7 @@ const SEED_DATA = {
       "grade": "67",
       "barkot": "",
       "kg": 50,
-      "ket": "Tanpa Barkot",
+      "ket": "kurangi 2kg",
       "is_done": false
     },
     {
@@ -4316,7 +4325,7 @@ const SEED_DATA = {
       "grade": "67",
       "barkot": "",
       "kg": 50,
-      "ket": "Tanpa Barkot",
+      "ket": "kurangi 4kg",
       "is_done": false
     },
     {
@@ -4325,7 +4334,8 @@ const SEED_DATA = {
       "grade": "65",
       "barkot": "943644",
       "kg": 50,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 2,5 kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4333,7 +4343,7 @@ const SEED_DATA = {
       "grade": "66",
       "barkot": "",
       "kg": 50,
-      "ket": "Tanpa Barkot",
+      "ket": "kurangi 3kg",
       "is_done": false
     },
     {
@@ -4342,7 +4352,8 @@ const SEED_DATA = {
       "grade": "64",
       "barkot": "34235",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 6kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4358,7 +4369,8 @@ const SEED_DATA = {
       "grade": "66",
       "barkot": "34234",
       "kg": null,
-      "is_done": false
+      "is_done": false,
+      "ket": "kurangi 3kg"
     },
     {
       "tanggal": "2026-08-28",
@@ -4815,7 +4827,7 @@ function saveLocalState() {
 
 async function loadDataForCurrentDate() {
   let found = false;
-  const syncVersion = '2026_08_28_v7';
+  const syncVersion = '2026_08_28_v8';
   const lastSync = localStorage.getItem('barkot_sync_ver');
   if (lastSync !== syncVersion) {
     // Clear old cache to apply fresh checked state for all dates
@@ -5099,6 +5111,16 @@ function showSpotlight(item) {
   document.getElementById('spotGradeVal').textContent = item.grade ? `GRADE ${item.grade}` : 'GRADE —';
   document.getElementById('spotKgVal').textContent = item.kg ? `${item.kg} KG` : '— KG';
   
+  const spotKetEl = document.getElementById('spotKetVal');
+  if (spotKetEl) {
+    if (item.ket) {
+      spotKetEl.style.display = 'block';
+      spotKetEl.textContent = '📝 KET: ' + item.ket.toUpperCase();
+    } else {
+      spotKetEl.style.display = 'none';
+    }
+  }
+
   const manualInput = document.getElementById('spotManualBarkotInput');
   if (manualInput) manualInput.value = item.barkot || '';
 
@@ -5397,6 +5419,7 @@ function render() {
       const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode" style="color:var(--color-smoke); font-size:10px; font-style:italic;">Tanpa Barkot</span>';
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
       const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
+      const ketHtml = item.ket ? `<span class="meta-tag" style="border-color:var(--color-ink); color:var(--color-ink); font-weight:500;">📝 ${item.ket}</span>` : '';
 
       const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
       
@@ -5424,6 +5447,7 @@ function render() {
           ${barkotHtml}
           ${gradeHtml}
           ${kgHtml}
+          ${ketHtml}
         </div>
         <div class="card-status-label">${statusLabel}</div>
       `;
