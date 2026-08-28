@@ -48,24 +48,24 @@
     --radius-pills: 9999px;
 
     /* Adaptive Typography & Sizing */
-    --card-no-size: 32px;
-    --card-barkot-size: 13.5px;
-    --card-min-h: 112px;
-    --touch-target: 40px;
+    --card-no-size: 34px;
+    --card-barkot-size: 14px;
+    --card-min-h: 116px;
+    --touch-target: 44px;
 
-    /* Safe Area insets */
+    /* Safe Area insets (iOS Dynamic Island & Home Indicator) */
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
     --sal: env(safe-area-inset-left, 0px);
     --sar: env(safe-area-inset-right, 0px);
   }
 
-  /* Font Modes */
-  body.font-mode-normal {
-    --card-no-size: 26px;
-    --card-barkot-size: 12px;
-    --card-min-h: 96px;
-    --touch-target: 36px;
+  /* Font & Device Optimization Modes */
+  body.font-mode-16pm {
+    --card-no-size: 34px;
+    --card-barkot-size: 14px;
+    --card-min-h: 116px;
+    --touch-target: 44px;
   }
   body.font-mode-a16 {
     --card-no-size: 32px;
@@ -79,11 +79,23 @@
     --card-min-h: 132px;
     --touch-target: 44px;
   }
+  body.font-mode-normal {
+    --card-no-size: 26px;
+    --card-barkot-size: 12px;
+    --card-min-h: 96px;
+    --touch-target: 36px;
+  }
 
   * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
     touch-action: manipulation;
+  }
+  input, textarea, [contenteditable="true"] {
+    -webkit-touch-callout: default;
+    user-select: text;
+    -webkit-user-select: text;
   }
 
   html, body {
@@ -94,21 +106,21 @@
     font-family: var(--font-eloquia-text);
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    padding-bottom: calc(var(--sab) + 36px);
+    padding-bottom: calc(var(--sab) + 40px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
     line-height: 1.4;
   }
 
-  /* Announcement Bar (Warm Parchment Strip with Saffron Dot) */
+  /* Announcement Bar (With Dynamic Island Safe Padding for iPhone 16 Pro Max) */
   .draw-announcement {
     background: transparent;
     border-bottom: 1px solid var(--color-ash);
-    padding-top: calc(var(--sat) + 5px);
-    padding-bottom: 5px;
-    padding-left: calc(var(--sal) + 14px);
-    padding-right: calc(var(--sar) + 14px);
+    padding-top: max(var(--sat), 6px);
+    padding-bottom: 6px;
+    padding-left: calc(var(--sal) + 16px);
+    padding-right: calc(var(--sar) + 16px);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -932,7 +944,7 @@
   }
 </style>
 </head>
-<body class="font-mode-a16">
+<body class="font-mode-16pm">
 
 <!-- DrawHistory Announcement Top Bar -->
 <div class="draw-announcement">
@@ -955,7 +967,7 @@
       <!-- Tombol Scan Barcode Kamera (Draw Ghost Button) -->
       <button class="draw-btn-ghost" style="border-color:var(--color-ink); font-weight:500;" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN</button>
       <!-- Tombol Ukuran Teks / Mode -->
-      <button class="draw-btn-ghost" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16</button>
+      <button class="draw-btn-ghost" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">📱 16 Pro Max</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
       <button class="draw-btn-ghost active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 ON</button>
       <button class="draw-btn-ghost" id="soundBtn" onclick="toggleSound()" title="Suara Bip">🔔</button>
@@ -3310,24 +3322,27 @@ let supabaseClient = null;
 let realtimeChannel = null;
 let activeSpotlightBal = null;
 
-// Ukuran Font State: 'a16' (Default), 'lansia', 'normal'
-let currentFontSizeMode = localStorage.getItem('barkot_font_mode') || 'a16';
+// Ukuran Font State: '16pm' (iPhone 16 Pro Max), 'a16', 'lansia', 'normal'
+let currentFontSizeMode = localStorage.getItem('barkot_font_mode') || '16pm';
 
 function initFontSize() {
   applyFontSize(currentFontSizeMode);
 }
 
 function cycleFontSize() {
-  if (currentFontSizeMode === 'a16') {
+  if (currentFontSizeMode === '16pm') {
+    currentFontSizeMode = 'a16';
+  } else if (currentFontSizeMode === 'a16') {
     currentFontSizeMode = 'lansia';
   } else if (currentFontSizeMode === 'lansia') {
     currentFontSizeMode = 'normal';
   } else {
-    currentFontSizeMode = 'a16';
+    currentFontSizeMode = '16pm';
   }
   localStorage.setItem('barkot_font_mode', currentFontSizeMode);
   applyFontSize(currentFontSizeMode);
   const labels = {
+    '16pm': 'Mode: iPhone 16 Pro Max (OLED 6.9")',
     'a16': 'Mode Teks: Besar (A16)',
     'lansia': 'Mode Teks: Ekstra Besar (Lansia)',
     'normal': 'Mode Teks: Normal'
@@ -3336,11 +3351,12 @@ function cycleFontSize() {
 }
 
 function applyFontSize(mode) {
-  document.body.classList.remove('font-mode-normal', 'font-mode-a16', 'font-mode-lansia');
+  document.body.classList.remove('font-mode-normal', 'font-mode-a16', 'font-mode-lansia', 'font-mode-16pm');
   document.body.classList.add('font-mode-' + mode);
   const btn = document.getElementById('fontSizeBtn');
   if (btn) {
-    if (mode === 'lansia') btn.textContent = '🔤 Lansia';
+    if (mode === '16pm') btn.textContent = '📱 16 Pro Max';
+    else if (mode === 'lansia') btn.textContent = '🔤 Lansia';
     else if (mode === 'normal') btn.textContent = '🔤 Normal';
     else btn.textContent = '🔤 A16';
   }
