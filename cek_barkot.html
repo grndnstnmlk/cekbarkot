@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cek Barkot">
 <meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — Buku Grade Induk (Universal Edition)</title>
+<title>Cek Barkot — Pencarian Global Seluruh Data & Grade Induk</title>
 
 <!-- Google Fonts: Inter & Roboto Mono (High Legibility) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
     --radius-buttons: 10px;
     --radius-pills: 9999px;
 
-    /* Accessibility / Font Scale Tokens (Default: A16 & iPhone 16 Pro Max Adaptive) */
+    /* Accessibility / Font Scale Tokens (Default: A16 & iPhone Adaptive) */
     --ui-scale: 1;
     --card-no-size: 33px;
     --card-barkot-size: 16px;
@@ -388,18 +388,12 @@
     transform: scale(0.96);
   }
 
-  /* Dual Panel Search & Quick Finder (Elderly Friendly) */
+  /* EDITORIAL PANEL: PENCARIAN GLOBAL SEMUA DATA (ALL-DATES INSTANT FINDER) */
   .editorial-panels {
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
     margin-bottom: 16px;
-  }
-  @media (min-width: 768px) {
-    .editorial-panels {
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
   }
 
   .panel-olive {
@@ -409,22 +403,40 @@
     padding: 16px 14px;
     border: 1px solid rgba(255,255,255,0.1);
   }
+  .panel-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
   .panel-eyebrow {
     font-family: var(--font-sans);
     font-size: 11.5px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #a3b899;
-    margin: 0 0 4px;
+    margin: 0;
     display: flex;
     align-items: center;
     gap: 6px;
   }
+  .global-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
   .panel-headline {
     font-family: var(--font-sans);
     font-size: 20px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: -0.02em;
     color: #ffffff;
@@ -463,6 +475,72 @@
   .editorial-input:focus {
     border-color: #facc15;
     background: rgba(0,0,0,0.5);
+  }
+
+  /* Global Search Match Cards Container */
+  .global-matches-container {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+  .global-match-card {
+    background: #0f140e;
+    border: 2px solid #38bdf8;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.15s ease;
+  }
+  .global-match-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .global-match-title {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    font-weight: 800;
+    color: #facc15;
+  }
+  .global-match-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #e2e8f0;
+    font-weight: 600;
+  }
+  .global-match-date-badge {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 2px;
+  }
+  .btn-global-jump {
+    background: #0284c7;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    min-height: 40px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-global-jump:active {
+    transform: scale(0.96);
   }
 
   /* Spotlight Result Card */
@@ -602,7 +680,7 @@
     flex-wrap: wrap;
   }
 
-  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & IPHONE 16 PRO MAX) */
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & IPHONE ADAPTIVE) */
   .bal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -895,7 +973,7 @@
     cursor: pointer;
   }
 
-  /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER (SAFARI & IOS PLAYSINLINE) */
+  /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER */
   .scanner-wrapper {
     position: relative;
     width: 100%;
@@ -1095,24 +1173,30 @@
     <button class="btn-missing-action" onclick="openMissingModal()">Lihat Detail (8)</button>
   </div>
 
-  <!-- EDITORIAL PANEL (OLIVE CHARCOAL FINDER) -->
+  <!-- EDITORIAL PANEL (PENCARIAN INSTAN LINTAS SEMUA DATA 21-27 AGUSTUS) -->
   <div class="editorial-panels">
     <div class="panel-olive">
-      <p class="panel-eyebrow"><span class="saffron-dot"></span> PENCARIAN CEPAT LAPANGAN</p>
-      <h2 class="panel-headline">Cari Nomor Gud / Barkot</h2>
+      <div class="panel-header-row">
+        <p class="panel-eyebrow"><span class="saffron-dot"></span> PENCARIAN GLOBAL INSTAN</p>
+        <span class="global-badge">🌐 Cari di Seluruh Tanggal</span>
+      </div>
+      <h2 class="panel-headline">Cari No Gud / No Barkot</h2>
       
       <div class="search-inputs-dual">
         <div>
           <label class="input-label-editorial">No Gud (Pekerja):</label>
-          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleSearchInput('nogud')">
+          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleGlobalSearch('nogud')">
         </div>
         <div>
           <label class="input-label-editorial">No Barkot (Stiker):</label>
-          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleSearchInput('barkot')">
+          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleGlobalSearch('barkot')">
         </div>
       </div>
 
-      <!-- Spotlight Inset Card -->
+      <!-- Global Search Matches List (If found in multiple dates or other dates) -->
+      <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
+
+      <!-- Spotlight Inset Card for Single / Selected Match -->
       <div class="spotlight-inset" id="spotlightCard">
         <div class="spotlight-top-row">
           <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
@@ -1145,7 +1229,7 @@
     </div>
   </div>
 
-  <!-- Main 2-Column Bal Grid (Samsung A16 & iPhone 16 Pro Max Adaptive) -->
+  <!-- Main 2-Column Bal Grid (Samsung A16 & iPhone Adaptive) -->
   <div class="bal-grid" id="balGrid"></div>
   <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
 
@@ -3707,36 +3791,121 @@ async function uncheckAllBal() {
 }
 
 // ==========================================
-// PENCARIAN & SPOTLIGHT
+// PENCARIAN GLOBAL INSTAN SELURUH DATA (ALL-DATES SEARCH)
 // ==========================================
-function handleSearchInput(type) {
+function handleGlobalSearch(type) {
   const nogudInput = document.getElementById('searchNoGudInput');
   const barkotInput = document.getElementById('searchBarkotInput');
-  let match = null;
+  const matchesBox = document.getElementById('globalMatchesBox');
 
+  let q = '';
   if (type === 'nogud') {
-    const val = nogudInput.value.trim();
-    if (val) {
-      barkotInput.value = '';
-      match = state.list.find(x => String(x.no_gud) === val) || 
-              state.list.find(x => String(x.no_gud).startsWith(val));
-    }
-  } else if (type === 'barkot') {
-    const val = barkotInput.value.trim();
-    if (val) {
-      nogudInput.value = '';
-      match = state.list.find(x => String(x.barkot).trim() === val) || 
-              state.list.find(x => x.barkot && String(x.barkot).includes(val));
-    }
+    q = nogudInput.value.trim();
+    if (q) barkotInput.value = '';
+  } else {
+    q = barkotInput.value.trim();
+    if (q) nogudInput.value = '';
   }
 
-  if (match) {
-    showSpotlight(match);
-  } else {
+  if (!q) {
+    matchesBox.style.display = 'none';
+    matchesBox.innerHTML = '';
     hideSpotlight();
+    render();
+    return;
+  }
+
+  // Cari di seluruh tanggal (Global Multi-Date Search)
+  const allMatches = [];
+
+  // Prioritas 1: Tanggal aktif
+  state.list.forEach(item => {
+    let match = false;
+    if (type === 'nogud') {
+      match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+    } else {
+      match = (item.barkot && String(item.barkot).includes(q));
+    }
+    if (match) {
+      allMatches.push({ ...item, tanggal: currentDate, isCurrentDate: true });
+    }
+  });
+
+  // Prioritas 2: Tanggal-tanggal lainnya di SEED_DATA
+  for (const tgl of Object.keys(SEED_DATA)) {
+    if (tgl === currentDate) continue;
+    SEED_DATA[tgl].forEach(item => {
+      let match = false;
+      if (type === 'nogud') {
+        match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+      } else {
+        match = (item.barkot && String(item.barkot).includes(q));
+      }
+      if (match) {
+        allMatches.push({ ...item, tanggal: tgl, isCurrentDate: false });
+      }
+    });
+  }
+
+  if (allMatches.length === 0) {
+    matchesBox.style.display = 'block';
+    matchesBox.innerHTML = `
+      <div style="padding:10px; text-align:center; font-family:var(--font-mono); font-size:13px; color:#cbd5e1;">
+        Tidak ada data No Gud / Barkot "${q}" di tanggal mana pun.
+      </div>
+    `;
+    hideSpotlight();
+  } else if (allMatches.length === 1 && allMatches[0].isCurrentDate) {
+    // 1 match di tanggal aktif langsung spotlight
+    matchesBox.style.display = 'none';
+    showSpotlight(allMatches[0]);
+  } else {
+    // Tampilkan daftar hasil temuan lintas tanggal
+    matchesBox.style.display = 'flex';
+    matchesBox.innerHTML = '';
+
+    allMatches.slice(0, 10).forEach(m => {
+      const card = document.createElement('div');
+      card.className = 'global-match-card';
+      const isMissing = MISSING_BARCODES.includes(String(m.barkot).trim());
+
+      card.innerHTML = `
+        <div class="global-match-info">
+          <span class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'}</span>
+          <span class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:#ea580c;">⚠️ Belum Ketemu</b>' : ''}</span>
+          <div>
+            <span class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</span>
+          </div>
+        </div>
+        <button class="btn-global-jump" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
+          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka Tgl'}
+        </button>
+      `;
+      matchesBox.appendChild(card);
+    });
+
+    if (allMatches[0].isCurrentDate) {
+      showSpotlight(allMatches[0]);
+    } else {
+      hideSpotlight();
+    }
   }
 
   render();
+}
+
+function jumpToGlobalBal(tgl, no_gud) {
+  if (tgl !== currentDate) {
+    onDateChanged(tgl);
+  }
+  setTimeout(() => {
+    const target = state.list.find(x => x.no_gud === no_gud);
+    if (target) {
+      showSpotlight(target);
+      const cardElem = Array.from(document.querySelectorAll('.bal-card')).find(el => el.querySelector('.card-no')?.textContent === String(no_gud));
+      if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 120);
 }
 
 function showSpotlight(item) {
@@ -4177,7 +4346,6 @@ function saveSupabaseConfig() {
 
 // ==========================================
 // HIGH-ACCURACY DUAL-ENGINE BARCODE SCANNER
-// (IPHONE 16 PRO MAX / SAFARI & ANDROID COMPATIBLE)
 // ==========================================
 let html5QrCode = null;
 let currentFacingMode = 'environment';
@@ -4187,7 +4355,7 @@ let nativeDetector = null;
 let nativeScanTimer = null;
 let isProcessingScan = false;
 
-// Format Barcode yang Diberi Prioritas Tinggi (Stiker Bal Tembakau)
+// Format Barcode Prioritas Tinggi (Stiker Bal Tembakau)
 const BARCODE_FORMATS = [
   Html5QrcodeSupportedFormats.CODE_128,
   Html5QrcodeSupportedFormats.CODE_39,
@@ -4232,7 +4400,6 @@ async function startScanner() {
     const config = {
       fps: isIos ? 25 : 20,
       qrbox: (viewfinderWidth, viewfinderHeight) => {
-        // Kotak scan lebar horizontal untuk membaca barcode garis 1D
         const width = Math.floor(viewfinderWidth * 0.92);
         const height = Math.floor(Math.max(140, viewfinderHeight * 0.58));
         return { width: width, height: height };
@@ -4256,7 +4423,6 @@ async function startScanner() {
       onBarcodeScanProgress
     );
 
-    // Amankan atribut playsinline khusus untuk iOS Safari iPhone 16 Pro Max
     setTimeout(() => {
       try {
         const videoElem = document.querySelector('#scannerReader video');
@@ -4282,13 +4448,12 @@ async function startScanner() {
       } catch(e) {}
     }, 400);
 
-    // Inisialisasi Native BarcodeDetector Engine Paralel (Hardware Accelerated)
     startNativeFrameScanner();
 
     status.innerHTML = '🔍 Posisikan <b>garis merah</b> melintang pada barcode (jarak ~15–20 cm)';
   } catch(err) {
     console.error('Camera scanner start err', err);
-    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera aktif di Safari / Browser.</span>';
+    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera aktif di browser.</span>';
   }
 }
 
@@ -4348,7 +4513,6 @@ async function switchCamera() {
   await startScanner();
 }
 
-// Input manual cepat di dalam modal scan jika barcode rusak / gelap
 function handleQuickScannerInput(val) {
   if (!val) return;
   const cleanVal = val.trim();
@@ -4368,14 +4532,11 @@ async function onBarcodeScannedSuccess(decodedText) {
 async function processScannedCode(scannedCode, isManual = false) {
   if (isProcessingScan) return;
   
-  // Filter teks pembersih jika barcode mengandung awalan/akhiran
   const cleanCode = scannedCode.replace(/[^0-9a-zA-Z]/g, '');
 
-  // 1. Cari di tanggal aktif saat ini
   let match = state.list.find(x => String(x.barkot).trim() === cleanCode || String(x.barkot).trim() === scannedCode || String(x.no_gud) === scannedCode);
   let matchedDate = currentDate;
 
-  // 2. Jika tidak ditemukan di tanggal aktif, cari di seluruh database tanggal lain
   if (!match) {
     for (const tgl of Object.keys(SEED_DATA)) {
       const foundInOther = SEED_DATA[tgl].find(x => String(x.barkot).trim() === cleanCode || String(x.barkot).trim() === scannedCode);
@@ -4396,7 +4557,6 @@ async function processScannedCode(scannedCode, isManual = false) {
     playBeep(true);
     if (navigator.vibrate) navigator.vibrate([70, 50, 70]);
 
-    // Tampilkan hasil scan No Gud langsung
     document.getElementById('scanFoundNoGud').textContent = `NO GUD ${match.no_gud}`;
     document.getElementById('scanFoundBarkot').textContent = `Barkot: ${match.barkot || scannedCode}`;
     document.getElementById('scanFoundMeta').textContent = `GRADE ${match.grade || '—'} · ${match.kg ? match.kg + ' KG' : '— KG'} · ${formatDateIndo(matchedDate)}`;
@@ -4404,18 +4564,15 @@ async function processScannedCode(scannedCode, isManual = false) {
 
     status.innerHTML = `<span style="color:#4ade80; font-weight:800;">✓ KETEMU: NO GUD ${match.no_gud} (Tgl: ${formatDateIndo(matchedDate)})</span>`;
 
-    // Berhenti scan
     setTimeout(async () => {
       await stopScanner();
       
-      // Jika di tanggal berbeda, pindah ke tanggal tersebut
       if (matchedDate !== currentDate) {
         onDateChanged(matchedDate);
       }
 
       setTimeout(() => {
         showSpotlight(match);
-        // Tandai selesai jika belum dicentang
         const isDone = Boolean(state.doneMap[match.no_gud]);
         if (!isDone) {
           forceToggleBal(match.no_gud, true);
