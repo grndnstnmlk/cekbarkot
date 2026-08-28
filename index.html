@@ -7,10 +7,10 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cek Barkot">
 <meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — Buku Grade Induk (Samsung A16 & Scanner Edition)</title>
+<title>Cek Barkot — Buku Grade Induk (Universal Edition)</title>
 
 <!-- Google Fonts: Inter & Roboto Mono (High Legibility) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,14 +50,14 @@
     --radius-buttons: 10px;
     --radius-pills: 9999px;
 
-    /* Accessibility / Font Scale Tokens (Default: A16 Optimized) */
+    /* Accessibility / Font Scale Tokens (Default: A16 & iPhone 16 Pro Max Adaptive) */
     --ui-scale: 1;
     --card-no-size: 33px;
     --card-barkot-size: 16px;
     --card-min-h: 126px;
     --touch-target: 48px;
 
-    /* Safe Area insets */
+    /* Safe Area insets (iPhone Dynamic Island & Home Bar) */
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
     --sal: env(safe-area-inset-left, 0px);
@@ -108,7 +108,7 @@
   .announcement-bar {
     background: var(--color-bone);
     border-bottom: 1px solid var(--color-ash);
-    padding-top: calc(var(--sat) + 8px);
+    padding-top: calc(var(--sat) + 6px);
     padding-bottom: 8px;
     padding-left: calc(var(--sal) + 16px);
     padding-right: calc(var(--sar) + 16px);
@@ -602,7 +602,7 @@
     flex-wrap: wrap;
   }
 
-  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & LANSIA OPTIMIZED) */
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & IPHONE 16 PRO MAX) */
   .bal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -895,15 +895,16 @@
     cursor: pointer;
   }
 
-  /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER */
+  /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER (SAFARI & IOS PLAYSINLINE) */
   .scanner-wrapper {
     position: relative;
     width: 100%;
     background: #000000;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     margin-bottom: 10px;
     min-height: 240px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
   }
   #scannerReader {
     width: 100% !important;
@@ -911,27 +912,29 @@
   #scannerReader video {
     width: 100% !important;
     height: auto !important;
-    max-height: 50vh;
+    max-height: 52vh;
     object-fit: cover;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   /* Visual Red Laser Line */
   .laser-scanner-line {
     position: absolute;
     top: 50%;
-    left: 10%;
-    right: 10%;
+    left: 8%;
+    right: 8%;
     height: 3px;
     background: #ef4444;
-    box-shadow: 0 0 10px 2px #ef4444;
+    box-shadow: 0 0 12px 2px #ef4444;
     z-index: 10;
     pointer-events: none;
     animation: scanLaser 1.8s infinite ease-in-out alternate;
   }
   @keyframes scanLaser {
-    0% { transform: translateY(-70px); opacity: 0.6; }
+    0% { transform: translateY(-70px); opacity: 0.7; }
     50% { opacity: 1; }
-    100% { transform: translateY(70px); opacity: 0.6; }
+    100% { transform: translateY(70px); opacity: 0.7; }
   }
 
   .scanner-toolbar {
@@ -1042,8 +1045,8 @@
     <div class="header-actions">
       <!-- Tombol Scan Barcode Kamera Cepat -->
       <button class="ghost-btn btn-scanner-highlight" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN</button>
-      <!-- Tombol Ukuran Teks / Mode A16 -->
-      <button class="ghost-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks untuk Samsung A16 & Lansia">🔤 A16</button>
+      <!-- Tombol Ukuran Teks / Mode -->
+      <button class="ghost-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
       <button class="ghost-btn active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
       <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">🔔 Bip: ON</button>
@@ -1142,7 +1145,7 @@
     </div>
   </div>
 
-  <!-- Main 2-Column Bal Grid (Samsung A16 Optimized) -->
+  <!-- Main 2-Column Bal Grid (Samsung A16 & iPhone 16 Pro Max Adaptive) -->
   <div class="bal-grid" id="balGrid"></div>
   <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
 
@@ -1202,7 +1205,7 @@
   </div>
 </div>
 
-<!-- Modal Camera Barcode Scanner (Dual Engine 1D Code 128/39 & Native BarcodeDetector) -->
+<!-- Modal Camera Barcode Scanner (Universal iOS Safari & Android Pro) -->
 <div class="modal-overlay" id="scannerModal">
   <div class="modal-card" style="text-align:center; max-width:500px; padding:16px 14px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1231,7 +1234,7 @@
     </div>
 
     <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--color-smoke); margin:6px 0;">
-      Arahkan garis merah melintang ke stiker barcode...
+      Arahkan garis merah melintang ke stiker barcode (jarak ~15-20 cm)...
     </p>
 
     <!-- Quick Manual Input in Scanner (If barcode is wrinkled/dark) -->
@@ -3433,7 +3436,7 @@ function handleRealtimeUpdate(payload) {
 }
 
 // ==========================================
-// AUDIO & HAPTIC FEEDBACK
+// AUDIO & HAPTIC FEEDBACK (IOS COMPATIBLE)
 // ==========================================
 function initAudio() {
   if (!audioCtx) {
@@ -4174,7 +4177,7 @@ function saveSupabaseConfig() {
 
 // ==========================================
 // HIGH-ACCURACY DUAL-ENGINE BARCODE SCANNER
-// (CODE 128 / CODE 39 / 2D + NATIVE HARDWARE ACCELERATION)
+// (IPHONE 16 PRO MAX / SAFARI & ANDROID COMPATIBLE)
 // ==========================================
 let html5QrCode = null;
 let currentFacingMode = 'environment';
@@ -4208,7 +4211,7 @@ async function startScanner() {
   resultBox.style.display = 'none';
   quickInput.value = '';
   isProcessingScan = false;
-  status.textContent = 'Membuka kamera HP...';
+  status.textContent = 'Membuka kamera...';
 
   initAudio();
 
@@ -4224,12 +4227,14 @@ async function startScanner() {
       verbose: false
     });
 
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
     const config = {
-      fps: 20,
+      fps: isIos ? 25 : 20,
       qrbox: (viewfinderWidth, viewfinderHeight) => {
         // Kotak scan lebar horizontal untuk membaca barcode garis 1D
-        const width = Math.floor(viewfinderWidth * 0.9);
-        const height = Math.floor(Math.max(140, viewfinderHeight * 0.55));
+        const width = Math.floor(viewfinderWidth * 0.92);
+        const height = Math.floor(Math.max(140, viewfinderHeight * 0.58));
         return { width: width, height: height };
       },
       aspectRatio: 1.25,
@@ -4239,8 +4244,8 @@ async function startScanner() {
       },
       videoConstraints: {
         facingMode: currentFacingMode,
-        focusMode: 'continuous',
-        advanced: [{ focusMode: 'continuous' }]
+        width: { min: 640, ideal: 1280, max: 1920 },
+        height: { min: 480, ideal: 720, max: 1080 }
       }
     };
 
@@ -4251,10 +4256,16 @@ async function startScanner() {
       onBarcodeScanProgress
     );
 
-    // Ambil camera stream track untuk kontrol Senter (Torch)
+    // Amankan atribut playsinline khusus untuk iOS Safari iPhone 16 Pro Max
     setTimeout(() => {
       try {
         const videoElem = document.querySelector('#scannerReader video');
+        if (videoElem) {
+          videoElem.setAttribute('playsinline', 'true');
+          videoElem.setAttribute('webkit-playsinline', 'true');
+          videoElem.setAttribute('muted', 'true');
+          videoElem.setAttribute('autoplay', 'true');
+        }
         if (videoElem && videoElem.srcObject) {
           const tracks = videoElem.srcObject.getVideoTracks();
           if (tracks.length > 0) {
@@ -4269,15 +4280,15 @@ async function startScanner() {
           }
         }
       } catch(e) {}
-    }, 500);
+    }, 400);
 
     // Inisialisasi Native BarcodeDetector Engine Paralel (Hardware Accelerated)
     startNativeFrameScanner();
 
-    status.innerHTML = '🔍 Posisikan <b>garis merah</b> melintang tegak lurus pada barcode';
+    status.innerHTML = '🔍 Posisikan <b>garis merah</b> melintang pada barcode (jarak ~15–20 cm)';
   } catch(err) {
     console.error('Camera scanner start err', err);
-    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera diaktifkan di browser.</span>';
+    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera aktif di Safari / Browser.</span>';
   }
 }
 
@@ -4328,7 +4339,7 @@ async function toggleTorch() {
     btn.style.background = isTorchOn ? '#facc15' : 'var(--color-bone)';
     btn.style.color = isTorchOn ? '#000000' : 'var(--color-ink)';
   } catch(e) {
-    showToast('Senter tidak didukung pada kamera ini');
+    showToast('Senter tidak didukung pada browser ini');
   }
 }
 
