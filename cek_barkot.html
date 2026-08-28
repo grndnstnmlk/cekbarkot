@@ -1090,7 +1090,7 @@
   <div class="modal-card">
     <h3 class="modal-title">Konfigurasi Cloud Supabase</h3>
     <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Project URL:</label>
-    <input type="text" id="cfgUrl" class="modal-input" placeholder="https://xyz.supabase.co" autocapitalize="none" autocomplete="off">
+    <input type="text" id="cfgUrl" class="modal-input" placeholder="https://jrpklibocgicubevyshm.supabase.co" autocapitalize="none" autocomplete="off">
 
     <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Anon Public Key:</label>
     <input type="password" id="cfgKey" class="modal-input" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
@@ -1115,6 +1115,12 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ==========================================
+// SUPABASE DEFAULT CREDENTIALS (OTOMATIS)
+// ==========================================
+const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycGtsaWJvY2dpY3ViZXZ5c2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTA3NjUsImV4cCI6MjEwMzQyNjc2NX0.xGoel8SNa2v9DcZBYwKcmjzGF7j6LJ-OQkr919JyYSc';
+
 // ==========================================
 // DATASET BAWAAN EXCEL (SEMUA TANGGAL 21 - 27 AGUSTUS)
 // ==========================================
@@ -3231,11 +3237,11 @@ function jumpToMissingBal(tgl, no_gud) {
 }
 
 // ==========================================
-// SUPABASE CLIENT SETUP
+// SUPABASE CLIENT SETUP (AUTO-CONNECT)
 // ==========================================
 function initSupabase() {
-  const url = localStorage.getItem('supabase_url') || '';
-  const key = localStorage.getItem('supabase_anon_key') || '';
+  const url = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
+  const key = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
 
   if (url && key && window.supabase) {
     try {
@@ -4004,8 +4010,8 @@ function refreshCurrentDateData() {
 // MODAL SETUP
 // ==========================================
 function openConfigModal() {
-  document.getElementById('cfgUrl').value = localStorage.getItem('supabase_url') || '';
-  document.getElementById('cfgKey').value = localStorage.getItem('supabase_anon_key') || '';
+  document.getElementById('cfgUrl').value = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
+  document.getElementById('cfgKey').value = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
   document.getElementById('configModal').classList.add('open');
 }
 
