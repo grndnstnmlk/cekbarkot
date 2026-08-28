@@ -10,12 +10,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cek Barkot">
 <meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — DrawHistory Gallery Edition</title>
+<title>Cek Barkot — Buku Grade Induk (Samsung A16 & Lansia Edition)</title>
 
-<!-- Google Fonts: Inter (for Eloquia style) & Roboto Mono -->
+<!-- Google Fonts: Inter & Roboto Mono (High Legibility) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
 <!-- SheetJS & Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -23,36 +23,64 @@
 
 <style>
   :root {
-    /* DrawHistory Design Tokens */
+    /* Palette & Tokens */
     --color-parchment: #faf6f3;
-    --color-ash: #e5e7eb;
-    --color-smoke: #999999;
-    --color-silver: #b3b3b3;
-    --color-ink: #000000;
+    --color-ash: #e2e5e9;
+    --color-ash-dark: #cbd5e1;
+    --color-smoke: #64748b;
+    --color-ink: #0f172a;
     --color-bone: #ffffff;
-    --color-olive-charcoal: #3d3b2f;
-    --color-obsidian: #1d1d1b;
-    --color-saffron-dot: #ff6714;
+    --color-olive-charcoal: #2c3327;
+    --color-obsidian: #1e231c;
+    --color-saffron: #ea580c;
+    --color-saffron-bg: #ffedd5;
+    --color-saffron-border: #fdba74;
+    --color-done-bg: #14532d;
+    --color-done-border: #166534;
+    --color-done-text: #f0fdf4;
+    --color-done-subtext: #86efac;
     
-    /* Functional status colors aligned with editorial palette */
-    --color-done-surface: #2b3a2c;
-    --color-done-text: #e2f1e4;
-    --color-done-border: #4c6b50;
-    
-    /* Typography Tokens */
-    --font-eloquia: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    /* Typography */
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    
-    /* Radius Tokens */
+
+    /* Radius */
     --radius-cards: 16px;
-    --radius-buttons: 8px;
+    --radius-buttons: 10px;
     --radius-pills: 9999px;
-    
-    /* Safe Area insets iPhone 16 Pro Max */
+
+    /* Accessibility / Font Scale Tokens (Default: A16 Optimized) */
+    --ui-scale: 1;
+    --card-no-size: 33px;
+    --card-barkot-size: 16px;
+    --card-min-h: 126px;
+    --touch-target: 48px;
+
+    /* Safe Area insets */
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
     --sal: env(safe-area-inset-left, 0px);
     --sar: env(safe-area-inset-right, 0px);
+  }
+
+  /* Size Modes */
+  body.font-mode-normal {
+    --card-no-size: 26px;
+    --card-barkot-size: 14px;
+    --card-min-h: 105px;
+    --touch-target: 44px;
+  }
+  body.font-mode-a16 {
+    --card-no-size: 33px;
+    --card-barkot-size: 16px;
+    --card-min-h: 126px;
+    --touch-target: 50px;
+  }
+  body.font-mode-lansia {
+    --card-no-size: 40px;
+    --card-barkot-size: 19px;
+    --card-min-h: 148px;
+    --touch-target: 56px;
   }
 
   * {
@@ -66,30 +94,31 @@
     padding: 0;
     background: var(--color-parchment);
     color: var(--color-ink);
-    font-family: var(--font-eloquia);
+    font-family: var(--font-sans);
     min-height: 100vh;
     min-height: -webkit-fill-available;
     padding-bottom: calc(var(--sab) + 40px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 15px;
   }
 
-  /* Top Announcement Strip with Saffron Dot */
+  /* Announcement Top Bar */
   .announcement-bar {
-    background: var(--color-parchment);
+    background: var(--color-bone);
     border-bottom: 1px solid var(--color-ash);
-    padding-top: calc(var(--sat) + 6px);
-    padding-bottom: 6px;
+    padding-top: calc(var(--sat) + 8px);
+    padding-bottom: 8px;
     padding-left: calc(var(--sal) + 16px);
     padding-right: calc(var(--sar) + 16px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--color-ink);
+    flex-wrap: wrap;
+    gap: 6px;
   }
   .announcement-left {
     display: flex;
@@ -97,46 +126,55 @@
     gap: 8px;
   }
   .saffron-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: var(--radius-pills);
-    background: var(--color-saffron-dot);
+    background: var(--color-saffron);
     display: inline-block;
     flex-shrink: 0;
   }
 
-  /* Header Section (Gallery Wall Style) */
+  /* Sticky Header */
   header {
-    background: var(--color-parchment);
-    padding: 14px calc(var(--sal) + 16px) 12px calc(var(--sar) + 16px);
-    border-bottom: 1px solid var(--color-ash);
+    background: rgba(250, 246, 243, 0.96);
+    padding: 12px calc(var(--sal) + 14px) 12px calc(var(--sar) + 14px);
+    border-bottom: 2px solid var(--color-ash);
     position: sticky;
     top: 0;
     z-index: 50;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
+  
   .header-main {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 12px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .title-group {
+    flex: 1;
+    min-width: 160px;
   }
   .display-title {
     margin: 0;
-    font-size: 28px;
-    font-weight: 300;
+    font-size: 24px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -0.04em;
-    line-height: 1;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
     color: var(--color-ink);
   }
   .display-subtitle {
-    margin: 4px 0 0;
+    margin: 3px 0 0;
     font-size: 13px;
-    font-weight: 400;
+    font-weight: 600;
     color: var(--color-smoke);
-    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
   .header-actions {
@@ -145,127 +183,212 @@
     align-items: center;
     flex-wrap: wrap;
   }
+
+  /* Buttons & Controls (High Touch Target & Contrast) */
   .ghost-btn {
-    background: transparent;
-    border: 1px solid var(--color-ink);
+    background: var(--color-bone);
+    border: 1.5px solid var(--color-ink);
     color: var(--color-ink);
     border-radius: var(--radius-buttons);
-    padding: 6px 10px;
+    padding: 8px 12px;
+    min-height: var(--touch-target);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12.5px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.1s ease;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 6px;
     user-select: none;
     -webkit-user-select: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
   .ghost-btn:active {
-    background: rgba(0,0,0,0.06);
+    transform: scale(0.96);
+    background: var(--color-ash);
   }
   .ghost-btn.active-lock {
     background: var(--color-obsidian);
     color: var(--color-bone);
     border-color: var(--color-obsidian);
   }
+  .ghost-btn.btn-warning-badge {
+    background: var(--color-saffron-bg);
+    border-color: var(--color-saffron);
+    color: #9a3412;
+  }
 
-  /* Date Bar & Chips */
+  /* Date Bar & Large Chips */
   .date-section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
-  .date-input-wrap {
+  .date-selector-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
   .date-picker {
-    background: transparent;
-    border: 1px solid var(--color-ash);
+    background: var(--color-bone);
+    border: 1.5px solid var(--color-ash-dark);
     border-radius: var(--radius-buttons);
-    padding: 4px 8px;
+    padding: 6px 10px;
+    min-height: 40px;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--color-ink);
     outline: none;
-    -webkit-appearance: none;
   }
-
   .quick-dates-bar {
     display: flex;
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
-    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0 4px;
   }
   .quick-dates-bar::-webkit-scrollbar { display: none; }
 
   .date-pill {
     font-family: var(--font-mono);
-    font-size: 11px;
-    background: transparent;
+    font-size: 12.5px;
+    font-weight: 700;
+    background: var(--color-bone);
     color: var(--color-ink);
-    border: 1px solid var(--color-ash);
+    border: 1.5px solid var(--color-ash-dark);
     border-radius: var(--radius-pills);
-    padding: 3px 10px;
+    padding: 6px 12px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
+    flex-shrink: 0;
+  }
+  .date-pill:active {
+    transform: scale(0.95);
   }
   .date-pill.active {
     background: var(--color-obsidian);
     color: var(--color-bone);
     border-color: var(--color-obsidian);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12);
   }
 
-  /* Progress Section: Minimalist Ash Line */
+  /* Progress Bar (High Visibility) */
   .progress-container {
-    margin-top: 10px;
+    margin-top: 8px;
   }
   .progress-track {
-    height: 3px;
+    height: 7px;
     background: var(--color-ash);
     border-radius: var(--radius-pills);
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
-    background: var(--color-ink);
+    background: #15803d;
     width: 0%;
     transition: width 0.25s ease;
   }
   .progress-label-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
+    font-weight: 700;
     color: var(--color-smoke);
     margin-top: 4px;
   }
   .progress-label-row b {
     color: var(--color-ink);
-    font-weight: 500;
+    font-weight: 800;
+  }
+  .pct-badge {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--color-ink);
   }
 
-  /* Layout Container */
+  /* Main Container */
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 16px calc(var(--sal) + 16px) 30px calc(var(--sar) + 16px);
+    padding: 12px calc(var(--sal) + 12px) 30px calc(var(--sar) + 12px);
   }
 
-  /* DUAL PANEL LAYOUT (DRAW HISTORY SIGNATURE: OLIVE CHARCOAL + OBSIDIAN) */
+  /* Missing Bal Alert Strip (Belum Ditempel / Belum Ketemu) */
+  .missing-bal-banner {
+    background: #fff7ed;
+    border: 2px solid #ea580c;
+    border-radius: var(--radius-cards);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 5px rgba(234, 88, 12, 0.08);
+  }
+  .missing-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .missing-banner-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .missing-banner-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #9a3412;
+    margin: 0;
+  }
+  .missing-banner-sub {
+    font-size: 12px;
+    font-weight: 500;
+    color: #c2410c;
+    margin: 2px 0 0;
+  }
+  .btn-missing-action {
+    background: #ea580c;
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-buttons);
+    padding: 8px 14px;
+    min-height: 40px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(234, 88, 12, 0.25);
+  }
+  .btn-missing-action:active {
+    transform: scale(0.96);
+  }
+
+  /* Dual Panel Search & Quick Finder (Elderly Friendly) */
   .editorial-panels {
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   @media (min-width: 768px) {
     .editorial-panels {
@@ -274,34 +397,34 @@
     }
   }
 
-  /* Left Panel: Olive Charcoal Search & Finder */
   .panel-olive {
     background: var(--color-olive-charcoal);
     color: var(--color-parchment);
     border-radius: var(--radius-cards);
-    padding: 20px 18px;
+    padding: 16px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
   }
   .panel-eyebrow {
-    font-family: var(--font-eloquia);
-    font-size: 11px;
-    font-weight: 400;
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-smoke);
-    margin: 0 0 6px;
+    letter-spacing: 0.06em;
+    color: #a3b899;
+    margin: 0 0 4px;
     display: flex;
     align-items: center;
     gap: 6px;
   }
   .panel-headline {
-    font-family: var(--font-eloquia);
-    font-size: 22px;
-    font-weight: 300;
+    font-family: var(--font-sans);
+    font-size: 20px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: -0.03em;
-    color: var(--color-parchment);
-    margin: 0 0 14px;
-    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0 0 12px;
+    line-height: 1.2;
   }
 
   .search-inputs-dual {
@@ -311,35 +434,37 @@
   }
   .input-label-editorial {
     font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--color-parchment);
-    opacity: 0.8;
+    font-size: 11px;
+    font-weight: 700;
+    color: #f1f5f9;
     text-transform: uppercase;
     display: block;
     margin-bottom: 4px;
   }
   .editorial-input {
     width: 100%;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: var(--color-bone);
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: #ffffff;
     font-family: var(--font-mono);
-    font-size: 16px;
-    font-weight: 500;
-    padding: 9px 10px;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px 10px;
+    min-height: 48px;
     border-radius: var(--radius-buttons);
     outline: none;
     transition: border-color 0.15s ease;
   }
   .editorial-input:focus {
-    border-color: var(--color-bone);
+    border-color: #facc15;
+    background: rgba(0,0,0,0.5);
   }
 
-  /* Spotlight Result Card inside Olive Panel */
+  /* Spotlight Result Card */
   .spotlight-inset {
-    background: var(--color-obsidian);
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.12);
+    background: #0f140e;
+    border-radius: 14px;
+    border: 2px solid #4ade80;
     padding: 14px;
     margin-top: 12px;
     display: none;
@@ -354,56 +479,69 @@
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-smoke);
+    font-size: 13px;
+    font-weight: 700;
+    color: #94a3b8;
   }
   .spotlight-no-label {
-    color: var(--color-bone);
-    font-size: 14px;
-    font-weight: 500;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
   }
   .spotlight-barcode-huge {
     font-family: var(--font-mono);
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    color: var(--color-bone);
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #facc15;
     text-align: center;
     margin: 8px 0;
+    padding: 6px;
+    background: rgba(250, 204, 21, 0.1);
+    border-radius: 8px;
+    border: 1px dashed rgba(250, 204, 21, 0.4);
   }
   .spotlight-meta-row {
     display: flex;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-smoke);
-    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 12px;
   }
   .ghost-btn-full {
     width: 100%;
-    background: transparent;
-    border: 1px solid var(--color-bone);
-    color: var(--color-bone);
+    background: #22c55e;
+    border: 2px solid #16a34a;
+    color: #052e16;
     border-radius: var(--radius-buttons);
-    padding: 10px;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    padding: 12px;
+    min-height: 52px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
   }
   .ghost-btn-full:active {
-    background: rgba(255,255,255,0.1);
+    transform: scale(0.97);
   }
   .ghost-btn-full.btn-done {
-    background: var(--color-done-surface);
-    border-color: var(--color-done-border);
-    color: var(--color-done-text);
+    background: #bbf7d0;
+    border-color: #86efac;
+    color: #14532d;
   }
   .ghost-btn-full.btn-locked {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.25);
-    color: var(--color-parchment);
+    background: #334155;
+    border-color: #475569;
+    color: #cbd5e1;
   }
 
   /* Filter Controls & Batch Actions Bar */
@@ -418,22 +556,35 @@
   .filter-pills {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
   }
   .filter-pill {
-    background: transparent;
-    border: 1px solid var(--color-ash);
-    color: var(--color-smoke);
+    background: var(--color-bone);
+    border: 1.5px solid var(--color-ash-dark);
+    color: var(--color-ink);
     font-family: var(--font-mono);
-    font-size: 11.5px;
-    padding: 5px 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 12px;
+    min-height: 38px;
     border-radius: var(--radius-pills);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+  }
+  .filter-pill:active {
+    transform: scale(0.96);
   }
   .filter-pill.active {
     background: var(--color-ink);
     color: var(--color-bone);
     border-color: var(--color-ink);
+  }
+  .filter-pill.missing-pill.active {
+    background: #ea580c;
+    border-color: #ea580c;
+    color: #ffffff;
   }
 
   .batch-actions {
@@ -442,23 +593,24 @@
     flex-wrap: wrap;
   }
 
-  /* Grid of Display Chips (Gallery Exhibition Items) */
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (SAMSUNG A16 & LANSIA OPTIMIZED) */
   .bal-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
     margin-bottom: 24px;
   }
   @media (min-width: 600px) {
     .bal-grid {
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 12px;
     }
   }
 
+  /* Individual Bal Card */
   .bal-card {
     background: var(--color-bone);
-    border: 1px solid var(--color-ash);
+    border: 2px solid var(--color-ash);
     border-radius: var(--radius-cards);
     padding: 14px 8px 10px;
     display: flex;
@@ -468,98 +620,142 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    -webkit-touch-callout: none;
     position: relative;
-    transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
-    min-height: 96px;
+    transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    min-height: var(--card-min-h);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
   .bal-card:active {
     transform: scale(0.95);
   }
+  
+  /* Large, Crisp No Gud */
   .bal-card .card-no {
     font-family: var(--font-mono);
-    font-size: 24px;
-    font-weight: 500;
+    font-size: var(--card-no-size);
+    font-weight: 800;
     line-height: 1;
     color: var(--color-ink);
     letter-spacing: -0.03em;
   }
+  
+  /* Meta tags row */
   .bal-card .card-meta {
-    margin-top: 6px;
+    margin-top: 8px;
     display: flex;
     flex-wrap: wrap;
-    gap: 3px;
+    gap: 4px;
     justify-content: center;
+    width: 100%;
   }
   .meta-tag {
     font-family: var(--font-mono);
-    font-size: 9.5px;
-    padding: 2px 5px;
-    border-radius: 4px;
-    background: var(--color-parchment);
-    color: var(--color-smoke);
-    border: 1px solid var(--color-ash);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid var(--color-ash-dark);
   }
   .meta-tag-barcode {
+    font-size: var(--card-barkot-size);
+    font-weight: 800;
     color: var(--color-ink);
-    font-weight: 500;
-  }
-  .bal-card .card-status-label {
-    margin-top: 4px;
-    font-family: var(--font-mono);
-    font-size: 8.5px;
-    text-transform: uppercase;
-    color: var(--color-silver);
+    background: #f8fafc;
+    border: 1.5px solid #94a3b8;
+    letter-spacing: 0.02em;
+    width: 95%;
+    text-align: center;
   }
 
-  /* DONE STATE (EDITORIAL TONAL SHIFT TO MOSS OLIVE) */
+  .bal-card .card-status-label {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  /* Card Missing Alert (Belum Ketemu) */
+  .bal-card.missing-item {
+    border-color: #f97316;
+    background: #fffbf7;
+  }
+  .bal-card.missing-item .missing-flag {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    background: #ea580c;
+    color: #ffffff;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* DONE STATE (VIBRANT FOREST GREEN & MOSS HIGH CONTRAST) */
   .bal-card.done {
-    background: var(--color-olive-charcoal);
-    border-color: var(--color-olive-charcoal);
-    color: var(--color-parchment);
+    background: var(--color-done-bg);
+    border-color: var(--color-done-border);
+    color: var(--color-done-text);
+    box-shadow: 0 2px 6px rgba(20, 83, 45, 0.2);
   }
   .bal-card.done .card-no {
-    color: var(--color-bone);
+    color: #ffffff;
   }
   .bal-card.done .meta-tag {
-    background: rgba(0,0,0,0.3);
-    border-color: rgba(255,255,255,0.1);
-    color: var(--color-parchment);
+    background: rgba(0,0,0,0.35);
+    border-color: rgba(255,255,255,0.2);
+    color: #f0fdf4;
+  }
+  .bal-card.done .meta-tag-barcode {
+    background: #166534;
+    border-color: #86efac;
+    color: #ffffff;
   }
   .bal-card.done .card-status-label {
-    color: var(--color-smoke);
+    color: var(--color-done-subtext);
+    font-weight: 800;
   }
   .bal-card.done .badge-top-right {
     position: absolute;
-    top: 4px;
-    right: 7px;
-    font-size: 13px;
-    color: var(--color-bone);
+    top: 5px;
+    right: 8px;
+    font-size: 15px;
+    color: #86efac;
     display: flex;
     align-items: center;
     gap: 2px;
   }
 
   .bal-card.highlight {
-    border: 1.5px solid var(--color-saffron-dot);
+    border: 3px solid #eab308;
+    animation: pulseHighlight 1s infinite alternate;
+  }
+  @keyframes pulseHighlight {
+    from { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+    to { box-shadow: 0 0 0 6px rgba(234, 179, 8, 0.1); }
   }
 
-  /* Bottom Management Panel (Obsidian Card Style) */
+  /* Management Panel */
   .panel-obsidian {
     background: var(--color-obsidian);
     color: var(--color-bone);
     border-radius: var(--radius-cards);
-    padding: 20px 18px;
+    padding: 18px 16px;
     margin-top: 24px;
   }
   .panel-obsidian h3 {
-    font-family: var(--font-eloquia);
-    font-size: 14px;
-    font-weight: 300;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-parchment);
-    margin: 0 0 8px;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    margin: 0 0 6px;
   }
   .obsidian-actions {
     display: flex;
@@ -568,26 +764,32 @@
     margin-top: 12px;
   }
   .ghost-btn-dark {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.25);
-    color: var(--color-bone);
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: #ffffff;
     border-radius: var(--radius-buttons);
-    padding: 8px 14px;
+    padding: 10px 14px;
+    min-height: 44px;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
     transition: background 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
   .ghost-btn-dark:active {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.2);
   }
 
   /* Modals */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.65);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 100;
@@ -607,29 +809,81 @@
     background: var(--color-bone);
     border-radius: var(--radius-cards);
     width: 100%;
-    max-width: 440px;
-    padding: 24px 20px;
-    border: 1px solid var(--color-ash);
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 22px 18px;
+    border: 2px solid var(--color-ash-dark);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
   .modal-title {
-    font-family: var(--font-eloquia);
-    font-size: 18px;
-    font-weight: 300;
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -0.02em;
     color: var(--color-ink);
-    margin: 0 0 12px;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   .modal-input {
     width: 100%;
     background: var(--color-parchment);
-    border: 1px solid var(--color-ash);
+    border: 2px solid var(--color-ash-dark);
     border-radius: var(--radius-buttons);
     padding: 10px 12px;
+    min-height: 48px;
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 600;
     margin-bottom: 12px;
     outline: none;
+  }
+
+  /* Missing Bales List in Modal */
+  .missing-list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .missing-list-item {
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .missing-item-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .missing-barkot-code {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 800;
+    color: #ea580c;
+  }
+  .missing-meta-desc {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #78350f;
+  }
+  .btn-jump-bal {
+    background: #ea580c;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
   }
 
   /* Toast Notification */
@@ -637,19 +891,21 @@
     position: fixed;
     bottom: calc(var(--sab) + 20px);
     left: 50%;
-    transform: translateX(-50%) translateY(40px);
+    transform: translateX(-50%) translateY(50px);
     background: var(--color-obsidian);
     color: var(--color-bone);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 8px 18px;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 10px 20px;
     border-radius: var(--radius-pills);
     opacity: 0;
     pointer-events: none;
     transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 150;
     white-space: nowrap;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
   .toast.show {
     opacity: 1;
@@ -661,11 +917,12 @@
     padding: 40px 10px;
     font-family: var(--font-mono);
     color: var(--color-smoke);
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 600;
   }
 </style>
 </head>
-<body>
+<body class="font-mode-a16">
 
 <!-- Announcement Strip -->
 <div class="announcement-bar">
@@ -673,39 +930,43 @@
     <span class="saffron-dot"></span>
     <span>Buku Grade Induk · Realtime Field Log</span>
   </div>
-  <div class="cloud-status-indicator" id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:10px; color:var(--color-smoke);">
+  <div class="cloud-status-indicator" id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:11px;">
     <span id="cloudStatusText">Offline</span>
   </div>
 </div>
 
 <header>
   <div class="header-main">
-    <div>
+    <div class="title-group">
       <h1 class="display-title">Cek Barkot</h1>
       <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
     </div>
     <div class="header-actions">
+      <!-- Tombol Ukuran Teks / Mode A16 -->
+      <button class="ghost-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks untuk Samsung A16 & Lansia">🔤 A16</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
       <button class="ghost-btn active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
-      <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">Bip</button>
-      <button class="ghost-btn" onclick="openConfigModal()">Setup</button>
+      <button class="ghost-btn" id="soundBtn" onclick="toggleSound()">🔔 Bip: ON</button>
+      <button class="ghost-btn" onclick="openConfigModal()">⚙️ Setup</button>
     </div>
   </div>
 
-  <!-- Date Selection & Quick Date Badges -->
+  <!-- Date Selection & Quick Date Badges (All Dates from 21 to 27 August) -->
   <div class="date-section">
-    <div class="date-input-wrap">
+    <div class="date-selector-row">
       <input type="date" id="datePicker" class="date-picker" onchange="onDateChanged(this.value)">
-    </div>
-    <div class="quick-dates-bar" id="quickDatesContainer">
-      <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
-      <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
-      <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
-      <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
+      <div class="quick-dates-bar" id="quickDatesContainer">
+        <span class="date-pill" onclick="onDateChanged('2026-08-21')">21 Ags (58)</span>
+        <span class="date-pill" onclick="onDateChanged('2026-08-22')">22 Ags (57)</span>
+        <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags (50)</span>
+        <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags (28)</span>
+        <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags (42)</span>
+        <span class="date-pill active" onclick="onDateChanged('2026-08-27')">27 Ags (50)</span>
+      </div>
     </div>
   </div>
 
-  <!-- Minimalist Progress -->
+  <!-- Progress Track -->
   <div class="progress-container">
     <div class="progress-track">
       <div class="progress-fill" id="progressBar"></div>
@@ -713,17 +974,29 @@
     <div class="progress-label-row">
       <span>SELESAI: <b id="countDone">0</b> / <span id="countTotal">0</span></span>
       <span>SISA: <b id="countRemain">0</b></span>
-      <span id="pctLabel">0%</span>
+      <span class="pct-badge" id="pctLabel">0%</span>
     </div>
   </div>
 </header>
 
 <main>
+  <!-- Missing Bales Alert Banner (Belum Ditempel / Belum Ketemu) -->
+  <div class="missing-bal-banner" id="missingBanner">
+    <div class="missing-banner-left">
+      <div class="missing-banner-icon">⚠️</div>
+      <div>
+        <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
+        <p class="missing-banner-sub">31155, 33419, 33422, 33743, 33744, 32277, 32278, 943613</p>
+      </div>
+    </div>
+    <button class="btn-missing-action" onclick="openMissingModal()">Lihat Detail (8)</button>
+  </div>
+
   <!-- EDITORIAL PANEL (OLIVE CHARCOAL FINDER) -->
   <div class="editorial-panels">
     <div class="panel-olive">
       <p class="panel-eyebrow"><span class="saffron-dot"></span> PENCARIAN CEPAT LAPANGAN</p>
-      <h2 class="panel-headline">Siapkan Stiker Barkot</h2>
+      <h2 class="panel-headline">Cari Nomor Gud / Barkot</h2>
       
       <div class="search-inputs-dual">
         <div>
@@ -748,7 +1021,7 @@
           <span id="spotStatusVal">BELUM DIBARKOT</span>
         </div>
         <button class="ghost-btn-full" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-          Tandai Sudah Ditempel
+          ✓ Tandai Sudah Ditempel
         </button>
       </div>
     </div>
@@ -760,49 +1033,66 @@
       <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
       <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
       <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
+      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Belum Ketemu (0)</button>
     </div>
     <div class="batch-actions">
-      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="checkAllBal()" title="Centang Semua Bal Hari Ini">✓ Centang Semua</button>
-      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="uncheckAllBal()" title="Batalkan Centang Semua Bal">↺ Un-centang</button>
-      <button class="ghost-btn" style="padding:5px 9px; font-size:11px;" onclick="startScanner()">📷 Scan</button>
+      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="checkAllBal()" title="Centang Semua Bal Hari Ini">✓ Centang Semua</button>
+      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="uncheckAllBal()" title="Batalkan Centang Semua Bal">↺ Reset</button>
+      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="startScanner()">📷 Scan</button>
     </div>
   </div>
 
-  <!-- Main Bal Exhibition Grid -->
+  <!-- Main 2-Column Bal Grid (Samsung A16 Optimized) -->
   <div class="bal-grid" id="balGrid"></div>
   <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
 
-  <!-- Management Panel (Obsidian Panel Style) -->
+  <!-- Management Panel (Obsidian Style) -->
   <div class="panel-obsidian">
     <h3>Pengelolaan Berkas & Cloud Sync</h3>
-    <p style="font-size:12px; color:var(--color-smoke); margin:0 0 12px;">
-      Unggah berkas Excel harian untuk memuat nomor bal baru ke sistem dan database:
+    <p style="font-size:13px; color:#cbd5e1; margin:0 0 12px;">
+      Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru atau salin rekap laporan ke WhatsApp:
     </p>
     <div class="obsidian-actions">
       <label class="ghost-btn-dark" style="cursor:pointer;">
-        Upload Excel (.xlsx)
+        📥 Upload Excel (.xlsx)
         <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
       </label>
-      <button class="ghost-btn-dark" onclick="syncAllLocalToCloud()">Upload Semua ke Cloud</button>
-      <button class="ghost-btn-dark" onclick="copyWaSummary()">Salin Rekap WA</button>
-      <button class="ghost-btn-dark" onclick="refreshCurrentDateData()">Muat Ulang</button>
+      <button class="ghost-btn-dark" onclick="syncAllLocalToCloud()">☁️ Upload ke Cloud</button>
+      <button class="ghost-btn-dark" onclick="copyWaSummary()">📋 Salin Rekap WA</button>
+      <button class="ghost-btn-dark" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
     </div>
 
-    <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1); display:flex; gap:8px;">
-      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
-      <button class="ghost-btn-dark" style="font-size:10px; padding:5px 8px; border-color:#ef5350; color:#ef5350;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
+    <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.15); display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="ghost-btn-dark" style="font-size:11px; padding:6px 10px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
+      <button class="ghost-btn-dark" style="font-size:11px; padding:6px 10px; border-color:#ef4444; color:#ef4444;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
     </div>
   </div>
 </main>
 
+<!-- Modal 8 Bal Belum Ditempel (Belum Ketemu) -->
+<div class="modal-overlay" id="missingModal">
+  <div class="modal-card">
+    <h3 class="modal-title">⚠️ 8 Bal Belum Ketemu</h3>
+    <p style="font-size:13px; color:var(--color-smoke); margin:0 0 10px;">
+      Daftar 8 barcode yang belum ditempel karena bal tembakau belum ditemukan di gudang:
+    </p>
+    <div class="missing-list-group" id="missingListContainer">
+      <!-- Populated via JS -->
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+      <button class="ghost-btn" onclick="closeMissingModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Setup Supabase -->
 <div class="modal-overlay" id="configModal">
   <div class="modal-card">
-    <h3 class="modal-title">Konfigurasi Supabase</h3>
-    <label style="font-family:var(--font-mono); font-size:10px; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Project URL:</label>
+    <h3 class="modal-title">Konfigurasi Cloud Supabase</h3>
+    <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Project URL:</label>
     <input type="text" id="cfgUrl" class="modal-input" placeholder="https://xyz.supabase.co" autocapitalize="none" autocomplete="off">
 
-    <label style="font-family:var(--font-mono); font-size:10px; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Anon Public Key:</label>
+    <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; text-transform:uppercase; color:var(--color-smoke); display:block; margin-bottom:4px;">Anon Public Key:</label>
     <input type="password" id="cfgKey" class="modal-input" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
 
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
@@ -815,9 +1105,9 @@
 <!-- Modal Camera Barcode Scanner -->
 <div class="modal-overlay" id="scannerModal">
   <div class="modal-card" style="text-align:center;">
-    <h3 class="modal-title">Pindai Barcode</h3>
+    <h3 class="modal-title">Pindai Barcode Kamera</h3>
     <video id="scannerVideo" playsinline autoplay muted style="width:100%; border-radius:8px; background:#000;"></video>
-    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:11px; color:var(--color-smoke); margin:8px 0;">Mencari barcode...</p>
+    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--color-smoke); margin:10px 0;">Mencari barcode...</p>
     <button class="ghost-btn" onclick="stopScanner()">Tutup</button>
   </div>
 </div>
@@ -826,7 +1116,7 @@
 
 <script>
 // ==========================================
-// DATASET BAWAAN EXCEL
+// DATASET BAWAAN EXCEL (SEMUA TANGGAL 21 - 27 AGUSTUS)
 // ==========================================
 const SEED_DATA = {
   "2026-08-27": [
@@ -2026,8 +2316,819 @@ const SEED_DATA = {
       "barkot": "33289",
       "kg": 37
     }
+  ],
+  "2026-08-21": [
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 255,
+      "grade": "55",
+      "barkot": "30163",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 256,
+      "grade": "60",
+      "barkot": "31295",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 257,
+      "grade": "60",
+      "barkot": "30154",
+      "kg": 33
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 258,
+      "grade": "60",
+      "barkot": "30182",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 259,
+      "grade": "50",
+      "barkot": "30164",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 265,
+      "grade": "52",
+      "barkot": "30143",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 267,
+      "grade": "53",
+      "barkot": "30142",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 271,
+      "grade": "52",
+      "barkot": "30146",
+      "kg": 31
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 273,
+      "grade": "52",
+      "barkot": "30141",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 315,
+      "grade": "50",
+      "barkot": "30156",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 318,
+      "grade": "63",
+      "barkot": "31286",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 320,
+      "grade": "52",
+      "barkot": "30157",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 321,
+      "grade": "55",
+      "barkot": "30145",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 322,
+      "grade": "55",
+      "barkot": "30159",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 323,
+      "grade": "55",
+      "barkot": "30155",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 324,
+      "grade": "55",
+      "barkot": "30162",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 325,
+      "grade": "50",
+      "barkot": "30160",
+      "kg": 45
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 326,
+      "grade": "55",
+      "barkot": "30140",
+      "kg": 44
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 327,
+      "grade": "53",
+      "barkot": "30161",
+      "kg": 41
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 328,
+      "grade": "63",
+      "barkot": "31162",
+      "kg": 41
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 329,
+      "grade": "63",
+      "barkot": "31155",
+      "kg": 38
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 330,
+      "grade": "62",
+      "barkot": "31159",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 331,
+      "grade": "60",
+      "barkot": "31158",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 332,
+      "grade": "60",
+      "barkot": "31160",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 333,
+      "grade": "62",
+      "barkot": "31163",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 334,
+      "grade": "63",
+      "barkot": "31296",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 335,
+      "grade": "58",
+      "barkot": "30144",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 337,
+      "grade": "52",
+      "barkot": "30171",
+      "kg": 32
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 338,
+      "grade": "52",
+      "barkot": "30172",
+      "kg": 31
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 339,
+      "grade": "52",
+      "barkot": "30176",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 340,
+      "grade": "55",
+      "barkot": "30178",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 341,
+      "grade": "55",
+      "barkot": "30177",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 344,
+      "grade": "52",
+      "barkot": "30175",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 346,
+      "grade": "60",
+      "barkot": "31161",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 349,
+      "grade": "52",
+      "barkot": "30158",
+      "kg": 33
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 350,
+      "grade": "53",
+      "barkot": "30174",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 357,
+      "grade": "48",
+      "barkot": "30181",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 358,
+      "grade": "48",
+      "barkot": "30180",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 366,
+      "grade": "50",
+      "barkot": "30179",
+      "kg": 38
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 367,
+      "grade": "52",
+      "barkot": "30173",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 369,
+      "grade": "53",
+      "barkot": "30169",
+      "kg": 40
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 375,
+      "grade": "63",
+      "barkot": "31157",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 376,
+      "grade": "65",
+      "barkot": "31156",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 377,
+      "grade": "63",
+      "barkot": "31154",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 378,
+      "grade": "63",
+      "barkot": "31289",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 379,
+      "grade": "64",
+      "barkot": "31287",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 380,
+      "grade": "65",
+      "barkot": "31291",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 381,
+      "grade": "64",
+      "barkot": "31288",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 382,
+      "grade": "61",
+      "barkot": "31297",
+      "kg": 45
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 383,
+      "grade": "65",
+      "barkot": "31294",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 384,
+      "grade": "62",
+      "barkot": "31293",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 385,
+      "grade": "65",
+      "barkot": "31290",
+      "kg": 40
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 387,
+      "grade": "50",
+      "barkot": "30165",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 388,
+      "grade": "50",
+      "barkot": "30166",
+      "kg": 44
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 389,
+      "grade": "60",
+      "barkot": "31262",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 390,
+      "grade": "58",
+      "barkot": "30168",
+      "kg": 49
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 395,
+      "grade": "50",
+      "barkot": "30167",
+      "kg": 40
+    },
+    {
+      "tanggal": "2026-08-21",
+      "no_gud": 396,
+      "grade": "50",
+      "barkot": "30170",
+      "kg": 34
+    }
+  ],
+  "2026-08-22": [
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 260,
+      "grade": "50",
+      "barkot": "30448",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 263,
+      "grade": "50",
+      "barkot": "30618",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 264,
+      "grade": "52",
+      "barkot": "30631",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 275,
+      "grade": "52",
+      "barkot": "30617",
+      "kg": 32
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 277,
+      "grade": "52",
+      "barkot": "30616",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 278,
+      "grade": "52",
+      "barkot": "30632",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 289,
+      "grade": "62",
+      "barkot": "31701",
+      "kg": 47
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 309,
+      "grade": "54",
+      "barkot": "30450",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 310,
+      "grade": "53",
+      "barkot": "30621",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 311,
+      "grade": "50",
+      "barkot": "30620",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 312,
+      "grade": "50",
+      "barkot": "30626",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 313,
+      "grade": "50",
+      "barkot": "30619",
+      "kg": 32
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 316,
+      "grade": "55",
+      "barkot": "30449",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 342,
+      "grade": "50",
+      "barkot": "30634",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 346,
+      "grade": "52",
+      "barkot": "30624",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 347,
+      "grade": "53",
+      "barkot": "30622",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 351,
+      "grade": "54",
+      "barkot": "30628",
+      "kg": 33
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 352,
+      "grade": "52",
+      "barkot": "30614",
+      "kg": 32
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 355,
+      "grade": "55",
+      "barkot": "30316",
+      "kg": 48
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 370,
+      "grade": "50",
+      "barkot": "30627",
+      "kg": 37
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 371,
+      "grade": "52",
+      "barkot": "30630",
+      "kg": 40
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 372,
+      "grade": "52",
+      "barkot": "30629",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 373,
+      "grade": "52",
+      "barkot": "30623",
+      "kg": 49
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 374,
+      "grade": "52",
+      "barkot": "30625",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 392,
+      "grade": "52",
+      "barkot": "30615",
+      "kg": 36
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 393,
+      "grade": "52",
+      "barkot": "30633",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 397,
+      "grade": "63",
+      "barkot": "31629",
+      "kg": 48
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 398,
+      "grade": "65",
+      "barkot": "31627",
+      "kg": 48
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 399,
+      "grade": "65",
+      "barkot": "31631",
+      "kg": 48
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 400,
+      "grade": "63",
+      "barkot": "31630",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 401,
+      "grade": "64",
+      "barkot": "31633",
+      "kg": 33
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 402,
+      "grade": "63",
+      "barkot": "31628",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 403,
+      "grade": "63",
+      "barkot": "31626",
+      "kg": 33
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 404,
+      "grade": "62",
+      "barkot": "31632",
+      "kg": 49
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 405,
+      "grade": "60",
+      "barkot": "30446",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 406,
+      "grade": "57",
+      "barkot": "30444",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 407,
+      "grade": "58",
+      "barkot": "30443",
+      "kg": 39
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 408,
+      "grade": "60",
+      "barkot": "31624",
+      "kg": 41
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 409,
+      "grade": "60",
+      "barkot": "30445",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 410,
+      "grade": "60",
+      "barkot": "31625",
+      "kg": 29
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 411,
+      "grade": "56",
+      "barkot": "30451",
+      "kg": 29
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 412,
+      "grade": "54",
+      "barkot": "30452",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 413,
+      "grade": "55",
+      "barkot": "30454",
+      "kg": 41
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 414,
+      "grade": "55",
+      "barkot": "30453",
+      "kg": 44
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 415,
+      "grade": "60",
+      "barkot": "30447",
+      "kg": 42
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 418,
+      "grade": "57",
+      "barkot": "30457",
+      "kg": 43
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 419,
+      "grade": "57",
+      "barkot": "30441",
+      "kg": 44
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 420,
+      "grade": "57",
+      "barkot": "30442",
+      "kg": 46
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 421,
+      "grade": "57",
+      "barkot": "30456",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 422,
+      "grade": "57",
+      "barkot": "30455",
+      "kg": 49
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 423,
+      "grade": "60",
+      "barkot": "31200",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 424,
+      "grade": "60",
+      "barkot": "31198",
+      "kg": 30
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 425,
+      "grade": "66",
+      "barkot": "31199",
+      "kg": 34
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 426,
+      "grade": "65",
+      "barkot": "31634",
+      "kg": 35
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 427,
+      "grade": "63",
+      "barkot": "31622",
+      "kg": 49
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 428,
+      "grade": "62",
+      "barkot": "31623",
+      "kg": 50
+    },
+    {
+      "tanggal": "2026-08-22",
+      "no_gud": 429,
+      "grade": "58",
+      "barkot": "30317",
+      "kg": 50
+    }
   ]
 };
+
+const MISSING_BARCODES = ["31155", "33419", "33422", "33743", "33744", "32277", "32278", "943613"];
 
 let currentDate = '2026-08-27';
 let state = {
@@ -2036,11 +3137,98 @@ let state = {
 };
 let currentFilter = 'all';
 let soundEnabled = true;
-let lockModeEnabled = true; // DEFAULT KUNCI AKTIF UNTUK KEAMANAN DI LAPANGAN
+let lockModeEnabled = true;
 let audioCtx = null;
 let supabaseClient = null;
 let realtimeChannel = null;
 let activeSpotlightBal = null;
+
+// Ukuran Font State: 'a16' (Default), 'lansia', 'normal'
+let currentFontSizeMode = localStorage.getItem('barkot_font_mode') || 'a16';
+
+function initFontSize() {
+  applyFontSize(currentFontSizeMode);
+}
+
+function cycleFontSize() {
+  if (currentFontSizeMode === 'a16') {
+    currentFontSizeMode = 'lansia';
+  } else if (currentFontSizeMode === 'lansia') {
+    currentFontSizeMode = 'normal';
+  } else {
+    currentFontSizeMode = 'a16';
+  }
+  localStorage.setItem('barkot_font_mode', currentFontSizeMode);
+  applyFontSize(currentFontSizeMode);
+  const labels = {
+    'a16': 'Mode Teks: Besar (Samsung A16)',
+    'lansia': 'Mode Teks: Sangat Besar (Lansia)',
+    'normal': 'Mode Teks: Standar'
+  };
+  showToast(labels[currentFontSizeMode] || 'Mode Teks Diperbarui');
+}
+
+function applyFontSize(mode) {
+  document.body.classList.remove('font-mode-normal', 'font-mode-a16', 'font-mode-lansia');
+  document.body.classList.add('font-mode-' + mode);
+  const btn = document.getElementById('fontSizeBtn');
+  if (btn) {
+    if (mode === 'lansia') btn.textContent = '🔤 Lansia (XL)';
+    else if (mode === 'normal') btn.textContent = '🔤 Normal';
+    else btn.textContent = '🔤 A16 (L)';
+  }
+}
+
+// ==========================================
+// MODAL 8 BAL BELUM KETEMU
+// ==========================================
+function openMissingModal() {
+  const container = document.getElementById('missingListContainer');
+  container.innerHTML = '';
+
+  const allFound = [];
+  for (const b of MISSING_BARCODES) {
+    for (const tgl of Object.keys(SEED_DATA)) {
+      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === b);
+      if (match) {
+        allFound.push({ ...match, tgl: tgl });
+        break;
+      }
+    }
+  }
+
+  allFound.forEach(it => {
+    const itemEl = document.createElement('div');
+    itemEl.className = 'missing-list-item';
+    itemEl.innerHTML = `
+      <div class="missing-item-left">
+        <span class="missing-barkot-code">Barkot ${it.barkot}</span>
+        <span class="missing-meta-desc">Tgl: ${formatDateIndo(it.tgl)} · No Gud: ${it.no_gud} · GR: ${it.grade} · ${it.kg || '-'}kg</span>
+      </div>
+      <button class="btn-jump-bal" onclick="jumpToMissingBal('${it.tgl}', ${it.no_gud})">🔍 Buka</button>
+    `;
+    container.appendChild(itemEl);
+  });
+
+  document.getElementById('missingModal').classList.add('open');
+}
+
+function closeMissingModal() {
+  document.getElementById('missingModal').classList.remove('open');
+}
+
+function jumpToMissingBal(tgl, no_gud) {
+  closeMissingModal();
+  onDateChanged(tgl);
+  setTimeout(() => {
+    const target = state.list.find(x => x.no_gud === no_gud);
+    if (target) {
+      showSpotlight(target);
+      const cardElem = Array.from(document.querySelectorAll('.bal-card')).find(el => el.querySelector('.card-no')?.textContent === String(no_gud));
+      if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
+}
 
 // ==========================================
 // SUPABASE CLIENT SETUP
@@ -2067,7 +3255,7 @@ function updateCloudBadge(isConnected, text) {
   const txt = document.getElementById('cloudStatusText');
   if (isConnected) {
     txt.textContent = text || 'Live Sync';
-    txt.style.color = '#2e7d32';
+    txt.style.color = '#15803d';
   } else {
     txt.textContent = text || 'Offline';
     txt.style.color = 'var(--color-smoke)';
@@ -2107,7 +3295,7 @@ function handleRealtimeUpdate(payload) {
 }
 
 // ==========================================
-// AUDIO FEEDBACK
+// AUDIO & HAPTIC FEEDBACK
 // ==========================================
 function initAudio() {
   if (!audioCtx) {
@@ -2137,7 +3325,7 @@ function playBeep(isSuccess = true) {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(880, now);
       osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
-      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.setValueAtTime(0.25, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc.start(now);
       osc.stop(now + 0.16);
@@ -2145,7 +3333,7 @@ function playBeep(isSuccess = true) {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(320, now);
       osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
-      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.setValueAtTime(0.2, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc.start(now);
       osc.stop(now + 0.07);
@@ -2156,7 +3344,7 @@ function playBeep(isSuccess = true) {
 function toggleSound() {
   initAudio();
   soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? 'Bip: ON' : 'Bip: OFF';
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔔 Bip: ON' : '🔕 Bip: OFF';
   showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
 }
 
@@ -2205,7 +3393,7 @@ function showToast(msg) {
 }
 
 // ==========================================
-// TANGGAL & STATE (INSTANT 0ms DISPLAY)
+// TANGGAL & STATE
 // ==========================================
 function formatDateIndo(dateStr) {
   if (!dateStr) return '';
@@ -2223,10 +3411,8 @@ function onDateChanged(newDate) {
 
   document.querySelectorAll('.date-pill').forEach(chip => {
     const chipText = chip.textContent;
-    const isCurrent = (currentDate === '2026-08-23' && chipText.includes('23')) ||
-                      (currentDate === '2026-08-24' && chipText.includes('24')) ||
-                      (currentDate === '2026-08-26' && chipText.includes('26')) ||
-                      (currentDate === '2026-08-27' && chipText.includes('27'));
+    const day = newDate.split('-')[2];
+    const isCurrent = chipText.includes(parseInt(day, 10) + ' Ags');
     chip.classList.toggle('active', isCurrent);
   });
 
@@ -2255,9 +3441,20 @@ async function loadDataForCurrentDate() {
   }
 
   if (!found && SEED_DATA[currentDate]) {
+    const doneMap = {};
+    const list = SEED_DATA[currentDate].map(x => {
+      const isMissing = MISSING_BARCODES.includes(String(x.barkot).trim());
+      const isDone = !isMissing;
+      if (isDone) doneMap[x.no_gud] = true;
+      return {
+        ...x,
+        is_done: isDone
+      };
+    });
+
     state = {
-      list: SEED_DATA[currentDate].map(x => ({ ...x, is_done: false })),
-      doneMap: {}
+      list: list,
+      doneMap: doneMap
     };
     saveLocalState();
     found = true;
@@ -2293,7 +3490,7 @@ async function loadDataForCurrentDate() {
 }
 
 // ==========================================
-// BATCH ACTIONS: CENTANG SEMUA & UN-CENTANG SEMUA
+// BATCH ACTIONS: CENTANG SEMUA & RESET
 // ==========================================
 async function checkAllBal() {
   if (state.list.length === 0) {
@@ -2387,8 +3584,8 @@ function handleSearchInput(type) {
     const val = barkotInput.value.trim();
     if (val) {
       nogudInput.value = '';
-      match = state.list.find(x => x.barkot === val) || 
-              state.list.find(x => x.barkot && x.barkot.includes(val));
+      match = state.list.find(x => String(x.barkot).trim() === val) || 
+              state.list.find(x => x.barkot && String(x.barkot).includes(val));
     }
   }
 
@@ -2421,19 +3618,19 @@ function updateSpotlightUI() {
 
   if (isDone) {
     status.innerHTML = lockModeEnabled ? 
-      '<span style="color:#a5d6a7;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
-      '<span style="color:#a5d6a7;">✓ SUDAH DIBARKOT</span>';
+      '<span style="color:#86efac; font-weight:800;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
+      '<span style="color:#86efac; font-weight:800;">✓ SUDAH DIBARKOT</span>';
     
     if (lockModeEnabled) {
       btn.textContent = '🔒 Bal Terkunci (Buka Kunci untuk Edit)';
       btn.className = 'ghost-btn-full btn-locked';
     } else {
-      btn.textContent = 'Batalkan Centang';
+      btn.textContent = '↺ Batalkan Centang';
       btn.className = 'ghost-btn-full btn-done';
     }
   } else {
     status.textContent = 'BELUM DIBARKOT';
-    btn.textContent = 'Tandai Sudah Ditempel';
+    btn.textContent = '✓ Tandai Sudah Ditempel';
     btn.className = 'ghost-btn-full';
   }
 }
@@ -2463,7 +3660,6 @@ function toggleSpotlightBal() {
 async function toggleBal(no_gud) {
   const isCurrentlyDone = Boolean(state.doneMap[no_gud]);
   
-  // Jika bal SUDAH dicentang dan MODE KUNCI AKTIF: Proteksi terhadap ketidaksengajaan
   if (isCurrentlyDone && lockModeEnabled) {
     initAudio();
     if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
@@ -2480,8 +3676,8 @@ async function forceToggleBal(no_gud, newStatus) {
   if (newStatus) {
     state.doneMap[no_gud] = true;
     playBeep(true);
-    if (navigator.vibrate) navigator.vibrate(30);
-    showToast(`✓ No Gud ${no_gud} ditandai selesai (Terkunci 🔒)`);
+    if (navigator.vibrate) navigator.vibrate(35);
+    showToast(`✓ No Gud ${no_gud} selesai (Terkunci 🔒)`);
   } else {
     delete state.doneMap[no_gud];
     playBeep(false);
@@ -2517,7 +3713,7 @@ async function forceToggleBal(no_gud, newStatus) {
 }
 
 // ==========================================
-// RENDER EXHIBITION GRID
+// RENDER 2-COLUMN BAL CARD GRID
 // ==========================================
 function setFilter(type, elem) {
   currentFilter = type;
@@ -2539,6 +3735,8 @@ function render() {
   const remainCount = Math.max(0, total - doneCount);
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
+  const missingCountInDate = state.list.filter(x => MISSING_BARCODES.includes(String(x.barkot).trim())).length;
+
   document.getElementById('countDone').textContent = doneCount;
   document.getElementById('countTotal').textContent = total;
   document.getElementById('countRemain').textContent = remainCount;
@@ -2548,17 +3746,21 @@ function render() {
   document.getElementById('tabAll').textContent = `Semua (${total})`;
   document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
   document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
+  document.getElementById('tabMissing').textContent = `⚠️ Belum Ketemu (${missingCountInDate})`;
 
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
+    const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
+
     if (currentFilter === 'pending' && isDone) return false;
     if (currentFilter === 'done' && !isDone) return false;
+    if (currentFilter === 'missing' && !isMissing) return false;
     
     if (nogudQ) {
       return String(item.no_gud).includes(nogudQ);
     }
     if (barkotQ) {
-      return item.barkot && item.barkot.includes(barkotQ);
+      return item.barkot && String(item.barkot).includes(barkotQ);
     }
     return true;
   });
@@ -2567,28 +3769,38 @@ function render() {
     emptyMsg.style.display = 'block';
     emptyMsg.textContent = total === 0 ? 
       `Belum ada data bal untuk tanggal ${currentDate}.` : 
-      'Tidak ada data bal yang cocok dengan kriteria pencarian.';
+      'Tidak ada data bal yang cocok dengan filter / pencarian.';
   } else {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
       const isDone = Boolean(state.doneMap[item.no_gud]);
+      const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
       const isSearchMatch = (nogudQ && String(item.no_gud) === nogudQ) || 
-                            (barkotQ && item.barkot === barkotQ);
+                            (barkotQ && String(item.barkot).trim() === barkotQ);
 
       const card = document.createElement('div');
-      card.className = 'bal-card' + (isDone ? ' done' : '') + (isSearchMatch ? ' highlight' : '');
+      card.className = 'bal-card' + 
+                       (isDone ? ' done' : '') + 
+                       (isMissing && !isDone ? ' missing-item' : '') + 
+                       (isSearchMatch ? ' highlight' : '');
 
-      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '';
+      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode">—</span>';
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
       const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
 
       const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
+      const missingBadge = (isMissing && !isDone) ? '<span class="missing-flag">⚠️ Belum Ketemu</span>' : '';
 
       card.innerHTML = `
+        ${missingBadge}
         ${isDone ? `<span class="badge-top-right">${lockIndicator}</span>` : ''}
         <div class="card-no">${item.no_gud}</div>
-        <div class="card-meta">${barkotHtml}${gradeHtml}${kgHtml}</div>
-        <div class="card-status-label">${isDone ? (lockModeEnabled ? 'TERKUNCI' : 'SELESAI') : 'NO GUD'}</div>
+        <div class="card-meta">
+          ${barkotHtml}
+          ${gradeHtml}
+          ${kgHtml}
+        </div>
+        <div class="card-status-label">${isDone ? (lockModeEnabled ? 'TERKUNCI' : 'SELESAI') : (isMissing ? 'BELUM KETEMU' : 'NO GUD')}</div>
       `;
       card.onclick = () => {
         showSpotlight(item);
@@ -2855,7 +4067,7 @@ async function startScanner() {
           if (barcodes.length > 0) {
             const code = barcodes[0].rawValue.trim();
             status.textContent = `Terdeteksi: ${code}`;
-            const match = state.list.find(x => x.barkot === code || String(x.no_gud) === code);
+            const match = state.list.find(x => String(x.barkot).trim() === code || String(x.no_gud) === code);
             if (match) {
               showSpotlight(match);
               toggleBal(match.no_gud);
@@ -2885,6 +4097,7 @@ function stopScanner() {
 // Inisialisasi awal
 document.getElementById('datePicker').value = currentDate;
 document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+initFontSize();
 initLockMode();
 initSupabase();
 loadDataForCurrentDate();
