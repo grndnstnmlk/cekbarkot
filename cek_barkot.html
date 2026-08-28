@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
-<!-- SheetJS, Supabase JS & HTML5-QRCode Scanner -->
+<!-- SheetJS, Supabase JS & HTML5-QRCode Scanner Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -798,14 +798,14 @@
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.75);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 12px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -819,19 +819,19 @@
     border-radius: var(--radius-cards);
     width: 100%;
     max-width: 480px;
-    max-height: 90vh;
+    max-height: 92vh;
     overflow-y: auto;
-    padding: 22px 18px;
+    padding: 18px 16px;
     border: 2px solid var(--color-ash-dark);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   }
   .modal-title {
     font-family: var(--font-sans);
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
     color: var(--color-ink);
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -895,40 +895,93 @@
     cursor: pointer;
   }
 
-  /* Camera Scanner Specific Styling */
-  #scannerReader {
+  /* CAMERA SCANNER HIGH PERFORMANCE VIEWFINDER */
+  .scanner-wrapper {
+    position: relative;
     width: 100%;
+    background: #000000;
     border-radius: 12px;
     overflow: hidden;
-    background: #000000;
-    border: 2px solid var(--color-ash-dark);
+    margin-bottom: 10px;
+    min-height: 240px;
+  }
+  #scannerReader {
+    width: 100% !important;
   }
   #scannerReader video {
     width: 100% !important;
     height: auto !important;
-    border-radius: 10px;
+    max-height: 50vh;
+    object-fit: cover;
   }
-  .scanner-scan-region-highlight {
-    border: 3px solid #38bdf8 !important;
-    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5) !important;
+
+  /* Visual Red Laser Line */
+  .laser-scanner-line {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: #ef4444;
+    box-shadow: 0 0 10px 2px #ef4444;
+    z-index: 10;
+    pointer-events: none;
+    animation: scanLaser 1.8s infinite ease-in-out alternate;
   }
+  @keyframes scanLaser {
+    0% { transform: translateY(-70px); opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { transform: translateY(70px); opacity: 0.6; }
+  }
+
+  .scanner-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
   .scanner-result-popup {
     background: #0f172a;
     color: #ffffff;
     border-radius: 12px;
-    padding: 14px;
-    margin-top: 12px;
+    padding: 12px;
+    margin: 10px 0;
     text-align: center;
-    border: 2px solid #38bdf8;
+    border: 2px solid #22c55e;
     display: none;
+    animation: fadeIn 0.15s ease;
   }
   .scanner-result-nogud {
     font-family: var(--font-mono);
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 800;
     color: #4ade80;
     letter-spacing: -0.02em;
-    margin: 4px 0;
+    margin: 2px 0;
+  }
+
+  .scanner-manual-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 8px;
+    text-align: left;
+  }
+  .scanner-manual-input {
+    width: 100%;
+    background: #ffffff;
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    outline: none;
+    color: #0f172a;
   }
 
   /* Toast Notification */
@@ -1149,27 +1202,44 @@
   </div>
 </div>
 
-<!-- Modal Camera Barcode Scanner (Universal 1D/2D Reader) -->
+<!-- Modal Camera Barcode Scanner (Dual Engine 1D Code 128/39 & Native BarcodeDetector) -->
 <div class="modal-overlay" id="scannerModal">
-  <div class="modal-card" style="text-align:center; max-width:520px;">
-    <h3 class="modal-title">📷 Pindai Barcode Stiker</h3>
-    <p style="font-size:12.5px; color:var(--color-smoke); margin:0 0 10px;">
-      Arahkan kamera ke stiker barcode 1D pada bal tembakau:
-    </p>
+  <div class="modal-card" style="text-align:center; max-width:500px; padding:16px 14px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h3 class="modal-title" style="margin:0;">📷 SCAN BARCODE</h3>
+      <button class="ghost-btn" style="min-height:36px; padding:4px 10px; font-size:11px;" onclick="stopScanner()">✕ TUTUP</button>
+    </div>
 
-    <div id="scannerReader"></div>
+    <!-- Scanner Viewfinder Box with Laser Line -->
+    <div class="scanner-wrapper">
+      <div id="scannerReader"></div>
+      <div class="laser-scanner-line" id="scannerLaser"></div>
+    </div>
 
+    <!-- Controls: Senter & Kamera -->
+    <div class="scanner-toolbar">
+      <button class="ghost-btn" id="torchBtn" style="flex:1; min-height:42px; font-size:12px;" onclick="toggleTorch()">🔦 Nyalakan Senter</button>
+      <button class="ghost-btn" style="flex:1; min-height:42px; font-size:12px;" onclick="switchCamera()">🔄 Ganti Kamera</button>
+    </div>
+
+    <!-- Instant Result Box -->
     <div class="scanner-result-popup" id="scannerResultBox">
-      <div style="font-size:12px; text-transform:uppercase; color:#94a3b8; font-weight:700;">HASIL SCAN:</div>
+      <div style="font-size:12px; text-transform:uppercase; color:#94a3b8; font-weight:700;">HASIL SCAN DITEMUKAN:</div>
       <div class="scanner-result-nogud" id="scanFoundNoGud">NO GUD 107</div>
-      <div style="font-family:var(--font-mono); font-size:14px; color:#facc15; font-weight:700;" id="scanFoundBarkot">Barkot: 943605</div>
+      <div style="font-family:var(--font-mono); font-size:15px; color:#facc15; font-weight:700;" id="scanFoundBarkot">Barkot: 943605</div>
       <div style="font-size:13px; color:#e2e8f0; margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
     </div>
 
-    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--color-smoke); margin:10px 0;">Menyiapkan kamera...</p>
-    
-    <div style="display:flex; justify-content:center; gap:8px; margin-top:8px;">
-      <button class="ghost-btn" onclick="stopScanner()">✕ Tutup Scanner</button>
+    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12.5px; font-weight:700; color:var(--color-smoke); margin:6px 0;">
+      Arahkan garis merah melintang ke stiker barcode...
+    </p>
+
+    <!-- Quick Manual Input in Scanner (If barcode is wrinkled/dark) -->
+    <div class="scanner-manual-box">
+      <label style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:#475569; display:block; margin-bottom:4px; text-transform:uppercase;">
+        Atau ketik angka barkot di sini:
+      </label>
+      <input type="text" id="scannerQuickInput" class="scanner-manual-input" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 34088" autocomplete="off" oninput="handleQuickScannerInput(this.value)">
     </div>
   </div>
 </div>
@@ -4103,72 +4173,201 @@ function saveSupabaseConfig() {
 }
 
 // ==========================================
-// UNIVERSAL CAMERA BARCODE SCANNER (HTML5-QRCode)
+// HIGH-ACCURACY DUAL-ENGINE BARCODE SCANNER
+// (CODE 128 / CODE 39 / 2D + NATIVE HARDWARE ACCELERATION)
 // ==========================================
 let html5QrCode = null;
+let currentFacingMode = 'environment';
+let isTorchOn = false;
+let cameraTrack = null;
+let nativeDetector = null;
+let nativeScanTimer = null;
+let isProcessingScan = false;
+
+// Format Barcode yang Diberi Prioritas Tinggi (Stiker Bal Tembakau)
+const BARCODE_FORMATS = [
+  Html5QrcodeSupportedFormats.CODE_128,
+  Html5QrcodeSupportedFormats.CODE_39,
+  Html5QrcodeSupportedFormats.CODE_93,
+  Html5QrcodeSupportedFormats.EAN_13,
+  Html5QrcodeSupportedFormats.EAN_8,
+  Html5QrcodeSupportedFormats.UPC_A,
+  Html5QrcodeSupportedFormats.UPC_E,
+  Html5QrcodeSupportedFormats.ITF,
+  Html5QrcodeSupportedFormats.CODABAR,
+  Html5QrcodeSupportedFormats.QR_CODE
+];
 
 async function startScanner() {
   const modal = document.getElementById('scannerModal');
   const status = document.getElementById('scannerStatus');
   const resultBox = document.getElementById('scannerResultBox');
+  const quickInput = document.getElementById('scannerQuickInput');
 
   modal.classList.add('open');
   resultBox.style.display = 'none';
+  quickInput.value = '';
+  isProcessingScan = false;
   status.textContent = 'Membuka kamera HP...';
+
+  initAudio();
 
   try {
     if (html5QrCode) {
       try { await html5QrCode.stop(); } catch(e) {}
+      try { html5QrCode.clear(); } catch(e) {}
+      html5QrCode = null;
     }
 
-    html5QrCode = new Html5Qrcode('scannerReader');
+    html5QrCode = new Html5Qrcode('scannerReader', {
+      formatsToSupport: BARCODE_FORMATS,
+      verbose: false
+    });
 
     const config = {
-      fps: 15,
-      qrbox: { width: 280, height: 160 },
-      aspectRatio: 1.0,
+      fps: 20,
+      qrbox: (viewfinderWidth, viewfinderHeight) => {
+        // Kotak scan lebar horizontal untuk membaca barcode garis 1D
+        const width = Math.floor(viewfinderWidth * 0.9);
+        const height = Math.floor(Math.max(140, viewfinderHeight * 0.55));
+        return { width: width, height: height };
+      },
+      aspectRatio: 1.25,
+      disableFlip: false,
       experimentalFeatures: {
         useBarCodeDetectorIfSupported: true
+      },
+      videoConstraints: {
+        facingMode: currentFacingMode,
+        focusMode: 'continuous',
+        advanced: [{ focusMode: 'continuous' }]
       }
     };
 
     await html5QrCode.start(
-      { facingMode: 'environment' },
+      { facingMode: currentFacingMode },
       config,
       onBarcodeScannedSuccess,
       onBarcodeScanProgress
     );
 
-    status.textContent = '🔍 Arahkan kamera ke stiker barcode...';
+    // Ambil camera stream track untuk kontrol Senter (Torch)
+    setTimeout(() => {
+      try {
+        const videoElem = document.querySelector('#scannerReader video');
+        if (videoElem && videoElem.srcObject) {
+          const tracks = videoElem.srcObject.getVideoTracks();
+          if (tracks.length > 0) {
+            cameraTrack = tracks[0];
+            const caps = cameraTrack.getCapabilities ? cameraTrack.getCapabilities() : {};
+            const torchBtn = document.getElementById('torchBtn');
+            if (caps.torch) {
+              torchBtn.style.display = 'inline-flex';
+            } else {
+              torchBtn.style.display = 'none';
+            }
+          }
+        }
+      } catch(e) {}
+    }, 500);
+
+    // Inisialisasi Native BarcodeDetector Engine Paralel (Hardware Accelerated)
+    startNativeFrameScanner();
+
+    status.innerHTML = '🔍 Posisikan <b>garis merah</b> melintang tegak lurus pada barcode';
   } catch(err) {
     console.error('Camera scanner start err', err);
-    status.textContent = 'Gagal mengakses kamera. Pastikan izin kamera aktif.';
+    status.innerHTML = '<span style="color:#f87171;">Gagal membuka kamera. Pastikan izin kamera diaktifkan di browser.</span>';
+  }
+}
+
+function startNativeFrameScanner() {
+  if (!('BarcodeDetector' in window)) return;
+  try {
+    if (!nativeDetector) {
+      nativeDetector = new BarcodeDetector({
+        formats: ['code_128', 'code_39', 'code_93', 'ean_13', 'ean_8', 'itf', 'upc_a', 'upc_e', 'codabar', 'qr_code']
+      });
+    }
+
+    if (nativeScanTimer) clearInterval(nativeScanTimer);
+
+    nativeScanTimer = setInterval(async () => {
+      if (isProcessingScan) return;
+      const videoElem = document.querySelector('#scannerReader video');
+      if (!videoElem || videoElem.readyState < 2) return;
+
+      try {
+        const barcodes = await nativeDetector.detect(videoElem);
+        if (barcodes && barcodes.length > 0) {
+          const raw = barcodes[0].rawValue;
+          if (raw) {
+            onBarcodeScannedSuccess(raw);
+          }
+        }
+      } catch(e) {}
+    }, 150);
+  } catch(e) {
+    console.warn('Native BarcodeDetector not available', e);
   }
 }
 
 function onBarcodeScanProgress(err) {
-  // Silent scanning progress
+  // Silent progress
 }
 
-async function onBarcodeScannedSuccess(decodedText, decodedResult) {
-  if (!decodedText) return;
+async function toggleTorch() {
+  if (!cameraTrack) return;
+  try {
+    isTorchOn = !isTorchOn;
+    await cameraTrack.applyConstraints({
+      advanced: [{ torch: isTorchOn }]
+    });
+    const btn = document.getElementById('torchBtn');
+    btn.textContent = isTorchOn ? '💡 Matikan Senter' : '🔦 Nyalakan Senter';
+    btn.style.background = isTorchOn ? '#facc15' : 'var(--color-bone)';
+    btn.style.color = isTorchOn ? '#000000' : 'var(--color-ink)';
+  } catch(e) {
+    showToast('Senter tidak didukung pada kamera ini');
+  }
+}
+
+async function switchCamera() {
+  currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+  await startScanner();
+}
+
+// Input manual cepat di dalam modal scan jika barcode rusak / gelap
+function handleQuickScannerInput(val) {
+  if (!val) return;
+  const cleanVal = val.trim();
+  if (cleanVal.length >= 2) {
+    processScannedCode(cleanVal, true);
+  }
+}
+
+async function onBarcodeScannedSuccess(decodedText) {
+  if (!decodedText || isProcessingScan) return;
   const scannedCode = String(decodedText).trim();
+  if (!scannedCode) return;
 
-  initAudio();
-  playBeep(true);
-  if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+  processScannedCode(scannedCode, false);
+}
 
-  const status = document.getElementById('scannerStatus');
-  const resultBox = document.getElementById('scannerResultBox');
+async function processScannedCode(scannedCode, isManual = false) {
+  if (isProcessingScan) return;
+  
+  // Filter teks pembersih jika barcode mengandung awalan/akhiran
+  const cleanCode = scannedCode.replace(/[^0-9a-zA-Z]/g, '');
 
   // 1. Cari di tanggal aktif saat ini
-  let match = state.list.find(x => String(x.barkot).trim() === scannedCode || String(x.no_gud) === scannedCode);
+  let match = state.list.find(x => String(x.barkot).trim() === cleanCode || String(x.barkot).trim() === scannedCode || String(x.no_gud) === scannedCode);
   let matchedDate = currentDate;
 
   // 2. Jika tidak ditemukan di tanggal aktif, cari di seluruh database tanggal lain
   if (!match) {
     for (const tgl of Object.keys(SEED_DATA)) {
-      const foundInOther = SEED_DATA[tgl].find(x => String(x.barkot).trim() === scannedCode);
+      const foundInOther = SEED_DATA[tgl].find(x => String(x.barkot).trim() === cleanCode || String(x.barkot).trim() === scannedCode);
       if (foundInOther) {
         match = foundInOther;
         matchedDate = tgl;
@@ -4177,16 +4376,24 @@ async function onBarcodeScannedSuccess(decodedText, decodedResult) {
     }
   }
 
+  const status = document.getElementById('scannerStatus');
+  const resultBox = document.getElementById('scannerResultBox');
+
   if (match) {
+    isProcessingScan = true;
+    initAudio();
+    playBeep(true);
+    if (navigator.vibrate) navigator.vibrate([70, 50, 70]);
+
     // Tampilkan hasil scan No Gud langsung
     document.getElementById('scanFoundNoGud').textContent = `NO GUD ${match.no_gud}`;
     document.getElementById('scanFoundBarkot').textContent = `Barkot: ${match.barkot || scannedCode}`;
     document.getElementById('scanFoundMeta').textContent = `GRADE ${match.grade || '—'} · ${match.kg ? match.kg + ' KG' : '— KG'} · ${formatDateIndo(matchedDate)}`;
     resultBox.style.display = 'block';
 
-    status.innerHTML = `<span style="color:#4ade80; font-weight:800;">✓ KETEMU: NO GUD ${match.no_gud}</span>`;
+    status.innerHTML = `<span style="color:#4ade80; font-weight:800;">✓ KETEMU: NO GUD ${match.no_gud} (Tgl: ${formatDateIndo(matchedDate)})</span>`;
 
-    // Berhenti scan agar tidak scan berulang kali
+    // Berhenti scan
     setTimeout(async () => {
       await stopScanner();
       
@@ -4207,16 +4414,22 @@ async function onBarcodeScannedSuccess(decodedText, decodedResult) {
       }, 150);
 
       showToast(`✓ Scan: No Gud ${match.no_gud} (Barkot ${match.barkot})`);
-    }, 900);
+    }, isManual ? 400 : 900);
 
   } else {
-    status.innerHTML = `<span style="color:#f87171; font-weight:800;">⚠️ Barcode ${scannedCode} tidak ada di database</span>`;
+    if (!isManual) {
+      status.innerHTML = `<span style="color:#f87171; font-weight:800;">⚠️ Barcode "${scannedCode}" tidak ada di database</span>`;
+    }
   }
 }
 
 async function stopScanner() {
   const modal = document.getElementById('scannerModal');
   modal.classList.remove('open');
+  if (nativeScanTimer) {
+    clearInterval(nativeScanTimer);
+    nativeScanTimer = null;
+  }
   if (html5QrCode) {
     try {
       await html5QrCode.stop();
@@ -4226,6 +4439,9 @@ async function stopScanner() {
     } catch(e) {}
     html5QrCode = null;
   }
+  isProcessingScan = false;
+  cameraTrack = null;
+  isTorchOn = false;
 }
 
 // Inisialisasi awal
