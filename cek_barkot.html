@@ -10,16 +10,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cek Barkot">
 <meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — Buku Grade Induk (Samsung A16 & Lansia Edition)</title>
+<title>Cek Barkot — Buku Grade Induk (Samsung A16 & Scanner Edition)</title>
 
 <!-- Google Fonts: Inter & Roboto Mono (High Legibility) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
-<!-- SheetJS & Supabase JS -->
+<!-- SheetJS, Supabase JS & HTML5-QRCode Scanner -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
   :root {
@@ -216,10 +217,14 @@
     color: var(--color-bone);
     border-color: var(--color-obsidian);
   }
-  .ghost-btn.btn-warning-badge {
-    background: var(--color-saffron-bg);
-    border-color: var(--color-saffron);
-    color: #9a3412;
+  .ghost-btn.btn-scanner-highlight {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0369a1;
+    box-shadow: 0 2px 5px rgba(2, 132, 199, 0.3);
+  }
+  .ghost-btn.btn-scanner-highlight:active {
+    background: #0369a1;
   }
 
   /* Date Bar & Large Chips */
@@ -485,8 +490,12 @@
   }
   .spotlight-no-label {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 800;
+    letter-spacing: -0.02em;
+    background: #15803d;
+    padding: 2px 10px;
+    border-radius: 6px;
   }
   .spotlight-barcode-huge {
     font-family: var(--font-mono);
@@ -505,7 +514,7 @@
     display: flex;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: #e2e8f0;
     margin-bottom: 12px;
@@ -886,6 +895,42 @@
     cursor: pointer;
   }
 
+  /* Camera Scanner Specific Styling */
+  #scannerReader {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000000;
+    border: 2px solid var(--color-ash-dark);
+  }
+  #scannerReader video {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 10px;
+  }
+  .scanner-scan-region-highlight {
+    border: 3px solid #38bdf8 !important;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5) !important;
+  }
+  .scanner-result-popup {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    text-align: center;
+    border: 2px solid #38bdf8;
+    display: none;
+  }
+  .scanner-result-nogud {
+    font-family: var(--font-mono);
+    font-size: 38px;
+    font-weight: 800;
+    color: #4ade80;
+    letter-spacing: -0.02em;
+    margin: 4px 0;
+  }
+
   /* Toast Notification */
   .toast {
     position: fixed;
@@ -942,6 +987,8 @@
       <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
     </div>
     <div class="header-actions">
+      <!-- Tombol Scan Barcode Kamera Cepat -->
+      <button class="ghost-btn btn-scanner-highlight" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN</button>
       <!-- Tombol Ukuran Teks / Mode A16 -->
       <button class="ghost-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks untuk Samsung A16 & Lansia">🔤 A16</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
@@ -1038,7 +1085,7 @@
     <div class="batch-actions">
       <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="checkAllBal()" title="Centang Semua Bal Hari Ini">✓ Centang Semua</button>
       <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="uncheckAllBal()" title="Batalkan Centang Semua Bal">↺ Reset</button>
-      <button class="ghost-btn" style="padding:6px 10px; font-size:12px;" onclick="startScanner()">📷 Scan</button>
+      <button class="ghost-btn btn-scanner-highlight" style="padding:6px 10px; font-size:12px;" onclick="startScanner()">📷 Scan Barkot</button>
     </div>
   </div>
 
@@ -1102,13 +1149,28 @@
   </div>
 </div>
 
-<!-- Modal Camera Barcode Scanner -->
+<!-- Modal Camera Barcode Scanner (Universal 1D/2D Reader) -->
 <div class="modal-overlay" id="scannerModal">
-  <div class="modal-card" style="text-align:center;">
-    <h3 class="modal-title">Pindai Barcode Kamera</h3>
-    <video id="scannerVideo" playsinline autoplay muted style="width:100%; border-radius:8px; background:#000;"></video>
-    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--color-smoke); margin:10px 0;">Mencari barcode...</p>
-    <button class="ghost-btn" onclick="stopScanner()">Tutup</button>
+  <div class="modal-card" style="text-align:center; max-width:520px;">
+    <h3 class="modal-title">📷 Pindai Barcode Stiker</h3>
+    <p style="font-size:12.5px; color:var(--color-smoke); margin:0 0 10px;">
+      Arahkan kamera ke stiker barcode 1D pada bal tembakau:
+    </p>
+
+    <div id="scannerReader"></div>
+
+    <div class="scanner-result-popup" id="scannerResultBox">
+      <div style="font-size:12px; text-transform:uppercase; color:#94a3b8; font-weight:700;">HASIL SCAN:</div>
+      <div class="scanner-result-nogud" id="scanFoundNoGud">NO GUD 107</div>
+      <div style="font-family:var(--font-mono); font-size:14px; color:#facc15; font-weight:700;" id="scanFoundBarkot">Barkot: 943605</div>
+      <div style="font-size:13px; color:#e2e8f0; margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
+    </div>
+
+    <p id="scannerStatus" style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--color-smoke); margin:10px 0;">Menyiapkan kamera...</p>
+    
+    <div style="display:flex; justify-content:center; gap:8px; margin-top:8px;">
+      <button class="ghost-btn" onclick="stopScanner()">✕ Tutup Scanner</button>
+    </div>
   </div>
 </div>
 
@@ -4041,62 +4103,128 @@ function saveSupabaseConfig() {
 }
 
 // ==========================================
-// CAMERA BARCODE SCANNER
+// UNIVERSAL CAMERA BARCODE SCANNER (HTML5-QRCode)
 // ==========================================
-let videoStream = null;
-let scanInterval = null;
+let html5QrCode = null;
 
 async function startScanner() {
   const modal = document.getElementById('scannerModal');
-  const video = document.getElementById('scannerVideo');
   const status = document.getElementById('scannerStatus');
+  const resultBox = document.getElementById('scannerResultBox');
 
   modal.classList.add('open');
-  status.textContent = 'Membuka kamera...';
+  resultBox.style.display = 'none';
+  status.textContent = 'Membuka kamera HP...';
 
   try {
-    videoStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
-    });
-    video.srcObject = videoStream;
-    await video.play();
-    status.textContent = 'Arahkan kamera ke stiker barcode...';
-
-    if ('BarcodeDetector' in window) {
-      const barcodeDetector = new BarcodeDetector({
-        formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'upc_a', 'upc_e', 'itf']
-      });
-
-      scanInterval = setInterval(async () => {
-        try {
-          const barcodes = await barcodeDetector.detect(video);
-          if (barcodes.length > 0) {
-            const code = barcodes[0].rawValue.trim();
-            status.textContent = `Terdeteksi: ${code}`;
-            const match = state.list.find(x => String(x.barkot).trim() === code || String(x.no_gud) === code);
-            if (match) {
-              showSpotlight(match);
-              toggleBal(match.no_gud);
-              stopScanner();
-            } else {
-              status.textContent = `Barcode ${code} tidak ada di tanggal ini`;
-            }
-          }
-        } catch(e) {}
-      }, 400);
+    if (html5QrCode) {
+      try { await html5QrCode.stop(); } catch(e) {}
     }
+
+    html5QrCode = new Html5Qrcode('scannerReader');
+
+    const config = {
+      fps: 15,
+      qrbox: { width: 280, height: 160 },
+      aspectRatio: 1.0,
+      experimentalFeatures: {
+        useBarCodeDetectorIfSupported: true
+      }
+    };
+
+    await html5QrCode.start(
+      { facingMode: 'environment' },
+      config,
+      onBarcodeScannedSuccess,
+      onBarcodeScanProgress
+    );
+
+    status.textContent = '🔍 Arahkan kamera ke stiker barcode...';
   } catch(err) {
-    status.textContent = 'Gagal membuka kamera.';
+    console.error('Camera scanner start err', err);
+    status.textContent = 'Gagal mengakses kamera. Pastikan izin kamera aktif.';
   }
 }
 
-function stopScanner() {
+function onBarcodeScanProgress(err) {
+  // Silent scanning progress
+}
+
+async function onBarcodeScannedSuccess(decodedText, decodedResult) {
+  if (!decodedText) return;
+  const scannedCode = String(decodedText).trim();
+
+  initAudio();
+  playBeep(true);
+  if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+
+  const status = document.getElementById('scannerStatus');
+  const resultBox = document.getElementById('scannerResultBox');
+
+  // 1. Cari di tanggal aktif saat ini
+  let match = state.list.find(x => String(x.barkot).trim() === scannedCode || String(x.no_gud) === scannedCode);
+  let matchedDate = currentDate;
+
+  // 2. Jika tidak ditemukan di tanggal aktif, cari di seluruh database tanggal lain
+  if (!match) {
+    for (const tgl of Object.keys(SEED_DATA)) {
+      const foundInOther = SEED_DATA[tgl].find(x => String(x.barkot).trim() === scannedCode);
+      if (foundInOther) {
+        match = foundInOther;
+        matchedDate = tgl;
+        break;
+      }
+    }
+  }
+
+  if (match) {
+    // Tampilkan hasil scan No Gud langsung
+    document.getElementById('scanFoundNoGud').textContent = `NO GUD ${match.no_gud}`;
+    document.getElementById('scanFoundBarkot').textContent = `Barkot: ${match.barkot || scannedCode}`;
+    document.getElementById('scanFoundMeta').textContent = `GRADE ${match.grade || '—'} · ${match.kg ? match.kg + ' KG' : '— KG'} · ${formatDateIndo(matchedDate)}`;
+    resultBox.style.display = 'block';
+
+    status.innerHTML = `<span style="color:#4ade80; font-weight:800;">✓ KETEMU: NO GUD ${match.no_gud}</span>`;
+
+    // Berhenti scan agar tidak scan berulang kali
+    setTimeout(async () => {
+      await stopScanner();
+      
+      // Jika di tanggal berbeda, pindah ke tanggal tersebut
+      if (matchedDate !== currentDate) {
+        onDateChanged(matchedDate);
+      }
+
+      setTimeout(() => {
+        showSpotlight(match);
+        // Tandai selesai jika belum dicentang
+        const isDone = Boolean(state.doneMap[match.no_gud]);
+        if (!isDone) {
+          forceToggleBal(match.no_gud, true);
+        }
+        const cardElem = Array.from(document.querySelectorAll('.bal-card')).find(el => el.querySelector('.card-no')?.textContent === String(match.no_gud));
+        if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+
+      showToast(`✓ Scan: No Gud ${match.no_gud} (Barkot ${match.barkot})`);
+    }, 900);
+
+  } else {
+    status.innerHTML = `<span style="color:#f87171; font-weight:800;">⚠️ Barcode ${scannedCode} tidak ada di database</span>`;
+  }
+}
+
+async function stopScanner() {
   const modal = document.getElementById('scannerModal');
   modal.classList.remove('open');
-  if (scanInterval) clearInterval(scanInterval);
-  if (videoStream) {
-    videoStream.getTracks().forEach(track => track.stop());
-    videoStream = null;
+  if (html5QrCode) {
+    try {
+      await html5QrCode.stop();
+    } catch(e) {}
+    try {
+      html5QrCode.clear();
+    } catch(e) {}
+    html5QrCode = null;
   }
 }
 
