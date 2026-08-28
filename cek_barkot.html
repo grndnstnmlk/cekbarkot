@@ -1200,7 +1200,7 @@ const SEED_DATA = {
       "barkot": "",
       "kg": null,
       "is_out": true,
-      "ket": "Out daun buah",
+      "ket": "Out daun bawah",
       "is_done": false
     },
     {
@@ -1252,7 +1252,7 @@ const SEED_DATA = {
       "barkot": "",
       "kg": null,
       "is_out": true,
-      "ket": "Out daun buah",
+      "ket": "Out daun bawah",
       "is_done": false
     },
     {
@@ -4827,7 +4827,7 @@ function saveLocalState() {
 
 async function loadDataForCurrentDate() {
   let found = false;
-  const syncVersion = '2026_08_28_v8';
+  const syncVersion = '2026_08_28_v9';
   const lastSync = localStorage.getItem('barkot_sync_ver');
   if (lastSync !== syncVersion) {
     // Clear old cache to apply fresh checked state for all dates
