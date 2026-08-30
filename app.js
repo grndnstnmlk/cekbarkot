@@ -6,12 +6,11 @@
 const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycGtsaWJvY2dpY3ViZXZ5c2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTA3NjUsImV4cCI6MjEwMzQyNjc2NX0.xGoel8SNa2v9DcZBYwKcmjzGF7j6LJ-OQkr919JyYSc';
 
-// 9 Barcode Belum Ditempel (Sesuai berkas resmi tgl 28-30 Agustus)
+// 8 Barcode Belum Ditempel (Sesuai berkas resmi tgl 28-30 Agustus)
 const MISSING_BARCODES_DEFAULT = [
   "31155",
   "33419",
   "33422",
-  "33743",
   "33744",
   "32277",
   "32278",
