@@ -1103,15 +1103,24 @@ function openMissingModal() {
 
   missingList.forEach(it => {
     const itemEl = document.createElement('div');
-    itemEl.style.cssText = 'background:var(--color-bone); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:8px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+    itemEl.style.cssText = 'background:var(--color-bone); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+    
+    const ketBadge = it.ket ? `<span style="display:inline-block; margin-top:2px; font-size:11px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:4px; padding:1px 6px;">📝 ${it.ket}</span>` : '';
+
     itemEl.innerHTML = `
       <div>
-        <div style="font-family:var(--font-roboto-mono); font-weight:600; font-size:13px;">#${it.barkot} ${it.no_gud !== '—' ? `· NO GUD ${it.no_gud}` : ''}</div>
-        <div style="font-size:11px; color:var(--color-smoke);">Tgl: ${formatDateShort(it.tanggal)} · GR ${it.grade} · ${it.kg ? it.kg + 'kg' : '—'}</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-family:var(--font-roboto-mono); font-weight:700; font-size:14px; color:var(--color-ink);">${it.no_gud !== '—' ? `NO GUD ${it.no_gud}` : 'BELUM ADA NO GUD'}</span>
+          <span style="font-family:var(--font-roboto-mono); font-weight:500; font-size:12px; color:var(--color-smoke); background:var(--color-parchment); border:1px solid var(--color-ash); border-radius:4px; padding:1px 6px;">Barkot #${it.barkot}</span>
+        </div>
+        <div style="font-size:11.5px; color:var(--color-smoke); margin-top:3px;">
+          📅 Tgl: <b>${formatDateShort(it.tanggal)}</b> · GR ${it.grade} · ${it.kg ? it.kg + 'kg' : '—'}
+        </div>
+        ${ketBadge}
       </div>
-      <div style="display:flex; gap:4px;">
-        ${it.tanggal !== '—' ? `<button class="draw-btn-ghost" style="font-size:10.5px; padding:3px 8px; min-height:26px;" onclick="jumpToDateAndHighlight('${it.tanggal}', ${it.no_gud}); closeMissingModal();">🔍 Buka</button>` : ''}
-        <button class="draw-btn-ghost" style="font-size:10.5px; padding:3px 8px; min-height:26px; border-color:var(--color-out); color:var(--color-out);" onclick="removeMissingBarcode('${it.barkot}')">✕ Hapus</button>
+      <div style="display:flex; gap:4px; align-items:center;">
+        ${it.tanggal !== '—' ? `<button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 10px; min-height:28px;" onclick="jumpToDateAndHighlight('${it.tanggal}', ${it.no_gud}); closeMissingModal();">🔍 Buka</button>` : ''}
+        <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px; border-color:var(--color-out); color:var(--color-out);" onclick="removeMissingBarcode('${it.barkot}')" title="Hapus dari daftar">✕</button>
       </div>
     `;
     container.appendChild(itemEl);
