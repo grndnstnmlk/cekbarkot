@@ -6,9 +6,8 @@
 const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycGtsaWJvY2dpY3ViZXZ5c2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTA3NjUsImV4cCI6MjEwMzQyNjc2NX0.xGoel8SNa2v9DcZBYwKcmjzGF7j6LJ-OQkr919JyYSc';
 
-// 8 Barcode Belum Ditempel (Sesuai berkas resmi tgl 28-30 Agustus)
+// 7 Barcode Belum Ditempel (Sesuai berkas resmi tgl 28-30 Agustus)
 const MISSING_BARCODES_DEFAULT = [
-  "31155",
   "33419",
   "33422",
   "33744",
@@ -1361,12 +1360,57 @@ function initSupabase() {
       supabaseClient = supabase.createClient(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
       updateCloudStatusUI('Online');
       setupRealtime();
+      fetchAllDoneFromCloud();
     } catch(e) {
       console.warn('Supabase init error:', e);
       updateCloudStatusUI('Offline');
     }
   } else {
     updateCloudStatusUI('Offline');
+  }
+}
+
+async function fetchAllDoneFromCloud() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient
+      .from('barkot_data')
+      .select('tanggal, no_gud, grade, barkot, kg, is_done');
+    
+    if (!error && data && data.length > 0) {
+      const seed = getSeedData();
+      data.forEach(row => {
+        const tgl = row.tanggal;
+        const no_gud = row.no_gud;
+        const isDone = Boolean(row.is_done);
+
+        if (seed[tgl]) {
+          const it = seed[tgl].find(x => x.no_gud === no_gud);
+          if (it) {
+            it.is_done = isDone;
+            if (row.barkot !== undefined && row.barkot !== null && row.barkot !== '') it.barkot = row.barkot;
+            if (row.grade) it.grade = row.grade;
+            if (row.kg !== undefined && row.kg !== null) it.kg = row.kg;
+          }
+        }
+
+        if (isDone) {
+          try {
+            const key = 'barkot_local:' + tgl;
+            const raw = localStorage.getItem(key);
+            const st = raw ? JSON.parse(raw) : { list: (seed[tgl] || []), doneMap: {} };
+            if (!st.doneMap) st.doneMap = {};
+            st.doneMap[no_gud] = true;
+            localStorage.setItem(key, JSON.stringify(st));
+          } catch(e) {}
+        }
+      });
+
+      updateMissingBannerUI();
+      loadDataForCurrentDate();
+    }
+  } catch(err) {
+    console.warn('Supabase fetch all done error:', err);
   }
 }
 
@@ -1384,7 +1428,7 @@ async function syncLocalItemToCloud(item, isDone) {
     await supabaseClient
       .from('barkot_data')
       .upsert({
-        tanggal: currentDate,
+        tanggal: item.tanggal || currentDate,
         no_gud: item.no_gud,
         grade: item.grade,
         barkot: item.barkot || null,
@@ -1442,16 +1486,54 @@ function setupRealtime() {
     realtimeChannel = supabaseClient
       .channel('barkot_data_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'barkot_data' }, payload => {
-        if (payload.new && payload.new.tanggal === currentDate) {
+        if (payload.new) {
+          const tgl = payload.new.tanggal;
           const no_gud = payload.new.no_gud;
           const isDone = Boolean(payload.new.is_done);
-          if (isDone) {
-            state.doneMap[no_gud] = true;
-          } else {
-            delete state.doneMap[no_gud];
+
+          // Update dataset in-memory
+          const seed = getSeedData();
+          if (seed[tgl]) {
+            const it = seed[tgl].find(x => x.no_gud === no_gud);
+            if (it) {
+              it.is_done = isDone;
+              if (payload.new.barkot !== undefined && payload.new.barkot !== null) it.barkot = payload.new.barkot;
+            }
           }
-          saveLocalState();
-          render();
+
+          // Update storage tanggal tersebut
+          try {
+            const key = 'barkot_local:' + tgl;
+            const raw = localStorage.getItem(key);
+            const st = raw ? JSON.parse(raw) : { list: (seed[tgl] || []), doneMap: {} };
+            if (!st.doneMap) st.doneMap = {};
+            if (isDone) {
+              st.doneMap[no_gud] = true;
+            } else {
+              delete st.doneMap[no_gud];
+            }
+            localStorage.setItem(key, JSON.stringify(st));
+          } catch(e) {}
+
+          // Update jika sedang melihat tanggal tersebut
+          if (tgl === currentDate) {
+            if (isDone) {
+              state.doneMap[no_gud] = true;
+            } else {
+              delete state.doneMap[no_gud];
+            }
+            const curIt = state.list.find(x => x.no_gud === no_gud);
+            if (curIt) curIt.is_done = isDone;
+            saveLocalState();
+            render();
+          }
+
+          // Selalu update UI banner & modal
+          updateMissingBannerUI();
+          const modal = document.getElementById('missingModal');
+          if (modal && (modal.classList.contains('open') || modal.style.display === 'flex')) {
+            openMissingModal();
+          }
         }
       })
       .subscribe();

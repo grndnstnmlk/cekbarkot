@@ -309,7 +309,7 @@ var SEED_DATA = {
       "grade": "63",
       "barkot": "31155",
       "kg": 38,
-      "is_done": false
+      "is_done": true
     },
     {
       "tanggal": "2026-08-21",
