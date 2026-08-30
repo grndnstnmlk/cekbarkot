@@ -38,7 +38,13 @@ let html5QrScanner = null;
 let currentCameraId = null;
 let availableCameras = [];
 let isTorchOn = false;
-let scannerMediaTrack = null;
+
+// Safe accessor for SEED_DATA
+function getSeedData() {
+  if (typeof window !== 'undefined' && window.SEED_DATA) return window.SEED_DATA;
+  if (typeof SEED_DATA !== 'undefined' && SEED_DATA) return SEED_DATA;
+  return {};
+}
 
 // ==========================================
 // DYNAMIC MISSING BARCODES STORAGE
@@ -99,12 +105,12 @@ function resetMissingBarcodesDefault() {
 function getBalDuplicateInfo(item) {
   if (!item || !item.barkot || String(item.barkot).trim() === '') return null;
   const no_gud = item.no_gud;
-  if (!window.SEED_DATA) return null;
+  const seed = getSeedData();
   
   const allOccurrences = [];
-  const allDates = Object.keys(SEED_DATA).sort();
+  const allDates = Object.keys(seed).sort();
   for (const tgl of allDates) {
-    const match = SEED_DATA[tgl].find(x => x.no_gud === no_gud && x.barkot && String(x.barkot).trim() !== '');
+    const match = (seed[tgl] || []).find(x => x.no_gud === no_gud && x.barkot && String(x.barkot).trim() !== '');
     if (match) {
       allOccurrences.push({ ...match, tanggal: tgl });
     }
@@ -131,12 +137,12 @@ function getBalDuplicateInfo(item) {
 function getAllMissingAndDualItems() {
   const missingList = [];
   const dualList = [];
-  if (!window.SEED_DATA) return { dualList, missingList };
-  const allDates = Object.keys(SEED_DATA).sort();
+  const seed = getSeedData();
+  const allDates = Object.keys(seed).sort();
 
   const seenNoGud = {};
   allDates.forEach(tgl => {
-    SEED_DATA[tgl].forEach(item => {
+    (seed[tgl] || []).forEach(item => {
       if (item.barkot && String(item.barkot).trim() !== '') {
         if (!seenNoGud[item.no_gud]) {
           seenNoGud[item.no_gud] = { ...item, tanggal: tgl };
@@ -159,7 +165,7 @@ function getAllMissingAndDualItems() {
   missingCodes.forEach(code => {
     let found = null;
     for (const tgl of allDates) {
-      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === code);
+      const match = (seed[tgl] || []).find(x => String(x.barkot).trim() === code);
       if (match) {
         found = { ...match, tanggal: tgl };
         break;
@@ -222,9 +228,11 @@ function formatDateShort(dateStr) {
 
 function renderQuickDates() {
   const container = document.getElementById('quickDatesContainer');
-  if (!container || !window.SEED_DATA) return;
+  if (!container) return;
   
-  const dateSet = new Set(Object.keys(SEED_DATA));
+  const seed = getSeedData();
+  const dateSet = new Set(Object.keys(seed));
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith('barkot_local:')) {
@@ -239,7 +247,7 @@ function renderQuickDates() {
   sortedDates.forEach(dateStr => {
     const d = new Date(dateStr + 'T00:00:00');
     const day = d.getDate();
-    const count = (SEED_DATA[dateStr] || []).length;
+    const count = (seed[dateStr] || []).length;
     const pill = document.createElement('span');
     pill.className = 'date-pill' + (dateStr === currentDate ? ' active' : '');
     pill.textContent = `${day} Ags (${count})`;
@@ -250,8 +258,11 @@ function renderQuickDates() {
 
 function onDateChanged(newDate) {
   currentDate = newDate;
-  document.getElementById('datePicker').value = currentDate;
-  document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+  const picker = document.getElementById('datePicker');
+  if (picker) picker.value = currentDate;
+  const label = document.getElementById('dateDisplayLabel');
+  if (label) label.textContent = formatDateIndo(currentDate);
+  
   renderQuickDates();
   hideSpotlight();
   loadDataForCurrentDate();
@@ -365,6 +376,7 @@ function saveLocalState() {
 function loadDataForCurrentDate() {
   const key = 'barkot_local:' + currentDate;
   let found = false;
+  const seed = getSeedData();
 
   const raw = localStorage.getItem(key);
   if (raw) {
@@ -378,9 +390,9 @@ function loadDataForCurrentDate() {
     } catch(e) {}
   }
 
-  if (!found && window.SEED_DATA && SEED_DATA[currentDate]) {
+  if (!found && seed && seed[currentDate]) {
     const doneMap = {};
-    const list = SEED_DATA[currentDate].map(x => {
+    const list = seed[currentDate].map(x => {
       const dupInfo = getBalDuplicateInfo(x);
       const isDual = Boolean(dupInfo && dupInfo.isSecondary);
       const isMissingInList = getMissingBarcodesList().includes(String(x.barkot || '').trim());
@@ -499,13 +511,14 @@ function clearUnifiedSearch() {
 
 function performGlobalSearch(q) {
   const matchesBox = document.getElementById('globalMatchesBox');
-  if (!matchesBox || !window.SEED_DATA) return;
+  const seed = getSeedData();
+  if (!matchesBox) return;
 
   const results = [];
-  const allDates = Object.keys(SEED_DATA).sort();
+  const allDates = Object.keys(seed).sort();
 
   for (const tgl of allDates) {
-    const items = SEED_DATA[tgl] || [];
+    const items = seed[tgl] || [];
     for (const item of items) {
       const matchGud = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
       const matchBarkot = item.barkot && String(item.barkot).includes(q);
@@ -959,8 +972,8 @@ function handleExcelUpload(event) {
       }
 
       if (parsedItems.length > 0) {
-        if (!window.SEED_DATA) window.SEED_DATA = {};
-        window.SEED_DATA[detectedDate] = parsedItems;
+        const seed = getSeedData();
+        seed[detectedDate] = parsedItems;
         currentDate = detectedDate;
         document.getElementById('datePicker').value = currentDate;
         document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
@@ -1159,13 +1172,12 @@ function onBarcodeDetected(code) {
   } else {
     // Search in other dates
     let foundOther = null;
-    if (window.SEED_DATA) {
-      for (const tgl of Object.keys(SEED_DATA)) {
-        const it = SEED_DATA[tgl].find(x => x.barkot && String(x.barkot).trim() === cleanCode);
-        if (it) {
-          foundOther = { ...it, tanggal: tgl };
-          break;
-        }
+    const seed = getSeedData();
+    for (const tgl of Object.keys(seed)) {
+      const it = (seed[tgl] || []).find(x => x.barkot && String(x.barkot).trim() === cleanCode);
+      if (it) {
+        foundOther = { ...it, tanggal: tgl };
+        break;
       }
     }
 
@@ -1309,13 +1321,21 @@ function showToast(msg) {
 // ==========================================
 // INITIALIZATION
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('datePicker').value = currentDate;
-  document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+function initApp() {
+  const picker = document.getElementById('datePicker');
+  if (picker) picker.value = currentDate;
+  const label = document.getElementById('dateDisplayLabel');
+  if (label) label.textContent = formatDateIndo(currentDate);
 
   initFontSize();
   initLockMode();
   initSupabase();
   renderQuickDates();
   loadDataForCurrentDate();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}

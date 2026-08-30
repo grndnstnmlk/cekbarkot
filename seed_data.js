@@ -1,4 +1,4 @@
-const SEED_DATA = {
+var SEED_DATA = {
   "2026-08-21": [
     {
       "tanggal": "2026-08-21",
@@ -3849,3 +3849,4 @@ const SEED_DATA = {
     }
   ]
 };
+if (typeof window !== 'undefined') { window.SEED_DATA = SEED_DATA; }
