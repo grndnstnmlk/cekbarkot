@@ -375,53 +375,78 @@ function saveLocalState() {
 
 function loadDataForCurrentDate() {
   const key = 'barkot_local:' + currentDate;
-  let found = false;
   const seed = getSeedData();
+  const seedItems = seed[currentDate] || [];
 
+  let localState = null;
   const raw = localStorage.getItem(key);
   if (raw) {
     try {
-      const parsed = JSON.parse(raw);
-      if (parsed && Array.isArray(parsed.list) && parsed.list.length > 0) {
-        state = parsed;
-        if (!state.doneMap) state.doneMap = {};
-        found = true;
-      }
+      localState = JSON.parse(raw);
     } catch(e) {}
   }
 
-  if (!found && seed && seed[currentDate]) {
-    const doneMap = {};
-    const list = seed[currentDate].map(x => {
-      const dupInfo = getBalDuplicateInfo(x);
+  const doneMap = (localState && localState.doneMap) ? { ...localState.doneMap } : {};
+  const localListMap = {};
+  if (localState && Array.isArray(localState.list)) {
+    localState.list.forEach(it => {
+      localListMap[it.no_gud] = it;
+    });
+  }
+
+  const missingBarcodes = getMissingBarcodesList();
+  
+  let mergedList = [];
+  if (seedItems.length > 0) {
+    mergedList = seedItems.map(seedItem => {
+      const localItem = localListMap[seedItem.no_gud];
+      const dupInfo = getBalDuplicateInfo(seedItem);
       const isDual = Boolean(dupInfo && dupInfo.isSecondary);
-      const isMissingInList = getMissingBarcodesList().includes(String(x.barkot || '').trim());
+      const isMissingInList = missingBarcodes.includes(String(seedItem.barkot || '').trim());
       const isMissing = isDual || isMissingInList;
-      const isDone = Boolean(x.is_done) && !isMissing;
-      if (isDone) doneMap[x.no_gud] = true;
+
+      let isDone;
+      if (doneMap[seedItem.no_gud] !== undefined) {
+        isDone = Boolean(doneMap[seedItem.no_gud]);
+      } else {
+        isDone = Boolean(seedItem.is_done) && !isMissing;
+      }
+
+      if (isDone) {
+        doneMap[seedItem.no_gud] = true;
+      } else {
+        delete doneMap[seedItem.no_gud];
+      }
+
       return {
-        ...x,
+        ...seedItem,
+        barkot: (localItem && localItem.barkot !== undefined && localItem.barkot !== '') ? localItem.barkot : seedItem.barkot,
+        is_out: (localItem && localItem.is_out !== undefined) ? localItem.is_out : seedItem.is_out,
         is_done: isDone
       };
     });
 
-    state = {
-      list: list,
-      doneMap: doneMap
-    };
-    saveLocalState();
-    found = true;
+    if (localState && Array.isArray(localState.list)) {
+      localState.list.forEach(locIt => {
+        if (!mergedList.find(x => String(x.no_gud) === String(locIt.no_gud))) {
+          mergedList.push(locIt);
+        }
+      });
+    }
+  } else if (localState && Array.isArray(localState.list)) {
+    mergedList = localState.list;
   }
 
-  if (!found) {
-    state = { list: [], doneMap: {} };
-  }
+  state = {
+    list: mergedList,
+    doneMap: doneMap
+  };
+  saveLocalState();
 
   render();
   renderQuickDates();
   updateMissingBannerUI();
 
-  // Async fetch from Supabase if connected
   if (supabaseClient) {
     fetchFromSupabaseBackground(currentDate);
   }
@@ -444,14 +469,27 @@ async function fetchFromSupabaseBackground(dateStr) {
       state.list.forEach(item => {
         if (cloudMap[item.no_gud]) {
           const c = cloudMap[item.no_gud];
-          if (c.barkot !== undefined && c.barkot !== null) item.barkot = c.barkot;
-          if (c.grade) item.grade = c.grade;
-          if (c.kg !== undefined) item.kg = c.kg;
-          if (c.is_done !== undefined) {
-            state.doneMap[item.no_gud] = Boolean(c.is_done);
-            item.is_done = Boolean(c.is_done);
+          if (c.barkot !== undefined && c.barkot !== null && c.barkot !== item.barkot) {
+            item.barkot = c.barkot;
+            changed = true;
           }
-          changed = true;
+          if (c.grade && c.grade !== item.grade) {
+            item.grade = c.grade;
+            changed = true;
+          }
+          if (c.kg !== undefined && c.kg !== item.kg) {
+            item.kg = c.kg;
+            changed = true;
+          }
+          if (c.is_done !== undefined && Boolean(state.doneMap[item.no_gud]) !== Boolean(c.is_done)) {
+            if (c.is_done) {
+              state.doneMap[item.no_gud] = true;
+            } else {
+              delete state.doneMap[item.no_gud];
+            }
+            item.is_done = Boolean(c.is_done);
+            changed = true;
+          }
         }
       });
 
@@ -687,15 +725,17 @@ function toggleBal(noGud) {
 
   if (isDone && lockModeEnabled) {
     playBeep(300, 'sawtooth', 0.15);
-    showToast(`🔒 No Gud ${noGud} terkunci! Matikan tombol 🔒 Kunci di atas jika ingin membatalkan centang.`);
+    showToast(`🔒 No Gud ${noGud} terkunci! Matikan tombol 🔒 ON di atas jika ingin membatalkan centang.`);
     return;
   }
 
   if (isDone) {
     delete state.doneMap[noGud];
+    item.is_done = false;
     playBeep(440, 'sine', 0.08);
   } else {
     state.doneMap[noGud] = true;
+    item.is_done = true;
     playBeep(880, 'sine', 0.12);
   }
 
@@ -713,11 +753,12 @@ function checkAllBal() {
   if (confirm(`Tandai SEMUA (${state.list.length} bal) pada tanggal ${formatDateIndo(currentDate)} sebagai SELESAI?`)) {
     state.list.forEach(item => {
       state.doneMap[item.no_gud] = true;
+      item.is_done = true;
     });
     saveLocalState();
     render();
     syncAllLocalToCloud();
-    showToast(`Semua bal tgl ${formatDateShort(currentDate)} ditandai selesai`);
+    showToast(`Semua bal tgl ${formatDateShort(currentDate)} ditandai selesai & disimpan`);
   }
 }
 
@@ -725,10 +766,13 @@ function uncheckAllBal() {
   if (!state.list || state.list.length === 0) return;
   if (confirm(`Reset SEMUA centang pada tanggal ${formatDateIndo(currentDate)} menjadi BELUM SELESAI?`)) {
     state.doneMap = {};
+    state.list.forEach(item => {
+      item.is_done = false;
+    });
     saveLocalState();
     render();
     syncAllLocalToCloud();
-    showToast(`Semua centang tgl ${formatDateShort(currentDate)} di-reset`);
+    showToast(`Semua centang tgl ${formatDateShort(currentDate)} di-reset & disimpan`);
   }
 }
 
@@ -742,7 +786,10 @@ function clearCurrentDateData() {
 
 function refreshCurrentDateData() {
   loadDataForCurrentDate();
-  showToast('Data dimuat ulang');
+  if (supabaseClient) {
+    fetchFromSupabaseBackground(currentDate);
+  }
+  showToast('✓ Data tanggal ' + formatDateShort(currentDate) + ' dimuat ulang & disinkronkan');
 }
 
 function copyWaSummary() {
