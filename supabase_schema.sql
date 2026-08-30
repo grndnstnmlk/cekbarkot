@@ -36,8 +36,18 @@ FOR ALL
 USING (true) 
 WITH CHECK (true);
 
--- 4. Aktifkan Fitur Realtime
-ALTER PUBLICATION supabase_realtime ADD TABLE public.barkot_data;
+-- 4. Aktifkan Fitur Realtime (Aman dijalankan berulang kali)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND schemaname = 'public' 
+        AND tablename = 'barkot_data'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.barkot_data;
+    END IF;
+END $$;
 
 -- 5. Data Awal Bawaan (Tanggal 2026-08-21 s/d 2026-08-30 - Total 458 Bal)
 INSERT INTO public.barkot_data (tanggal, no_gud, grade, barkot, kg, is_done)

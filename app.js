@@ -312,10 +312,19 @@ function applyFontSize(mode) {
   document.body.classList.add('font-mode-' + mode);
   const btn = document.getElementById('fontSizeBtn');
   if (btn) {
-    if (mode === '16pm') btn.textContent = '📱 16 Pro Max';
-    else if (mode === 'a16') btn.textContent = '📱 A16';
-    else if (mode === 'lansia') btn.textContent = '👓 Lansia';
-    else btn.textContent = '📐 Normal';
+    if (mode === '16pm') {
+      btn.textContent = '📱';
+      btn.title = 'Ukuran Teks: iPhone 16 Pro Max (Klik untuk ganti)';
+    } else if (mode === 'a16') {
+      btn.textContent = '📲';
+      btn.title = 'Ukuran Teks: Samsung A16 (Klik untuk ganti)';
+    } else if (mode === 'lansia') {
+      btn.textContent = '👓';
+      btn.title = 'Ukuran Teks: Ekstra Besar / Lansia (Klik untuk ganti)';
+    } else {
+      btn.textContent = '📐';
+      btn.title = 'Ukuran Teks: Normal / Standar (Klik untuk ganti)';
+    }
   }
 }
 
@@ -338,11 +347,11 @@ function updateLockBtnUI() {
   if (!btn) return;
   if (lockModeEnabled) {
     btn.className = 'draw-btn-ghost active-lock';
-    btn.textContent = '🔒 ON';
+    btn.textContent = '🔒';
     btn.title = 'Kunci AKTIF: Bal selesai tidak bisa tidak sengaja ter-uncentang';
   } else {
     btn.className = 'draw-btn-ghost';
-    btn.textContent = '🔓 OFF';
+    btn.textContent = '🔓';
     btn.title = 'Kunci NONAKTIF: Bal selesai bisa langsung disentuh';
   }
 }
@@ -466,7 +475,7 @@ function loadDataForCurrentDate() {
 async function fetchFromSupabaseBackground(dateStr) {
   try {
     const { data, error } = await supabaseClient
-      .from('cek_barkot_items')
+      .from('barkot_data')
       .select('*')
       .eq('tanggal', dateStr);
     
@@ -1315,7 +1324,7 @@ async function syncLocalItemToCloud(item, isDone) {
   if (!supabaseClient || !item) return;
   try {
     await supabaseClient
-      .from('cek_barkot_items')
+      .from('barkot_data')
       .upsert({
         tanggal: currentDate,
         no_gud: item.no_gud,
@@ -1323,7 +1332,7 @@ async function syncLocalItemToCloud(item, isDone) {
         barkot: item.barkot || null,
         kg: item.kg !== undefined && item.kg !== null ? item.kg : null,
         is_done: Boolean(isDone),
-        updated_at: new Date().toISOString()
+        done_at: isDone ? new Date().toISOString() : null
       }, { onConflict: 'tanggal,no_gud' });
   } catch(e) {
     console.warn('Supabase sync item err:', e);
@@ -1341,19 +1350,22 @@ async function syncAllLocalToCloud() {
   }
 
   showToast('Mengunggah data ke Cloud...');
-  const payload = state.list.map(it => ({
-    tanggal: currentDate,
-    no_gud: it.no_gud,
-    grade: it.grade,
-    barkot: it.barkot || null,
-    kg: it.kg !== undefined && it.kg !== null ? it.kg : null,
-    is_done: Boolean(state.doneMap[it.no_gud]),
-    updated_at: new Date().toISOString()
-  }));
+  const payload = state.list.map(it => {
+    const isDone = Boolean(state.doneMap[it.no_gud]);
+    return {
+      tanggal: currentDate,
+      no_gud: it.no_gud,
+      grade: it.grade,
+      barkot: it.barkot || null,
+      kg: it.kg !== undefined && it.kg !== null ? it.kg : null,
+      is_done: isDone,
+      done_at: isDone ? (it.done_at || new Date().toISOString()) : null
+    };
+  });
 
   try {
     const { error } = await supabaseClient
-      .from('cek_barkot_items')
+      .from('barkot_data')
       .upsert(payload, { onConflict: 'tanggal,no_gud' });
 
     if (!error) {
@@ -1370,8 +1382,8 @@ function setupRealtime() {
   if (!supabaseClient) return;
   try {
     realtimeChannel = supabaseClient
-      .channel('cek_barkot_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'cek_barkot_items' }, payload => {
+      .channel('barkot_data_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'barkot_data' }, payload => {
         if (payload.new && payload.new.tanggal === currentDate) {
           const no_gud = payload.new.no_gud;
           const isDone = Boolean(payload.new.is_done);
