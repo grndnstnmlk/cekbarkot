@@ -6,15 +6,17 @@
 const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycGtsaWJvY2dpY3ViZXZ5c2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTA3NjUsImV4cCI6MjEwMzQyNjc2NX0.xGoel8SNa2v9DcZBYwKcmjzGF7j6LJ-OQkr919JyYSc';
 
-// 7 Barcode Belum Ditempel (Default)
+// 9 Barcode Belum Ditempel (Sesuai berkas resmi tgl 28-30 Agustus)
 const MISSING_BARCODES_DEFAULT = [
-  '34208',
-  '34098',
-  '34094',
-  '34093',
-  '34092',
-  '34091',
-  '34088'
+  "31155",
+  "33419",
+  "33422",
+  "33743",
+  "33744",
+  "32277",
+  "32278",
+  "34240",
+  "943647"
 ];
 
 let currentDate = '2026-08-30';
@@ -50,17 +52,20 @@ function getSeedData() {
 // DYNAMIC MISSING BARCODES STORAGE
 // ==========================================
 function getMissingBarcodesList() {
-  const stored = localStorage.getItem('barkot_missing_list');
+  const stored = localStorage.getItem('barkot_missing_list_v2');
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
     } catch(e) {}
   }
   return [...MISSING_BARCODES_DEFAULT];
 }
 
 function saveMissingBarcodesList(list) {
-  localStorage.setItem('barkot_missing_list', JSON.stringify(list));
+  localStorage.setItem('barkot_missing_list_v2', JSON.stringify(list));
   updateMissingBannerUI();
   render();
 }
@@ -92,10 +97,10 @@ function addNewMissingBarcode() {
 }
 
 function resetMissingBarcodesDefault() {
-  if (confirm('Kembalikan daftar barcode belum ditempel ke default (7 barcode awal)?')) {
+  if (confirm('Kembalikan daftar barcode belum ditempel ke default (9 barcode resmi)?')) {
     saveMissingBarcodesList([...MISSING_BARCODES_DEFAULT]);
     openMissingModal();
-    showToast('Daftar direset ke default');
+    showToast('Daftar direset ke 9 barcode resmi');
   }
 }
 
@@ -162,25 +167,31 @@ function getAllMissingAndDualItems() {
   });
 
   const missingCodes = getMissingBarcodesList();
-  missingCodes.forEach(code => {
+  missingCodes.forEach(b => {
     let found = null;
     for (const tgl of allDates) {
-      const match = (seed[tgl] || []).find(x => String(x.barkot).trim() === code);
+      const match = (seed[tgl] || []).find(x => String(x.barkot).trim() === String(b).trim());
       if (match) {
-        found = { ...match, tanggal: tgl };
+        const isAlreadyInDual = dualList.some(d => d.no_gud === match.no_gud && d.tanggal === tgl);
+        if (!isAlreadyInDual) {
+          found = { ...match, tanggal: tgl };
+        }
         break;
       }
     }
     if (found) {
       missingList.push(found);
     } else {
-      missingList.push({
-        barkot: code,
-        no_gud: '—',
-        grade: '—',
-        kg: '—',
-        tanggal: '—'
-      });
+      const inDual = dualList.some(d => String(d.barkot).trim() === String(b).trim());
+      if (!inDual) {
+        missingList.push({
+          barkot: b,
+          no_gud: '—',
+          grade: '—',
+          kg: '—',
+          tanggal: '—'
+        });
+      }
     }
   });
 
