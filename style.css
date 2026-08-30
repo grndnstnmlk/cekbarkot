@@ -1,0 +1,919 @@
+:root {
+    /* DrawHistory Palette Tokens */
+    --color-parchment: #faf6f3;
+    --color-ash: #e5e7eb;
+    --color-smoke: #999999;
+    --color-silver: #b3b3b3;
+    --color-ink: #000000;
+    --color-bone: #ffffff;
+    --color-olive-charcoal: #3d3b2f;
+    --color-obsidian: #1d1d1b;
+    --color-saffron-dot: #ff6714;
+    --color-out: #be123c;
+    --color-out-bg: #fff1f2;
+
+    /* Typography Families */
+    --font-eloquia-text: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-roboto-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Radius System (Strictly 3 Values: 16px cards, 8px buttons, 9999px pills) */
+    --radius-cards: 16px;
+    --radius-images: 16px;
+    --radius-buttons: 8px;
+    --radius-pills: 9999px;
+
+    /* Adaptive Typography & Sizing */
+    --card-no-size: 34px;
+    --card-barkot-size: 14px;
+    --card-min-h: 116px;
+    --touch-target: 44px;
+
+    /* Safe Area insets (iOS Dynamic Island & Home Indicator) */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+  }
+
+  /* Font & Device Optimization Modes */
+  body.font-mode-16pm {
+    --card-no-size: 34px;
+    --card-barkot-size: 14px;
+    --card-min-h: 116px;
+    --touch-target: 44px;
+  }
+  body.font-mode-a16 {
+    --card-no-size: 32px;
+    --card-barkot-size: 13.5px;
+    --card-min-h: 112px;
+    --touch-target: 40px;
+  }
+  body.font-mode-lansia {
+    --card-no-size: 38px;
+    --card-barkot-size: 15.5px;
+    --card-min-h: 132px;
+    --touch-target: 44px;
+  }
+  body.font-mode-normal {
+    --card-no-size: 26px;
+    --card-barkot-size: 12px;
+    --card-min-h: 96px;
+    --touch-target: 36px;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+  input, textarea, [contenteditable="true"] {
+    -webkit-touch-callout: default;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-parchment);
+    color: var(--color-ink);
+    font-family: var(--font-eloquia-text);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-bottom: calc(var(--sab) + 40px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* Announcement Bar (With Dynamic Island Safe Padding for iPhone 16 Pro Max) */
+  .draw-announcement {
+    background: transparent;
+    border-bottom: 1px solid var(--color-ash);
+    padding-top: max(var(--sat), 6px);
+    padding-bottom: 6px;
+    padding-left: calc(var(--sal) + 16px);
+    padding-right: calc(var(--sar) + 16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--color-ink);
+    text-transform: uppercase;
+    letter-spacing: -0.13px;
+  }
+  .draw-announcement-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .saffron-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pills);
+    background: var(--color-saffron-dot);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  /* Header Section (Gallery Sticky Bar with Ash Hairline) */
+  header {
+    background: rgba(250, 246, 243, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-ash);
+    padding: 8px calc(var(--sal) + 14px) 8px calc(var(--sar) + 14px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  
+  .header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .title-group {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .display-title {
+    margin: 0;
+    font-family: var(--font-eloquia-text);
+    font-size: 19px;
+    font-weight: 300;
+    letter-spacing: -0.55px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--color-ink);
+    white-space: nowrap;
+  }
+  .display-subtitle {
+    margin: 0;
+    font-family: var(--font-roboto-mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--color-smoke);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* Ghost Outlined Buttons (DrawHistory Signature: 8px radius, transparent fill, 1px border) */
+  .draw-btn-ghost {
+    background: transparent;
+    border: 1px solid var(--color-ink);
+    color: var(--color-ink);
+    border-radius: var(--radius-buttons);
+    padding: 6px 12px;
+    min-height: 32px;
+    font-family: var(--font-roboto-mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+  }
+  .draw-btn-ghost:active {
+    background: rgba(0, 0, 0, 0.08);
+    transform: scale(0.97);
+  }
+  .draw-btn-ghost.active-lock {
+    background: var(--color-obsidian);
+    border-color: var(--color-obsidian);
+    color: var(--color-bone);
+  }
+
+  /* Obsidian Ghost Button for Dark Cards */
+  .draw-btn-ghost-dark {
+    background: transparent;
+    border: 1px solid var(--color-parchment);
+    color: var(--color-parchment);
+    border-radius: var(--radius-buttons);
+    padding: 6px 14px;
+    min-height: 34px;
+    font-family: var(--font-roboto-mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+  }
+  .draw-btn-ghost-dark:active {
+    background: rgba(250, 246, 243, 0.12);
+    transform: scale(0.97);
+  }
+
+  /* Date Pills Row */
+  .date-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .date-selector-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .date-selector-row::-webkit-scrollbar { display: none; }
+
+  .date-picker {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-buttons);
+    padding: 3px 8px;
+    min-height: 29px;
+    font-family: var(--font-roboto-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--color-ink);
+    outline: none;
+    flex-shrink: 0;
+  }
+  .quick-dates-bar {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .date-pill {
+    font-family: var(--font-roboto-mono);
+    font-size: 11px;
+    font-weight: 400;
+    background: var(--color-bone);
+    color: var(--color-smoke);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-pills);
+    padding: 3px 10px;
+    min-height: 29px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.12s ease;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .date-pill:active {
+    transform: scale(0.96);
+  }
+  .date-pill.active {
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    border-color: var(--color-obsidian);
+  }
+
+  /* Progress Track (Hairline Minimalist) */
+  .progress-container {
+    margin-top: 5px;
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--color-ash);
+    border-radius: var(--radius-pills);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--color-obsidian);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-roboto-mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    color: var(--color-smoke);
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+  .progress-label-row b {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .pct-badge {
+    font-family: var(--font-roboto-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  /* Main Container */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px calc(var(--sal) + 12px) 24px calc(var(--sar) + 12px);
+  }
+
+  /* Missing Bal Alert Panel (Obsidian Display Card: 16px radius, Bone text, Saffron Dot) */
+  .missing-bal-banner {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-obsidian);
+    border-radius: var(--radius-cards);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    color: var(--color-bone);
+  }
+  .missing-bal-banner:active {
+    background: var(--color-olive-charcoal);
+  }
+  .missing-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .missing-banner-title {
+    font-family: var(--font-eloquia-text);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--color-bone);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .missing-link-btn {
+    font-family: var(--font-roboto-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--color-parchment);
+    white-space: nowrap;
+    text-decoration: underline;
+    text-transform: uppercase;
+  }
+
+  /* Unified Compact Search Bar (Parchment/Bone surface with 8px radius & Ash border) */
+  .search-container-compact {
+    margin-bottom: 12px;
+  }
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .search-icon-badge {
+    position: absolute;
+    left: 12px;
+    font-size: 12px;
+    color: var(--color-smoke);
+    pointer-events: none;
+  }
+  .unified-search-input {
+    width: 100%;
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    color: var(--color-ink);
+    font-family: var(--font-roboto-mono);
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px 32px 8px 34px;
+    min-height: 38px;
+    border-radius: var(--radius-buttons);
+    outline: none;
+    transition: all 0.15s ease;
+  }
+  .unified-search-input:focus {
+    border-color: var(--color-ink);
+  }
+  .search-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: var(--color-ash);
+    border: none;
+    border-radius: var(--radius-pills);
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  /* Global Search Match Cards Container */
+  .global-matches-container {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  .global-match-card {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-buttons);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .global-match-title {
+    font-family: var(--font-roboto-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .global-match-sub {
+    font-family: var(--font-eloquia-text);
+    font-size: 11.5px;
+    color: var(--color-smoke);
+  }
+  .global-match-date-badge {
+    font-family: var(--font-roboto-mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--color-ink);
+    text-transform: uppercase;
+  }
+
+  /* Spotlight Result Card (Obsidian Deep Editorial Panel: 16px radius, Bone reverse type) */
+  .spotlight-inset {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-obsidian);
+    border-radius: var(--radius-cards);
+    padding: 16px 14px;
+    margin-top: 10px;
+    display: none;
+    color: var(--color-bone);
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .spotlight-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-roboto-mono);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    color: var(--color-silver);
+  }
+  .spotlight-no-label {
+    color: var(--color-bone);
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .spotlight-barcode-huge {
+    font-family: var(--font-roboto-mono);
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: normal;
+    color: var(--color-bone);
+    text-align: center;
+    margin: 8px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-buttons);
+  }
+  .spotlight-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-roboto-mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--color-silver);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  /* Filter Controls */
+  .filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-pills {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .filter-pills::-webkit-scrollbar { display: none; }
+
+  .filter-pill {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    color: var(--color-smoke);
+    font-family: var(--font-roboto-mono);
+    font-size: 11px;
+    font-weight: 400;
+    padding: 4px 10px;
+    min-height: 29px;
+    border-radius: var(--radius-pills);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .filter-pill:active {
+    transform: scale(0.96);
+  }
+  .filter-pill.active {
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    border-color: var(--color-obsidian);
+  }
+  .filter-pill.missing-pill.active {
+    background: var(--color-olive-charcoal);
+    border-color: var(--color-olive-charcoal);
+    color: var(--color-bone);
+  }
+  .filter-pill.out-pill.active {
+    background: var(--color-out);
+    border-color: var(--color-out);
+    color: var(--color-bone);
+  }
+  .batch-actions {
+    display: flex;
+    gap: 4px;
+  }
+
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (DrawHistory Museum Exhibition Style) */
+  .bal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  @media (min-width: 640px) {
+    .display-title {
+      font-size: 24px;
+    }
+    .bal-grid {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+  }
+
+  /* Individual Bal Card (16px radius, Ash hairline border, Eloquia Text 300 No Gud) */
+  .bal-card {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-cards);
+    padding: 12px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+    transition: all 0.12s ease;
+    min-height: var(--card-min-h);
+  }
+  .bal-card:active {
+    transform: scale(0.97);
+    border-color: var(--color-ink);
+  }
+  
+  /* Large, Crisp No Gud (Eloquia Text 300 Uppercase with Negative Tracking) */
+  .bal-card .card-no {
+    font-family: var(--font-eloquia-text);
+    font-size: var(--card-no-size);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-ink);
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  
+  /* Meta tags row */
+  .bal-card .card-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    width: 100%;
+  }
+  .meta-tag {
+    font-family: var(--font-roboto-mono);
+    font-size: 9.5px;
+    font-weight: 400;
+    padding: 2px 6px;
+    border-radius: var(--radius-buttons);
+    background: var(--color-parchment);
+    color: var(--color-smoke);
+    border: 1px solid var(--color-ash);
+    text-transform: uppercase;
+  }
+  .meta-tag-barcode {
+    font-family: var(--font-roboto-mono);
+    font-size: var(--card-barkot-size);
+    font-weight: 500;
+    color: var(--color-ink);
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    letter-spacing: normal;
+    width: 96%;
+    text-align: center;
+    border-radius: var(--radius-buttons);
+  }
+
+  .bal-card .card-status-label {
+    margin-top: 6px;
+    font-family: var(--font-roboto-mono);
+    font-size: 9px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-smoke);
+  }
+
+  /* Card Missing Alert (Belum Ketemu) */
+  .bal-card.missing-item {
+    border-color: var(--color-smoke);
+    background: #fbf9f6;
+  }
+  .bal-card.missing-item .missing-flag {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 8px;
+    font-weight: 400;
+    font-family: var(--font-roboto-mono);
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    padding: 1px 6px;
+    border-radius: var(--radius-pills);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* Card OUT State (Tonal Rose-Ash Inset) */
+  .bal-card.out-item {
+    border-color: var(--color-out);
+    background: var(--color-out-bg);
+  }
+  .bal-card.out-item .card-no {
+    color: var(--color-out);
+  }
+  .bal-card.out-item .out-flag {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 8px;
+    font-weight: 500;
+    font-family: var(--font-roboto-mono);
+    background: var(--color-out);
+    color: #ffffff;
+    padding: 1px 6px;
+    border-radius: var(--radius-pills);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .bal-card.out-item .card-status-label {
+    color: var(--color-out);
+    font-weight: 500;
+  }
+
+  /* DONE STATE (Olive Charcoal #3d3b2f Editorial Panel) */
+  .bal-card.done {
+    background: var(--color-olive-charcoal);
+    border-color: var(--color-olive-charcoal);
+  }
+  .bal-card.done .card-no {
+    color: var(--color-bone);
+    font-weight: 300;
+  }
+  .bal-card.done .meta-tag {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-parchment);
+  }
+  .bal-card.done .meta-tag-barcode {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-bone);
+  }
+  .bal-card.done .card-status-label {
+    color: var(--color-silver);
+  }
+  .bal-card.done .badge-top-right {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 11px;
+    color: var(--color-bone);
+    font-family: var(--font-roboto-mono);
+  }
+
+  .bal-card.highlight {
+    border: 2px solid var(--color-ink);
+  }
+
+  /* Management Panel (Quiet Exhibition Canvas) */
+  .panel-management {
+    background: var(--color-bone);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-cards);
+    padding: 20px 16px;
+    margin-top: 24px;
+  }
+  .panel-management h3 {
+    font-family: var(--font-eloquia-text);
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin: 0 0 6px;
+  }
+
+  /* Modals (Clean Gallery Surfaces with 16px radius) */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(250, 246, 243, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-card {
+    background: var(--color-bone);
+    border-radius: var(--radius-cards);
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px 18px;
+    border: 1px solid var(--color-ink);
+  }
+  .modal-title {
+    font-family: var(--font-eloquia-text);
+    font-size: 18px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: -0.45px;
+    color: var(--color-ink);
+    margin: 0 0 8px;
+  }
+
+  /* Camera Scanner Viewfinder */
+  .scanner-wrapper {
+    position: relative;
+    width: 100%;
+    background: #000000;
+    border-radius: var(--radius-cards);
+    overflow: hidden;
+    margin-bottom: 10px;
+    min-height: 220px;
+    border: 1px solid var(--color-ink);
+  }
+  #scannerReader {
+    width: 100% !important;
+  }
+  #scannerReader video {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 48vh;
+    object-fit: cover;
+  }
+  .laser-scanner-line {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: var(--color-saffron-dot);
+    box-shadow: 0 0 8px 1px var(--color-saffron-dot);
+    z-index: 10;
+    pointer-events: none;
+    animation: scanLaser 1.8s infinite ease-in-out alternate;
+  }
+  @keyframes scanLaser {
+    0% { transform: translateY(-60px); opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { transform: translateY(60px); opacity: 0.6; }
+  }
+
+  .scanner-result-popup {
+    background: var(--color-parchment);
+    border: 1px solid var(--color-ash);
+    border-radius: var(--radius-buttons);
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    display: none;
+  }
+  .scanner-result-nogud {
+    font-family: var(--font-eloquia-text);
+    font-size: 32px;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin: 2px 0;
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--sab) + 20px);
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: var(--color-obsidian);
+    color: var(--color-bone);
+    font-family: var(--font-roboto-mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    padding: 8px 18px;
+    border-radius: var(--radius-pills);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 150;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 10px;
+    font-family: var(--font-roboto-mono);
+    color: var(--color-smoke);
+    font-size: 12px;
+    text-transform: uppercase;
+  }
