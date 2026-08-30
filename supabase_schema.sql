@@ -39,7 +39,7 @@ WITH CHECK (true);
 -- 4. Aktifkan Fitur Realtime
 ALTER PUBLICATION supabase_realtime ADD TABLE public.barkot_data;
 
--- 5. Data Awal Bawaan (Tanggal 21 - 29 Agustus 2026 - Total 437 Bal)
+-- 5. Data Awal Bawaan (Tanggal 2026-08-21 s/d 2026-08-30 - Total 458 Bal)
 INSERT INTO public.barkot_data (tanggal, no_gud, grade, barkot, kg, is_done)
 VALUES
 ('2026-08-21', 276, '50', NULL, NULL, false),
@@ -478,7 +478,28 @@ VALUES
 ('2026-08-29', 573, '67', '34704', 40, false),
 ('2026-08-29', 574, '50', '33836', 33, false),
 ('2026-08-29', 575, '50', '34463', 38, false),
-('2026-08-29', 576, '58', NULL, 39, false)
+('2026-08-29', 576, '58', NULL, 39, false),
+('2026-08-30', 585, '70', '34803', 38, false),
+('2026-08-30', 586, '70', '34809', 37, false),
+('2026-08-30', 587, '68', '34808', 47, false),
+('2026-08-30', 588, '70', '34810', 46, false),
+('2026-08-30', 589, '66', '34806', 40, false),
+('2026-08-30', 590, '64', '34494', 47, false),
+('2026-08-30', 591, '70', '34813', 33, false),
+('2026-08-30', 592, '68', '34814', 41, false),
+('2026-08-30', 593, '66', '34812', 45, false),
+('2026-08-30', 594, '66', '34807', 47, false),
+('2026-08-30', 595, '66', '34811', 50, false),
+('2026-08-30', 596, '55', '34362', 45, false),
+('2026-08-30', 597, '56', '34364', 44, false),
+('2026-08-30', 598, '56', '34363', 47, false),
+('2026-08-30', 599, '57', '34361', 47, false),
+('2026-08-30', 600, '64', '34805', 50, false),
+('2026-08-30', 601, '65', NULL, NULL, false),
+('2026-08-30', 602, '65', NULL, NULL, false),
+('2026-08-30', 603, '61', '34496', 50, false),
+('2026-08-30', 604, '63', '34495', 50, false),
+('2026-08-30', 606, '70', '34804', 46, false)
 ON CONFLICT (tanggal, no_gud) DO UPDATE SET
     grade = EXCLUDED.grade,
     barkot = EXCLUDED.barkot,

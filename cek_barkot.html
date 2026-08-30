@@ -8,14 +8,14 @@
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="T.B.K JH Cek Barkot">
-<meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — T.B.K JH</title>
+<meta name="apple-mobile-web-app-title" content="Oevra Cek Barkot">
+<meta name="theme-color" content="#ffffff">
+<title>Cek Barkot — Oevra Editorial Edition</title>
 
-<!-- Google Fonts: Inter (Eloquia Text substitute), Roboto Mono -->
+<!-- Google Fonts: Space Grotesk, Plus Jakarta Sans (Suisse Substitute), Roboto Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Roboto+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- SheetJS, Supabase JS & HTML5-QRCode Scanner Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -24,133 +24,121 @@
 
 <style>
   :root {
-    /* DrawHistory Palette Tokens */
-    --color-parchment: #faf6f3;
-    --color-ash: #e5e7eb;
-    --color-smoke: #999999;
-    --color-silver: #b3b3b3;
-    --color-ink: #000000;
-    --color-bone: #ffffff;
-    --color-olive-charcoal: #3d3b2f;
-    --color-obsidian: #1d1d1b;
-    --color-saffron-dot: #ff6714;
-    --color-out: #be123c;
-    --color-out-bg: #fff1f2;
-
+    /* Oevra Design Tokens */
+    --color-eucalyptus: #778643;
+    --gradient-eucalyptus: radial-gradient(ellipse at 50% 25%, rgba(119,134,67,0.22) 0%, rgba(119,134,67,0.06) 50%, #ffffff 100%);
+    --color-ink-black: #000000;
+    --color-pure-canvas: #ffffff;
+    --color-graphite: #4e4e4e;
+    --color-mist: #c8c8c8;
+    --color-mist-light: #f4f6f1;
+    --color-eucalyptus-wash: rgba(119, 134, 67, 0.12);
+    --color-eucalyptus-dark: #586430;
+    
     /* Typography Families */
-    --font-eloquia-text: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-roboto-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-suisse: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-space: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    /* Radius System (Strictly 3 Values: 16px cards, 8px buttons, 9999px pills) */
-    --radius-cards: 16px;
-    --radius-images: 16px;
-    --radius-buttons: 8px;
-    --radius-pills: 9999px;
+    /* Border Radii (Oevra Standard) */
+    --radius-cards: 15px;
+    --radius-images: 15px;
+    --radius-buttons: 22.5px;
+    --radius-pills: 22.5px;
 
     /* Adaptive Typography & Sizing */
     --card-no-size: 34px;
-    --card-barkot-size: 14px;
-    --card-min-h: 116px;
-    --touch-target: 44px;
+    --card-barkot-size: 15px;
+    --card-min-h: 124px;
+    --touch-target: 48px;
 
-    /* Safe Area insets (iOS Dynamic Island & Home Indicator) */
+    /* Safe Area insets */
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
     --sal: env(safe-area-inset-left, 0px);
     --sar: env(safe-area-inset-right, 0px);
   }
 
-  /* Font & Device Optimization Modes */
-  body.font-mode-16pm {
-    --card-no-size: 34px;
-    --card-barkot-size: 14px;
-    --card-min-h: 116px;
+  /* Font Modes */
+  body.font-mode-normal {
+    --card-no-size: 28px;
+    --card-barkot-size: 13.5px;
+    --card-min-h: 108px;
     --touch-target: 44px;
   }
   body.font-mode-a16 {
-    --card-no-size: 32px;
-    --card-barkot-size: 13.5px;
-    --card-min-h: 112px;
-    --touch-target: 40px;
+    --card-no-size: 34px;
+    --card-barkot-size: 15.5px;
+    --card-min-h: 126px;
+    --touch-target: 50px;
   }
   body.font-mode-lansia {
-    --card-no-size: 38px;
-    --card-barkot-size: 15.5px;
-    --card-min-h: 132px;
-    --touch-target: 44px;
-  }
-  body.font-mode-normal {
-    --card-no-size: 26px;
-    --card-barkot-size: 12px;
-    --card-min-h: 96px;
-    --touch-target: 36px;
+    --card-no-size: 42px;
+    --card-barkot-size: 18px;
+    --card-min-h: 148px;
+    --touch-target: 56px;
   }
 
   * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
     touch-action: manipulation;
-  }
-  input, textarea, [contenteditable="true"] {
-    -webkit-touch-callout: default;
-    user-select: text;
-    -webkit-user-select: text;
   }
 
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--color-parchment);
-    color: var(--color-ink);
-    font-family: var(--font-eloquia-text);
+    background: var(--color-pure-canvas);
+    background-image: var(--gradient-eucalyptus);
+    background-attachment: fixed;
+    color: var(--color-ink-black);
+    font-family: var(--font-space);
     min-height: 100vh;
     min-height: -webkit-fill-available;
     padding-bottom: calc(var(--sab) + 40px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 15px;
+    line-height: 1.3;
   }
 
-  /* Announcement Bar (With Dynamic Island Safe Padding for iPhone 16 Pro Max) */
-  .draw-announcement {
+  /* Oevra Micro Top Bar */
+  .oevra-topbar {
     background: transparent;
-    border-bottom: 1px solid var(--color-ash);
-    padding-top: max(var(--sat), 6px);
-    padding-bottom: 6px;
-    padding-left: calc(var(--sal) + 16px);
-    padding-right: calc(var(--sar) + 16px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding-top: calc(var(--sat) + 8px);
+    padding-bottom: 8px;
+    padding-left: calc(var(--sal) + 20px);
+    padding-right: calc(var(--sar) + 20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 11px;
-    font-weight: 400;
-    color: var(--color-ink);
+    font-weight: 500;
+    color: var(--color-graphite);
     text-transform: uppercase;
-    letter-spacing: -0.13px;
+    letter-spacing: 0.08em;
   }
-  .draw-announcement-left {
+  .oevra-topbar-left {
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .saffron-dot {
+  .eucalyptus-dot {
     width: 6px;
     height: 6px;
-    border-radius: var(--radius-pills);
-    background: var(--color-saffron-dot);
+    border-radius: 50%;
+    background: var(--color-eucalyptus);
     display: inline-block;
-    flex-shrink: 0;
   }
 
-  /* Header Section (Gallery Sticky Bar with Ash Hairline) */
+  /* Header Section */
   header {
-    background: rgba(250, 246, 243, 0.95);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--color-ash);
-    padding: 8px calc(var(--sal) + 14px) 8px calc(var(--sar) + 14px);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-mist);
+    padding: 18px calc(var(--sal) + 20px) 14px calc(var(--sar) + 20px);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -159,128 +147,108 @@
   .header-main {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
   }
   .title-group {
+    flex: 1;
+    min-width: 200px;
+  }
+  .section-label {
+    font-family: var(--font-space);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-eucalyptus);
+    margin: 0 0 4px;
     display: flex;
-    align-items: baseline;
-    gap: 8px;
-    min-width: 0;
-    flex-shrink: 1;
+    align-items: center;
+    gap: 6px;
   }
   .display-title {
     margin: 0;
-    font-family: var(--font-eloquia-text);
-    font-size: 19px;
+    font-family: var(--font-suisse);
+    font-size: 34px;
     font-weight: 300;
-    letter-spacing: -0.55px;
-    text-transform: uppercase;
-    line-height: 1.1;
-    color: var(--color-ink);
-    white-space: nowrap;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--color-ink-black);
   }
   .display-subtitle {
-    margin: 0;
-    font-family: var(--font-roboto-mono);
-    font-size: 11.5px;
+    margin: 4px 0 0;
+    font-family: var(--font-space);
+    font-size: 13.5px;
     font-weight: 400;
-    color: var(--color-smoke);
-    text-transform: uppercase;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--color-graphite);
   }
 
   .header-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
-    flex-shrink: 0;
-  }
-  .header-actions .btn-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    line-height: 1;
-  }
-  @media (max-width: 600px) {
-    .header-actions {
-      gap: 5px;
-    }
-    .header-actions .btn-text {
-      display: none !important;
-    }
-    .header-actions .draw-btn-ghost, .header-actions .header-btn {
-      padding: 6px 10px;
-      min-height: 34px;
-      min-width: 36px;
-      font-size: 15px;
-      gap: 0;
-      justify-content: center;
-    }
+    flex-wrap: wrap;
   }
 
-  /* Ghost Outlined Buttons (8px radius, transparent fill, 1px border) */
-  .draw-btn-ghost {
+  /* Oevra Outlined Pill Buttons */
+  .oevra-btn-ghost {
     background: transparent;
-    border: 1px solid var(--color-ink);
-    color: var(--color-ink);
+    border: 1px solid var(--color-ink-black);
+    color: var(--color-ink-black);
     border-radius: var(--radius-buttons);
-    padding: 6px 12px;
-    min-height: 32px;
-    font-family: var(--font-roboto-mono);
-    font-size: 11.5px;
-    font-weight: 400;
+    padding: 9px 18px;
+    min-height: var(--touch-target);
+    font-family: var(--font-space);
+    font-size: 12.5px;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: normal;
+    letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.12s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
     user-select: none;
     -webkit-user-select: none;
-    white-space: nowrap;
   }
-  .draw-btn-ghost:active {
-    background: rgba(0, 0, 0, 0.08);
+  .oevra-btn-ghost:active {
+    background: var(--color-mist-light);
     transform: scale(0.97);
   }
-  .draw-btn-ghost.active-lock {
-    background: var(--color-obsidian);
-    border-color: var(--color-obsidian);
-    color: var(--color-bone);
+  .oevra-btn-ghost.active-lock {
+    border-color: var(--color-eucalyptus);
+    background: var(--color-eucalyptus-wash);
+    color: var(--color-eucalyptus-dark);
+    font-weight: 600;
   }
 
-  /* Obsidian Ghost Button for Dark Cards */
-  .draw-btn-ghost-dark {
-    background: transparent;
-    border: 1px solid var(--color-parchment);
-    color: var(--color-parchment);
+  /* Oevra Filled Green CTA Button */
+  .oevra-btn-filled {
+    background: var(--color-eucalyptus);
+    border: 1px solid transparent;
+    color: var(--color-pure-canvas);
     border-radius: var(--radius-buttons);
-    padding: 6px 14px;
-    min-height: 34px;
-    font-family: var(--font-roboto-mono);
-    font-size: 11.5px;
-    font-weight: 400;
+    padding: 9px 20px;
+    min-height: var(--touch-target);
+    font-family: var(--font-space);
+    font-size: 12.5px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: normal;
+    letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.12s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
     user-select: none;
     -webkit-user-select: none;
-    white-space: nowrap;
   }
-  .draw-btn-ghost-dark:active {
-    background: rgba(250, 246, 243, 0.12);
+  .oevra-btn-filled:active {
+    background: var(--color-eucalyptus-dark);
     transform: scale(0.97);
   }
 
@@ -288,79 +256,77 @@
   .date-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
+    margin-bottom: 6px;
   }
   .date-selector-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .date-selector-row::-webkit-scrollbar { display: none; }
-
   .date-picker {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
     border-radius: var(--radius-buttons);
-    padding: 3px 8px;
-    min-height: 29px;
-    font-family: var(--font-roboto-mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--color-ink);
+    padding: 6px 14px;
+    min-height: 40px;
+    font-family: var(--font-space);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-black);
     outline: none;
-    flex-shrink: 0;
   }
   .quick-dates-bar {
     display: flex;
-    gap: 5px;
-    align-items: center;
-    flex-shrink: 0;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0 4px;
   }
+  .quick-dates-bar::-webkit-scrollbar { display: none; }
 
   .date-pill {
-    font-family: var(--font-roboto-mono);
-    font-size: 11px;
-    font-weight: 400;
-    background: var(--color-bone);
-    color: var(--color-smoke);
-    border: 1px solid var(--color-ash);
+    font-family: var(--font-space);
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--color-pure-canvas);
+    color: var(--color-graphite);
+    border: 1px solid var(--color-mist);
     border-radius: var(--radius-pills);
-    padding: 3px 10px;
-    min-height: 29px;
+    padding: 6px 14px;
+    min-height: 38px;
     display: inline-flex;
     align-items: center;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.12s ease;
+    transition: all 0.15s ease;
     flex-shrink: 0;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
   .date-pill:active {
     transform: scale(0.96);
   }
   .date-pill.active {
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    border-color: var(--color-obsidian);
+    background: var(--color-eucalyptus);
+    color: var(--color-pure-canvas);
+    border-color: var(--color-eucalyptus);
   }
 
   /* Progress Track (Hairline Minimalist) */
   .progress-container {
-    margin-top: 5px;
+    margin-top: 10px;
   }
   .progress-track {
-    height: 2px;
-    background: var(--color-ash);
+    height: 3px;
+    background: var(--color-mist-light);
     border-radius: var(--radius-pills);
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
-    background: var(--color-obsidian);
+    background: var(--color-eucalyptus);
     width: 0%;
     transition: width 0.3s ease;
   }
@@ -368,224 +334,219 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: var(--font-roboto-mono);
-    font-size: 10.5px;
+    font-family: var(--font-space);
+    font-size: 12px;
     font-weight: 400;
-    color: var(--color-smoke);
-    margin-top: 3px;
-    text-transform: uppercase;
+    color: var(--color-graphite);
+    margin-top: 6px;
   }
   .progress-label-row b {
-    color: var(--color-ink);
-    font-weight: 500;
+    color: var(--color-ink-black);
+    font-weight: 600;
   }
   .pct-badge {
-    font-family: var(--font-roboto-mono);
-    font-size: 10.5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--color-eucalyptus);
   }
 
   /* Main Container */
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 12px calc(var(--sal) + 12px) 24px calc(var(--sar) + 12px);
+    padding: 20px calc(var(--sal) + 16px) 30px calc(var(--sar) + 16px);
   }
 
-  /* Missing Bal Alert Panel (Obsidian Display Card: 16px radius, Bone text, Saffron Dot) */
+  /* Missing Bal Banner (Oevra Botanical Clean) */
   .missing-bal-banner {
-    background: var(--color-obsidian);
-    border: 1px solid var(--color-obsidian);
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-eucalyptus);
     border-radius: var(--radius-cards);
-    padding: 10px 14px;
-    margin-bottom: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.12s ease;
-    color: var(--color-bone);
-  }
-  .missing-bal-banner:active {
-    background: var(--color-olive-charcoal);
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .missing-banner-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-width: 0;
+    gap: 12px;
   }
   .missing-banner-title {
-    font-family: var(--font-eloquia-text);
-    font-size: 12px;
-    font-weight: 300;
-    color: var(--color-bone);
+    font-family: var(--font-space);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-eucalyptus-dark);
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: -0.2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    letter-spacing: 0.04em;
   }
-  .missing-link-btn {
-    font-family: var(--font-roboto-mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--color-parchment);
-    white-space: nowrap;
-    text-decoration: underline;
-    text-transform: uppercase;
+  .missing-banner-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-graphite);
+    margin: 2px 0 0;
   }
 
-  /* Unified Compact Search Bar (Parchment/Bone surface with 8px radius & Ash border) */
-  .search-container-compact {
-    margin-bottom: 12px;
+  /* Editorial Global Search Panel (Canvas on White) */
+  .editorial-panels {
+    margin-bottom: 22px;
   }
-  .search-input-wrapper {
-    position: relative;
+  .panel-oevra {
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-ink-black);
+    border-radius: var(--radius-cards);
+    padding: 24px 20px;
+  }
+  .panel-eyebrow {
+    font-family: var(--font-space);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-eucalyptus);
+    margin: 0 0 6px;
     display: flex;
     align-items: center;
-    width: 100%;
+    gap: 6px;
   }
-  .search-icon-badge {
-    position: absolute;
-    left: 12px;
-    font-size: 12px;
-    color: var(--color-smoke);
-    pointer-events: none;
+  .panel-headline {
+    font-family: var(--font-suisse);
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-black);
+    margin: 0 0 16px;
+    line-height: 1.15;
   }
-  .unified-search-input {
+
+  .search-inputs-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .input-label-editorial {
+    font-family: var(--font-space);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-graphite);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .editorial-input {
     width: 100%;
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
-    color: var(--color-ink);
-    font-family: var(--font-roboto-mono);
-    font-size: 13px;
-    font-weight: 400;
-    padding: 8px 32px 8px 34px;
-    min-height: 38px;
-    border-radius: var(--radius-buttons);
+    background: #fafbf9;
+    border: 1px solid var(--color-mist);
+    color: var(--color-ink-black);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 14px;
+    min-height: 48px;
+    border-radius: 10px;
     outline: none;
-    transition: all 0.15s ease;
+    transition: border-color 0.15s ease;
   }
-  .unified-search-input:focus {
-    border-color: var(--color-ink);
-  }
-  .search-clear-btn {
-    position: absolute;
-    right: 8px;
-    background: var(--color-ash);
-    border: none;
-    border-radius: var(--radius-pills);
-    width: 20px;
-    height: 20px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    color: var(--color-ink);
-    cursor: pointer;
+  .editorial-input:focus {
+    border-color: var(--color-eucalyptus);
+    background: var(--color-pure-canvas);
   }
 
   /* Global Search Match Cards Container */
   .global-matches-container {
-    margin-top: 10px;
+    margin-top: 14px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     max-height: 380px;
     overflow-y: auto;
-    padding-right: 4px;
-  }
-  .global-match-card.highlight-match {
-    border: 2px solid var(--color-ink);
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .global-match-card {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
-    border-radius: var(--radius-buttons);
-    padding: 8px 12px;
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
+    border-radius: var(--radius-cards);
+    padding: 14px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
   .global-match-title {
-    font-family: var(--font-roboto-mono);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-ink-black);
   }
   .global-match-sub {
-    font-family: var(--font-eloquia-text);
-    font-size: 11.5px;
-    color: var(--color-smoke);
+    font-family: var(--font-space);
+    font-size: 12.5px;
+    color: var(--color-graphite);
   }
   .global-match-date-badge {
-    font-family: var(--font-roboto-mono);
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--color-ink);
+    font-family: var(--font-space);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-eucalyptus);
     text-transform: uppercase;
   }
 
-  /* Spotlight Result Card (Obsidian Deep Editorial Panel: 16px radius, Bone reverse type) */
+  /* Spotlight Result Card */
   .spotlight-inset {
-    background: var(--color-obsidian);
-    border: 1px solid var(--color-obsidian);
+    background: var(--color-mist-light);
+    border: 1px solid var(--color-eucalyptus);
     border-radius: var(--radius-cards);
-    padding: 16px 14px;
-    margin-top: 10px;
+    padding: 18px;
+    margin-top: 16px;
     display: none;
-    color: var(--color-bone);
     animation: fadeIn 0.2s ease;
   }
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-3px); }
+    from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .spotlight-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: var(--font-roboto-mono);
-    font-size: 11px;
-    font-weight: 400;
+    font-family: var(--font-space);
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: normal;
-    color: var(--color-silver);
+    letter-spacing: 0.05em;
+    color: var(--color-graphite);
   }
   .spotlight-no-label {
-    color: var(--color-bone);
-    font-size: 13px;
-    font-weight: 400;
+    color: var(--color-eucalyptus-dark);
+    font-size: 18px;
+    font-weight: 700;
   }
   .spotlight-barcode-huge {
-    font-family: var(--font-roboto-mono);
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: normal;
-    color: var(--color-bone);
+    font-family: var(--font-mono);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-black);
     text-align: center;
-    margin: 8px 0;
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-buttons);
+    margin: 10px 0;
+    padding: 10px;
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
+    border-radius: 10px;
   }
   .spotlight-meta-row {
     display: flex;
     justify-content: space-between;
-    font-family: var(--font-roboto-mono);
-    font-size: 11.5px;
-    font-weight: 400;
-    color: var(--color-silver);
-    margin-bottom: 12px;
-    text-transform: uppercase;
+    font-family: var(--font-space);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--color-graphite);
+    margin-bottom: 14px;
   }
 
   /* Filter Controls */
@@ -593,85 +554,66 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
-    gap: 6px;
+    margin-bottom: 16px;
+    gap: 8px;
     flex-wrap: wrap;
   }
   .filter-pills {
     display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .filter-pills::-webkit-scrollbar { display: none; }
-
   .filter-pill {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
-    color: var(--color-smoke);
-    font-family: var(--font-roboto-mono);
-    font-size: 11px;
-    font-weight: 400;
-    padding: 4px 10px;
-    min-height: 29px;
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
+    color: var(--color-graphite);
+    font-family: var(--font-space);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    min-height: 38px;
     border-radius: var(--radius-pills);
     cursor: pointer;
-    transition: all 0.12s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     text-transform: uppercase;
-    letter-spacing: normal;
-    white-space: nowrap;
-    flex-shrink: 0;
+    letter-spacing: 0.04em;
   }
   .filter-pill:active {
     transform: scale(0.96);
   }
   .filter-pill.active {
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    border-color: var(--color-obsidian);
+    background: var(--color-ink-black);
+    color: var(--color-pure-canvas);
+    border-color: var(--color-ink-black);
   }
   .filter-pill.missing-pill.active {
-    background: var(--color-olive-charcoal);
-    border-color: var(--color-olive-charcoal);
-    color: var(--color-bone);
-  }
-  .filter-pill.out-pill.active {
-    background: var(--color-out);
-    border-color: var(--color-out);
-    color: var(--color-bone);
-  }
-  .batch-actions {
-    display: flex;
-    gap: 4px;
+    background: var(--color-eucalyptus);
+    border-color: var(--color-eucalyptus);
+    color: var(--color-pure-canvas);
   }
 
-  /* ADAPTIVE 2-COLUMN BAL CARD GRID (DrawHistory Museum Exhibition Style) */
+  /* ADAPTIVE 2-COLUMN BAL CARD GRID (OEVRA SAGE & WHITE) */
   .bal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 28px;
+    gap: 12px;
+    margin-bottom: 30px;
   }
-  @media (min-width: 640px) {
-    .display-title {
-      font-size: 24px;
-    }
+  @media (min-width: 600px) {
     .bal-grid {
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 14px;
     }
   }
 
-  /* Individual Bal Card (16px radius, Ash hairline border, Eloquia Text 300 No Gud) */
+  /* Individual Bal Card (Artifact in Greenhouse Style) */
   .bal-card {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
     border-radius: var(--radius-cards);
-    padding: 12px 8px 10px;
+    padding: 16px 10px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -685,23 +627,22 @@
   }
   .bal-card:active {
     transform: scale(0.97);
-    border-color: var(--color-ink);
+    border-color: var(--color-eucalyptus);
   }
   
-  /* Large, Crisp No Gud (Eloquia Text 300 Uppercase with Negative Tracking) */
+  /* Large, Crisp No Gud (Suisse/Space Geometry) */
   .bal-card .card-no {
-    font-family: var(--font-eloquia-text);
+    font-family: var(--font-suisse);
     font-size: var(--card-no-size);
     font-weight: 300;
     line-height: 1;
-    color: var(--color-ink);
-    letter-spacing: -0.04em;
-    text-transform: uppercase;
+    color: var(--color-ink-black);
+    letter-spacing: -0.03em;
   }
   
   /* Meta tags row */
   .bal-card .card-meta {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
@@ -709,151 +650,117 @@
     width: 100%;
   }
   .meta-tag {
-    font-family: var(--font-roboto-mono);
-    font-size: 9.5px;
-    font-weight: 400;
-    padding: 2px 6px;
-    border-radius: var(--radius-buttons);
-    background: var(--color-parchment);
-    color: var(--color-smoke);
-    border: 1px solid var(--color-ash);
-    text-transform: uppercase;
+    font-family: var(--font-space);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: var(--color-mist-light);
+    color: var(--color-graphite);
+    border: 1px solid rgba(0,0,0,0.06);
   }
   .meta-tag-barcode {
-    font-family: var(--font-roboto-mono);
+    font-family: var(--font-mono);
     font-size: var(--card-barkot-size);
-    font-weight: 500;
-    color: var(--color-ink);
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
-    letter-spacing: normal;
-    width: 96%;
+    font-weight: 600;
+    color: var(--color-ink-black);
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
+    letter-spacing: 0.02em;
+    width: 95%;
     text-align: center;
-    border-radius: var(--radius-buttons);
   }
 
   .bal-card .card-status-label {
-    margin-top: 6px;
-    font-family: var(--font-roboto-mono);
-    font-size: 9px;
-    font-weight: 400;
+    margin-top: 8px;
+    font-family: var(--font-space);
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-smoke);
+    letter-spacing: 0.06em;
+    color: var(--color-mist);
   }
 
   /* Card Missing Alert (Belum Ketemu) */
   .bal-card.missing-item {
-    border-color: var(--color-smoke);
-    background: #fbf9f6;
+    border-color: var(--color-eucalyptus);
+    background: #fafbf8;
   }
   .bal-card.missing-item .missing-flag {
     position: absolute;
     top: 6px;
     left: 8px;
-    font-size: 8px;
-    font-weight: 400;
-    font-family: var(--font-roboto-mono);
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    padding: 1px 6px;
-    border-radius: var(--radius-pills);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  /* Card OUT State (Tonal Rose-Ash Inset) */
-  .bal-card.out-item {
-    border-color: var(--color-out);
-    background: var(--color-out-bg);
-  }
-  .bal-card.out-item .card-no {
-    color: var(--color-out);
-  }
-  .bal-card.out-item .out-flag {
-    position: absolute;
-    top: 6px;
-    left: 8px;
-    font-size: 8px;
-    font-weight: 500;
-    font-family: var(--font-roboto-mono);
-    background: var(--color-out);
+    font-size: 9.5px;
+    font-weight: 600;
+    font-family: var(--font-space);
+    background: var(--color-eucalyptus);
     color: #ffffff;
-    padding: 1px 6px;
+    padding: 2px 6px;
     border-radius: var(--radius-pills);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
-  .bal-card.out-item .card-status-label {
-    color: var(--color-out);
-    font-weight: 500;
-  }
 
-  /* DONE STATE (Olive Charcoal #3d3b2f Editorial Panel) */
+  /* DONE STATE (OEVRA SAGE HARMONY) */
   .bal-card.done {
-    background: var(--color-olive-charcoal);
-    border-color: var(--color-olive-charcoal);
+    background: var(--color-eucalyptus-wash);
+    border-color: var(--color-eucalyptus);
   }
   .bal-card.done .card-no {
-    color: var(--color-bone);
-    font-weight: 300;
-  }
-  .bal-card.done .meta-tag {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: var(--color-parchment);
+    color: var(--color-eucalyptus-dark);
+    font-weight: 400;
   }
   .bal-card.done .meta-tag-barcode {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: var(--color-bone);
+    background: var(--color-pure-canvas);
+    border-color: var(--color-eucalyptus);
+    color: var(--color-eucalyptus-dark);
   }
   .bal-card.done .card-status-label {
-    color: var(--color-silver);
+    color: var(--color-eucalyptus);
+    font-weight: 600;
   }
   .bal-card.done .badge-top-right {
     position: absolute;
     top: 6px;
     right: 8px;
-    font-size: 11px;
-    color: var(--color-bone);
-    font-family: var(--font-roboto-mono);
+    font-size: 13px;
+    color: var(--color-eucalyptus);
   }
 
   .bal-card.highlight {
-    border: 2px solid var(--color-ink);
+    border: 2px solid var(--color-eucalyptus);
+    box-shadow: 0 0 0 4px var(--color-eucalyptus-wash);
   }
 
-  /* Management Panel (Quiet Exhibition Canvas) */
+  /* Management Panel (Quiet Editorial Canvas) */
   .panel-management {
-    background: var(--color-bone);
-    border: 1px solid var(--color-ash);
+    background: var(--color-pure-canvas);
+    border: 1px solid var(--color-mist);
     border-radius: var(--radius-cards);
-    padding: 20px 16px;
-    margin-top: 24px;
+    padding: 24px 20px;
+    margin-top: 28px;
   }
   .panel-management h3 {
-    font-family: var(--font-eloquia-text);
-    font-size: 17px;
-    font-weight: 300;
-    letter-spacing: -0.4px;
-    text-transform: uppercase;
-    color: var(--color-ink);
+    font-family: var(--font-suisse);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--color-ink-black);
     margin: 0 0 6px;
   }
 
-  /* Modals (Clean Gallery Surfaces with 16px radius) */
+  /* Modals (Minimalist Glassmorphism) */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(250, 246, 243, 0.88);
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 14px;
+    padding: 16px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -863,23 +770,22 @@
     pointer-events: auto;
   }
   .modal-card {
-    background: var(--color-bone);
+    background: var(--color-pure-canvas);
     border-radius: var(--radius-cards);
     width: 100%;
     max-width: 480px;
-    max-height: 90vh;
+    max-height: 92vh;
     overflow-y: auto;
-    padding: 20px 18px;
-    border: 1px solid var(--color-ink);
+    padding: 24px 20px;
+    border: 1px solid var(--color-ink-black);
   }
   .modal-title {
-    font-family: var(--font-eloquia-text);
-    font-size: 18px;
+    font-family: var(--font-suisse);
+    font-size: 20px;
     font-weight: 300;
-    text-transform: uppercase;
-    letter-spacing: -0.45px;
-    color: var(--color-ink);
-    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-black);
+    margin: 0 0 10px;
   }
 
   /* Camera Scanner Viewfinder */
@@ -889,9 +795,9 @@
     background: #000000;
     border-radius: var(--radius-cards);
     overflow: hidden;
-    margin-bottom: 10px;
-    min-height: 220px;
-    border: 1px solid var(--color-ink);
+    margin-bottom: 12px;
+    min-height: 240px;
+    border: 1px solid var(--color-ink-black);
   }
   #scannerReader {
     width: 100% !important;
@@ -899,7 +805,7 @@
   #scannerReader video {
     width: 100% !important;
     height: auto !important;
-    max-height: 48vh;
+    max-height: 50vh;
     object-fit: cover;
   }
   .laser-scanner-line {
@@ -908,55 +814,53 @@
     left: 8%;
     right: 8%;
     height: 2px;
-    background: var(--color-saffron-dot);
-    box-shadow: 0 0 8px 1px var(--color-saffron-dot);
+    background: var(--color-eucalyptus);
+    box-shadow: 0 0 8px 1px var(--color-eucalyptus);
     z-index: 10;
     pointer-events: none;
     animation: scanLaser 1.8s infinite ease-in-out alternate;
   }
   @keyframes scanLaser {
-    0% { transform: translateY(-60px); opacity: 0.6; }
+    0% { transform: translateY(-70px); opacity: 0.6; }
     50% { opacity: 1; }
-    100% { transform: translateY(60px); opacity: 0.6; }
+    100% { transform: translateY(70px); opacity: 0.6; }
   }
 
   .scanner-result-popup {
-    background: var(--color-parchment);
-    border: 1px solid var(--color-ash);
-    border-radius: var(--radius-buttons);
-    padding: 10px;
-    margin: 10px 0;
+    background: var(--color-mist-light);
+    border: 1px solid var(--color-eucalyptus);
+    border-radius: 12px;
+    padding: 14px;
+    margin: 12px 0;
     text-align: center;
     display: none;
   }
   .scanner-result-nogud {
-    font-family: var(--font-eloquia-text);
-    font-size: 32px;
-    font-weight: 300;
-    text-transform: uppercase;
-    color: var(--color-ink);
+    font-family: var(--font-suisse);
+    font-size: 38px;
+    font-weight: 400;
+    color: var(--color-eucalyptus-dark);
     margin: 2px 0;
   }
 
   /* Toast Notification */
   .toast {
     position: fixed;
-    bottom: calc(var(--sab) + 20px);
+    bottom: calc(var(--sab) + 24px);
     left: 50%;
-    transform: translateX(-50%) translateY(40px);
-    background: var(--color-obsidian);
-    color: var(--color-bone);
-    font-family: var(--font-roboto-mono);
-    font-size: 11.5px;
-    font-weight: 400;
-    padding: 8px 18px;
+    transform: translateX(-50%) translateY(50px);
+    background: var(--color-ink-black);
+    color: var(--color-pure-canvas);
+    font-family: var(--font-space);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 22px;
     border-radius: var(--radius-pills);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 150;
     white-space: nowrap;
-    text-transform: uppercase;
   }
   .toast.show {
     opacity: 1;
@@ -965,23 +869,22 @@
 
   .empty-state {
     text-align: center;
-    padding: 40px 10px;
-    font-family: var(--font-roboto-mono);
-    color: var(--color-smoke);
-    font-size: 12px;
-    text-transform: uppercase;
+    padding: 50px 10px;
+    font-family: var(--font-space);
+    color: var(--color-graphite);
+    font-size: 14px;
   }
 </style>
 </head>
-<body class="font-mode-16pm">
+<body class="font-mode-a16">
 
-<!-- T.B.K JH Announcement Top Bar -->
-<div class="draw-announcement">
-  <div class="draw-announcement-left">
-    <span class="saffron-dot"></span>
-    <span>T.B.K JH · CEK BARKOT GUDANG INDUK</span>
+<!-- Oevra Quiet Topbar -->
+<div class="oevra-topbar">
+  <div class="oevra-topbar-left">
+    <span class="eucalyptus-dot"></span>
+    <span>Oevra Field Log · Grade Induk</span>
   </div>
-  <div id="cloudStatusBadge" style="font-family:var(--font-roboto-mono); font-size:10px; text-transform:uppercase;">
+  <div id="cloudStatusBadge" style="font-family:var(--font-mono); font-size:10.5px;">
     <span id="cloudStatusText">Offline</span>
   </div>
 </div>
@@ -989,25 +892,19 @@
 <header>
   <div class="header-main">
     <div class="title-group">
+      <p class="section-label">Field Inventory Record</p>
       <h1 class="display-title">Cek Barkot</h1>
-      <span class="display-subtitle" id="dateDisplayLabel">28 AGUSTUS</span>
+      <p class="display-subtitle" id="dateDisplayLabel">Memuat tanggal...</p>
     </div>
     <div class="header-actions">
-      <!-- Tombol Scan Barcode Kamera (Draw Ghost Button) -->
-      <button class="draw-btn-ghost header-btn" style="border-color:var(--color-ink); font-weight:500;" onclick="startScanner()" title="Buka Kamera Scan Barcode">
-        <span class="btn-icon">📷</span><span class="btn-text"> SCAN</span>
-      </button>
+      <!-- Tombol Scan Barcode Kamera (Filled Green CTA) -->
+      <button class="oevra-btn-filled" onclick="startScanner()" title="Buka Kamera Scan Barcode">📷 SCAN</button>
       <!-- Tombol Ukuran Teks / Mode -->
-      <button class="draw-btn-ghost header-btn" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">
-        <span class="btn-icon">📱</span><span class="btn-text"> 16 Pro Max</span>
-      </button>
+      <button class="oevra-btn-ghost" id="fontSizeBtn" onclick="cycleFontSize()" title="Atur Ukuran Teks">🔤 A16</button>
       <!-- Tombol Mode Kunci Anti Salah Pencet -->
-      <button class="draw-btn-ghost active-lock header-btn" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">
-        <span class="btn-icon">🔒</span><span class="btn-text"> ON</span>
-      </button>
-      <button class="draw-btn-ghost header-btn" id="soundBtn" onclick="toggleSound()" title="Suara Bip">
-        <span class="btn-icon">🔔</span>
-      </button>
+      <button class="oevra-btn-ghost active-lock" id="lockBtn" onclick="toggleLockMode()" title="Kunci Bal Selesai agar tidak ter-uncentang tidak sengaja">🔒 Kunci: ON</button>
+      <button class="oevra-btn-ghost" id="soundBtn" onclick="toggleSound()">🔔 Bip: ON</button>
+      <button class="oevra-btn-ghost" onclick="openConfigModal()">⚙️ Setup</button>
     </div>
   </div>
 
@@ -1015,16 +912,7 @@
   <div class="date-section">
     <div class="date-selector-row">
       <input type="date" id="datePicker" class="date-picker" onchange="onDateChanged(this.value)">
-      <div class="quick-dates-bar" id="quickDatesContainer">
-        <span class="date-pill" onclick="onDateChanged('2026-08-21')">21 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-22')">22 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-23')">23 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-27')">27 Ags</span>
-        <span class="date-pill" onclick="onDateChanged('2026-08-28')">28 Ags</span>
-        <span class="date-pill active" onclick="onDateChanged('2026-08-29')">29 Ags</span>
-      </div>
+      <div class="quick-dates-bar" id="quickDatesContainer"></div>
     </div>
   </div>
 
@@ -1034,65 +922,59 @@
       <div class="progress-fill" id="progressBar"></div>
     </div>
     <div class="progress-label-row">
-      <span>SELESAI: <b id="countDone">0</b> / <span id="countTotal">0</span></span>
-      <span>SISA: <b id="countRemain">0</b></span>
+      <span>Selesai: <b id="countDone">0</b> / <span id="countTotal">0</span></span>
+      <span>Sisa: <b id="countRemain">0</b></span>
       <span class="pct-badge" id="pctLabel">0%</span>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- Missing Bales Alert Banner (Obsidian Display Card) -->
-  <div class="missing-bal-banner" id="missingBanner" onclick="openMissingModal()">
+  <!-- Missing Bales Alert Banner -->
+  <div class="missing-bal-banner" id="missingBanner">
     <div class="missing-banner-left">
-      <span class="saffron-dot"></span>
-      <h4 class="missing-banner-title" id="missingBannerTitle">7 Bal Belum Ditempel (Belum Ketemu)</h4>
+      <div>
+        <h4 class="missing-banner-title">8 Bal Belum Ditempel (Belum Ketemu)</h4>
+        <p class="missing-banner-sub">31155, 33419, 33422, 33743, 33744, 32277, 32278, 943613</p>
+      </div>
     </div>
-    <span class="missing-link-btn" id="missingBannerBtn">Lihat & Kelola (7) →</span>
+    <button class="oevra-btn-ghost" style="border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="openMissingModal()">Lihat Detail (8) →</button>
   </div>
 
-  <!-- UNIFIED COMPACT SEARCH BAR -->
-  <div class="search-container-compact">
-    <div class="search-input-wrapper">
-      <span class="search-icon-badge">🔍</span>
-      <input type="text" id="unifiedSearchInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Cari No Gud (107) atau Barkot (943605)..." autocomplete="off" oninput="handleUnifiedSearch(this.value)">
-      <button class="search-clear-btn" id="searchClearBtn" onclick="clearUnifiedSearch()" title="Hapus pencarian">✕</button>
-    </div>
-    
-    <!-- Hidden compatibility inputs -->
-    <input type="hidden" id="searchNoGudInput">
-    <input type="hidden" id="searchBarkotInput">
-
-    <!-- Global Search Matches List -->
-    <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
-
-    <!-- Spotlight Inset Card (Obsidian Display Panel) -->
-    <div class="spotlight-inset" id="spotlightCard">
-      <div class="spotlight-top-row">
-        <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
-        <span id="spotGradeVal">GRADE 68</span>
-      </div>
-      <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
-      <div class="spotlight-meta-row">
-        <span id="spotKgVal">50 KG</span>
-        <span id="spotStatusVal">BELUM DIBARKOT</span>
-      </div>
-      <div id="spotKetVal" style="display:none; font-family:var(--font-roboto-mono); font-size:11.5px; font-weight:500; color:var(--color-bone); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:4px 8px; border-radius:4px; margin-bottom:8px; text-align:left;"></div>
+  <!-- EDITORIAL PANEL (PENCARIAN GLOBAL INSTAN) -->
+  <div class="editorial-panels">
+    <div class="panel-oevra">
+      <p class="panel-eyebrow"><span class="eucalyptus-dot"></span> Pencarian Lintas Seluruh Data</p>
+      <h2 class="panel-headline">Cari No Gud atau No Barkot</h2>
       
-      <!-- Spotlight Multi-Action Buttons (Draw Ghost Dark) -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-        <button class="draw-btn-ghost-dark" style="width:100%; min-height:38px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
-          ✓ Tandai Selesai
-        </button>
-        <button class="draw-btn-ghost-dark" style="width:100%; min-height:38px; border-color:var(--color-out); color:#fca5a5;" id="spotOutBtn" onclick="toggleSpotlightOut()">
-          🚫 Status: OUT
-        </button>
+      <div class="search-inputs-dual">
+        <div>
+          <label class="input-label-editorial">No Gud (Pekerja):</label>
+          <input type="text" id="searchNoGudInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="107" autocomplete="off" oninput="handleGlobalSearch('nogud')">
+        </div>
+        <div>
+          <label class="input-label-editorial">No Barkot (Stiker):</label>
+          <input type="text" id="searchBarkotInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="943605" autocomplete="off" oninput="handleGlobalSearch('barkot')">
+        </div>
       </div>
 
-      <!-- Quick Edit/Assign Barcode -->
-      <div style="display:flex; gap:6px;">
-        <input type="text" id="spotManualBarkotInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Isi / Ubah No Barkot..." style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.2); color:var(--color-bone); font-size:11.5px; min-height:32px; padding:4px 10px;">
-        <button class="draw-btn-ghost-dark" style="padding:4px 12px; font-size:10.5px; min-height:32px; white-space:nowrap;" onclick="saveSpotlightBarkot()">💾 Simpan Barkot</button>
+      <!-- Global Search Matches List -->
+      <div class="global-matches-container" id="globalMatchesBox" style="display:none;"></div>
+
+      <!-- Spotlight Inset Card -->
+      <div class="spotlight-inset" id="spotlightCard">
+        <div class="spotlight-top-row">
+          <span class="spotlight-no-label">NO GUD <span id="spotNoGudVal">107</span></span>
+          <span id="spotGradeVal">GRADE 68</span>
+        </div>
+        <div class="spotlight-barcode-huge" id="spotBarkotVal">943605</div>
+        <div class="spotlight-meta-row">
+          <span id="spotKgVal">50 KG</span>
+          <span id="spotStatusVal">BELUM DIBARKOT</span>
+        </div>
+        <button class="oevra-btn-filled" style="width:100%; min-height:50px;" id="spotToggleBtn" onclick="toggleSpotlightBal()">
+          ✓ Tandai Sudah Ditempel
+        </button>
       </div>
     </div>
   </div>
@@ -1101,73 +983,75 @@
   <div class="filter-bar">
     <div class="filter-pills">
       <button class="filter-pill active" onclick="setFilter('all', this)" id="tabAll">Semua (0)</button>
-      <button class="filter-pill" onclick="setFilter('with_barkot', this)" id="tabWithBarkot">Berbarkot (0)</button>
-      <button class="filter-pill" onclick="setFilter('no_barkot', this)" id="tabNoBarkot">Tanpa Barkot (0)</button>
-      <button class="filter-pill out-pill" onclick="setFilter('out', this)" id="tabOut">🚫 OUT (0)</button>
       <button class="filter-pill" onclick="setFilter('pending', this)" id="tabPending">Belum (0)</button>
       <button class="filter-pill" onclick="setFilter('done', this)" id="tabDone">Sudah (0)</button>
-      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Hilang (0)</button>
+      <button class="filter-pill missing-pill" onclick="setFilter('missing', this)" id="tabMissing">⚠️ Belum Ketemu (0)</button>
     </div>
     <div class="batch-actions">
-      <button class="draw-btn-ghost" style="padding:4px 8px; font-size:10.5px; min-height:29px;" onclick="checkAllBal()">✓ Semua</button>
-      <button class="draw-btn-ghost" style="padding:4px 8px; font-size:10.5px; min-height:29px;" onclick="uncheckAllBal()">↺ Reset</button>
+      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11.5px;" onclick="checkAllBal()">✓ Centang Semua</button>
+      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11.5px;" onclick="uncheckAllBal()">↺ Reset</button>
+      <button class="oevra-btn-filled" style="padding:6px 14px; font-size:11.5px;" onclick="startScanner()">📷 Scan</button>
     </div>
   </div>
 
-  <!-- Main 2-Column Bal Grid (DrawHistory Editorial Clean) -->
+  <!-- Main 2-Column Bal Grid (Oevra Botanical Clean) -->
   <div class="bal-grid" id="balGrid"></div>
   <div class="empty-state" id="emptyMsg" style="display:none;">Tidak ada data bal untuk tanggal ini.</div>
 
-  <!-- Management Panel (Quiet Exhibition Canvas) -->
+  <!-- Management Panel (Oevra Minimal Canvas) -->
   <div class="panel-management">
-    <p style="font-family:var(--font-roboto-mono); font-size:10px; font-weight:400; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-smoke); margin:0 0 4px;">Sinkronisasi Cloud & Berkas</p>
+    <p class="section-label">Sinkronisasi Cloud & Berkas</p>
     <h3>Pengelolaan Berkas Excel</h3>
-    <p style="font-family:var(--font-eloquia-text); font-size:13px; color:var(--color-smoke); margin:0 0 14px;">
-      Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru (termasuk bal tanpa barkot & bal OUT):
+    <p style="font-size:13.5px; color:var(--color-graphite); margin:0 0 16px;">
+      Unggah berkas Excel harian (.xlsx) untuk memuat nomor bal baru atau salin rekap laporan ke WhatsApp:
     </p>
-    <div style="display:flex; flex-wrap:wrap; gap:6px;">
-      <label class="draw-btn-ghost" style="cursor:pointer;">
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <label class="oevra-btn-ghost" style="cursor:pointer;">
         📥 Upload Excel (.xlsx)
         <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleExcelUpload(event)">
       </label>
-      <button class="draw-btn-ghost" onclick="syncAllLocalToCloud()">☁️ Upload ke Cloud</button>
-      <button class="draw-btn-ghost" onclick="copyWaSummary()">📋 Salin Rekap WA</button>
-      <button class="draw-btn-ghost" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
+      <button class="oevra-btn-ghost" onclick="syncAllLocalToCloud()">☁️ Upload ke Cloud</button>
+      <button class="oevra-btn-ghost" onclick="copyWaSummary()">📋 Salin Rekap WA</button>
+      <button class="oevra-btn-ghost" onclick="refreshCurrentDateData()">🔄 Muat Ulang</button>
     </div>
 
-    <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--color-ash); display:flex; gap:6px; flex-wrap:wrap;">
-      <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
-      <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px; border-color:var(--color-out); color:var(--color-out);" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
+    <div style="margin-top:20px; padding-top:14px; border-top:1px solid var(--color-mist); display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="oevra-btn-ghost" style="font-size:11px; padding:6px 12px;" onclick="uncheckAllBal()">Reset Centang Hari Ini</button>
+      <button class="oevra-btn-ghost" style="font-size:11px; padding:6px 12px; border-color:#e11d48; color:#e11d48;" onclick="clearCurrentDateData()">Hapus Data Hari Ini</button>
     </div>
   </div>
 </main>
 
-<!-- Modal Bal Belum Ketemu (Dinamis: Bisa Tambah & Hapus) -->
+<!-- Modal 8 Bal Belum Ditempel -->
 <div class="modal-overlay" id="missingModal">
-  <div class="modal-card" style="max-width: 520px; width: 94%; max-height: 92vh; padding: 18px 16px; border-radius: 16px; display: flex; flex-direction: column;">
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
-      <div>
-        <p style="font-family:var(--font-roboto-mono); font-size:10.5px; font-weight:600; text-transform:uppercase; color:var(--color-smoke); margin:0 0 2px; letter-spacing:0.04em;">Daftar Belum Ditempel</p>
-        <h3 class="modal-title" id="missingModalTitle" style="margin:0; font-size:18px;">Bal Belum Ketemu</h3>
-      </div>
-      <button class="draw-btn-ghost" style="padding:4px 10px; font-size:12px; min-height:28px; font-weight:bold;" onclick="closeMissingModal()">✕</button>
-    </div>
-    <p style="font-family:var(--font-eloquia-text); font-size:12px; color:var(--color-smoke); margin:0 0 10px; line-height:1.4;">
-      Daftar barcode yang belum ditempel fisik balnya. Anda dapat menghapus barcode yang sudah ditemukan atau menambah barcode baru:
+  <div class="modal-card">
+    <p class="section-label">Belum Ditempel</p>
+    <h3 class="modal-title">8 Bal Belum Ketemu</h3>
+    <p style="font-size:13px; color:var(--color-graphite); margin:0 0 14px;">
+      Daftar 8 barcode yang belum ditempel karena bal tembakau belum ditemukan di gudang:
     </p>
-
-    <!-- Form Tambah Barcode Belum Ketemu -->
-    <div style="display:flex; gap:6px; margin-bottom:10px;">
-      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot baru (misal: 31155)..." style="font-size:13px; min-height:38px; padding:6px 12px; flex:1;" onkeydown="if(event.key==='Enter') addNewMissingBarcode()">
-      <button class="draw-btn-ghost" style="background:var(--color-obsidian); color:var(--color-bone); border-color:var(--color-obsidian); padding:6px 16px; font-size:12px; min-height:38px; font-weight:600; white-space:nowrap;" onclick="addNewMissingBarcode()">+ Tambah</button>
+    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+      <button class="oevra-btn-ghost" onclick="closeMissingModal()">Tutup</button>
     </div>
+  </div>
+</div>
 
-    <!-- List Item Belum Ketemu -->
-    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:55vh; overflow-y:auto; padding-right:2px;"></div>
+<!-- Modal Setup Supabase -->
+<div class="modal-overlay" id="configModal">
+  <div class="modal-card">
+    <p class="section-label">Cloud Configuration</p>
+    <h3 class="modal-title">Pengaturan Supabase</h3>
+    
+    <label style="font-family:var(--font-space); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-graphite); display:block; margin-bottom:4px;">Project URL:</label>
+    <input type="text" id="cfgUrl" class="editorial-input" style="font-size:14px; margin-bottom:12px;" placeholder="https://jrpklibocgicubevyshm.supabase.co" autocapitalize="none" autocomplete="off">
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid var(--color-ash);">
-      <button class="draw-btn-ghost" style="font-size:11px; padding:5px 10px; color:var(--color-smoke);" onclick="resetMissingBarcodesDefault()">↺ Reset Default</button>
-      <button class="draw-btn-ghost" style="font-size:12px; padding:5px 16px; font-weight:600;" onclick="closeMissingModal()">Tutup</button>
+    <label style="font-family:var(--font-space); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-graphite); display:block; margin-bottom:4px;">Anon Public Key:</label>
+    <input type="password" id="cfgKey" class="editorial-input" style="font-size:14px; margin-bottom:16px;" placeholder="eyJhbGciOi..." autocapitalize="none" autocomplete="off">
+
+    <div style="display:flex; justify-content:flex-end; gap:8px;">
+      <button class="oevra-btn-ghost" onclick="closeConfigModal()">Batal</button>
+      <button class="oevra-btn-filled" onclick="saveSupabaseConfig()">Simpan & Hubungkan</button>
     </div>
   </div>
 </div>
@@ -1177,10 +1061,10 @@
   <div class="modal-card" style="text-align:center; max-width:480px; padding:20px 16px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <div>
-        <p style="font-family:var(--font-roboto-mono); font-size:10px; text-transform:uppercase; color:var(--color-smoke); text-align:left; margin:0;">Optical Reader</p>
+        <p class="section-label" style="text-align:left; margin:0;">Optical Reader</p>
         <h3 class="modal-title" style="margin:0; text-align:left;">Pindai Barcode</h3>
       </div>
-      <button class="draw-btn-ghost" style="min-height:32px; padding:4px 12px; font-size:11px;" onclick="stopScanner()">✕ Tutup</button>
+      <button class="oevra-btn-ghost" style="min-height:34px; padding:4px 12px; font-size:11px;" onclick="stopScanner()">✕ Tutup</button>
     </div>
 
     <!-- Scanner Viewfinder -->
@@ -1191,28 +1075,28 @@
 
     <!-- Controls: Senter & Kamera -->
     <div style="display:flex; justify-content:space-between; gap:8px; margin:8px 0;">
-      <button class="draw-btn-ghost" id="torchBtn" style="flex:1; min-height:38px; font-size:11.5px;" onclick="toggleTorch()">🔦 Nyalakan Senter</button>
-      <button class="draw-btn-ghost" style="flex:1; min-height:38px; font-size:11.5px;" onclick="switchCamera()">🔄 Ganti Kamera</button>
+      <button class="oevra-btn-ghost" id="torchBtn" style="flex:1; min-height:40px; font-size:11.5px;" onclick="toggleTorch()">🔦 Nyalakan Senter</button>
+      <button class="oevra-btn-ghost" style="flex:1; min-height:40px; font-size:11.5px;" onclick="switchCamera()">🔄 Ganti Kamera</button>
     </div>
 
     <!-- Instant Result Box -->
     <div class="scanner-result-popup" id="scannerResultBox">
-      <div style="font-family:var(--font-roboto-mono); font-size:10.5px; text-transform:uppercase; color:var(--color-smoke);">HASIL SCAN DITEMUKAN:</div>
+      <div style="font-size:11px; text-transform:uppercase; color:var(--color-graphite); font-weight:600;">HASIL SCAN DITEMUKAN:</div>
       <div class="scanner-result-nogud" id="scanFoundNoGud">NO GUD 107</div>
-      <div style="font-family:var(--font-roboto-mono); font-size:15px; color:var(--color-ink); font-weight:500;" id="scanFoundBarkot">Barkot: 943605</div>
-      <div style="font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
+      <div style="font-family:var(--font-mono); font-size:15px; color:var(--color-eucalyptus-dark); font-weight:600;" id="scanFoundBarkot">Barkot: 943605</div>
+      <div style="font-size:13px; color:var(--color-graphite); margin-top:4px;" id="scanFoundMeta">GRADE 68 · 50 KG</div>
     </div>
 
-    <p id="scannerStatus" style="font-family:var(--font-roboto-mono); font-size:11px; color:var(--color-smoke); margin:8px 0; text-transform:uppercase;">
-      Arahkan garis melintang ke stiker barcode...
+    <p id="scannerStatus" style="font-family:var(--font-space); font-size:12px; font-weight:500; color:var(--color-graphite); margin:8px 0;">
+      Arahkan garis sage green melintang ke stiker barcode...
     </p>
 
     <!-- Quick Manual Input in Scanner -->
-    <div style="background:var(--color-parchment); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:10px; margin-top:8px; text-align:left;">
-      <label style="font-family:var(--font-roboto-mono); font-size:10px; color:var(--color-smoke); display:block; margin-bottom:4px; text-transform:uppercase;">
+    <div style="background:#fafbf9; border:1px solid var(--color-mist); border-radius:10px; padding:10px; margin-top:8px; text-align:left;">
+      <label style="font-family:var(--font-space); font-size:11px; font-weight:600; color:var(--color-graphite); display:block; margin-bottom:4px; text-transform:uppercase;">
         Atau ketik angka barkot di sini:
       </label>
-      <input type="text" id="scannerQuickInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 34088" autocomplete="off" oninput="handleQuickScannerInput(this.value)">
+      <input type="text" id="scannerQuickInput" class="editorial-input" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 34088" autocomplete="off" oninput="handleQuickScannerInput(this.value)">
     </div>
   </div>
 </div>
@@ -4906,189 +4790,184 @@ const SEED_DATA = {
       "is_out": true,
       "ket": "out kotor"
     }
+  ],
+  "2026-08-30": [
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 585,
+      "grade": "70",
+      "barkot": "34803",
+      "kg": 38,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 586,
+      "grade": "70",
+      "barkot": "34809",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 587,
+      "grade": "68",
+      "barkot": "34808",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 588,
+      "grade": "70",
+      "barkot": "34810",
+      "kg": 46,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 589,
+      "grade": "66",
+      "barkot": "34806",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 590,
+      "grade": "64",
+      "barkot": "34494",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 591,
+      "grade": "70",
+      "barkot": "34813",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 592,
+      "grade": "68",
+      "barkot": "34814",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 593,
+      "grade": "66",
+      "barkot": "34812",
+      "kg": 45,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 594,
+      "grade": "66",
+      "barkot": "34807",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 595,
+      "grade": "66",
+      "barkot": "34811",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 596,
+      "grade": "55",
+      "barkot": "34362",
+      "kg": 45,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 597,
+      "grade": "56",
+      "barkot": "34364",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 598,
+      "grade": "56",
+      "barkot": "34363",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 599,
+      "grade": "57",
+      "barkot": "34361",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 600,
+      "grade": "64",
+      "barkot": "34805",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 601,
+      "grade": "65",
+      "barkot": "",
+      "kg": null,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 602,
+      "grade": "65",
+      "barkot": "",
+      "kg": null,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 603,
+      "grade": "61",
+      "barkot": "34496",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 604,
+      "grade": "63",
+      "barkot": "34495",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-30",
+      "no_gud": 606,
+      "grade": "70",
+      "barkot": "34804",
+      "kg": 46,
+      "is_done": false
+    }
   ]
 };
 
-const DEFAULT_MISSING_BARCODES = ["31155", "33419", "33422", "33743", "33744", "32277", "32278", "34240", "943647"];
+const MISSING_BARCODES = ["31155", "33419", "33422", "33743", "33744", "32277", "32278", "34240", "943647"];
 
-function getMissingBarcodesList() {
-  try {
-    const raw = localStorage.getItem('barkot_missing_list');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch(e) {}
-  return [...DEFAULT_MISSING_BARCODES];
-}
-
-function saveMissingBarcodesList(arr) {
-  try {
-    localStorage.setItem('barkot_missing_list', JSON.stringify(arr));
-  } catch(e) {}
-  updateMissingBannerCount();
-  render();
-}
-
-function openMissingModal() {
-  updateMissingBannerCount();
-  const modal = document.getElementById('missingModal');
-  const container = document.getElementById('missingListContainer');
-  const list = getMissingBarcodesList();
-  
-  if (!modal || !container) return;
-
-  container.innerHTML = '';
-  if (list.length === 0) {
-    container.innerHTML = `
-      <div style="padding:24px 16px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase; background:var(--color-mist-light); border-radius:10px; border:1px dashed var(--color-ash);">
-        ✓ Semua barcode sudah ditempel / ditemukan!
-      </div>
-    `;
-  } else {
-    // Cari detail No Gud, Tanggal, Grade untuk setiap barcode yang belum ditempel
-    list.forEach(code => {
-      let matchedItem = null;
-      let matchedDate = null;
-
-      for (const tgl of Object.keys(SEED_DATA)) {
-        const item = SEED_DATA[tgl].find(x => String(x.barkot || '').trim() === String(code).trim());
-        if (item) {
-          matchedItem = item;
-          matchedDate = tgl;
-          break;
-        }
-      }
-
-      if (!matchedItem && state.list) {
-        const item = state.list.find(x => String(x.barkot || '').trim() === String(code).trim());
-        if (item) {
-          matchedItem = item;
-          matchedDate = currentDate;
-        }
-      }
-
-      const card = document.createElement('div');
-      card.style.cssText = 'background:#ffffff; border:1.5px solid var(--color-ink); border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; gap:8px; box-shadow:0 1px 4px rgba(0,0,0,0.05);';
-
-      if (matchedItem) {
-        const isOut = Boolean(matchedItem.is_out);
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <span style="font-family:var(--font-roboto-mono); font-size:15.5px; font-weight:800; color:#ffffff; background:var(--color-ink); padding:3px 10px; border-radius:6px; letter-spacing:-0.3px; display:inline-flex; align-items:center;">
-                NO GUD ${matchedItem.no_gud}
-              </span>
-              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
-                Barkot <b>${code}</b>
-              </span>
-              ${isOut ? '<span style="color:var(--color-out); font-weight:700; font-size:11px; background:#fee2e2; padding:2px 6px; border-radius:4px;">OUT</span>' : ''}
-            </div>
-
-            <div style="display:flex; gap:6px; flex-shrink:0; align-items:center;">
-              <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:var(--color-ink); font-weight:600; background:var(--color-mist-light); border-radius:8px;" onclick="closeMissingModal(); jumpToGlobalBal('${matchedDate}', ${matchedItem.no_gud})">
-                🔍 Buka
-              </button>
-              <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:#16a34a; color:#15803d; background:#f0fdf4; font-weight:700; border-radius:8px;" onclick="removeMissingBarcode('${code}')" title="Tandai Sudah Ditempel / Ketemu">
-                ✓ Ketemu
-              </button>
-            </div>
-          </div>
-
-          <div style="font-family:var(--font-suisse, -apple-system, sans-serif); font-size:12px; color:var(--color-smoke); line-height:1.4; display:flex; flex-wrap:wrap; gap:4px 10px; padding-top:6px; border-top:1px dashed var(--color-ash); align-items:center;">
-            <span>📅 <b>${formatDateIndo(matchedDate)}</b></span>
-            <span>GRADE: <b style="color:var(--color-ink);">${matchedItem.grade || '—'}</b></span>
-            <span>BERAT: <b style="color:var(--color-ink);">${matchedItem.kg ? matchedItem.kg + ' KG' : '—'}</b></span>
-            ${matchedItem.ket ? `<span style="color:var(--color-graphite);">📝 <b>${matchedItem.ket}</b></span>` : ''}
-          </div>
-        `;
-      } else {
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-family:var(--font-roboto-mono); font-size:13px; font-weight:700; color:#b91c1c; background:#fee2e2; padding:3px 8px; border-radius:6px;">
-                MANUAL
-              </span>
-              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
-                Barkot <b>${code}</b>
-              </span>
-            </div>
-            <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:#16a34a; color:#15803d; background:#f0fdf4; font-weight:700; border-radius:8px;" onclick="removeMissingBarcode('${code}')">
-              ✓ Ketemu
-            </button>
-          </div>
-          <div style="font-family:var(--font-suisse, -apple-system, sans-serif); font-size:11.5px; color:var(--color-smoke); padding-top:4px; border-top:1px dashed var(--color-ash);">
-            <i>(Nomor barkot dicatat di lapangan / belum terdaftar di data induk bawaan)</i>
-          </div>
-        `;
-      }
-
-      container.appendChild(card);
-    });
-  }
-
-  modal.classList.add('open');
-}
-
-function closeMissingModal() {
-  const modal = document.getElementById('missingModal');
-  if (modal) modal.classList.remove('open');
-}
-
-function updateMissingBannerCount() {
-  const list = getMissingBarcodesList();
-  const count = list.length;
-  const banner = document.getElementById('missingBanner');
-  const title = document.getElementById('missingBannerTitle');
-  const btn = document.getElementById('missingBannerBtn');
-  const modalTitle = document.getElementById('missingModalTitle');
-  
-  if (count === 0) {
-    if (banner) banner.style.display = 'none';
-  } else {
-    if (banner) banner.style.display = 'flex';
-    if (title) title.textContent = `${count} Bal Belum Ditempel (Belum Ketemu)`;
-    if (btn) btn.textContent = `Lihat & Kelola (${count}) →`;
-  }
-  if (modalTitle) modalTitle.textContent = `${count} Bal Belum Ketemu`;
-}
-
-function removeMissingBarcode(code) {
-  const currentList = getMissingBarcodesList();
-  const updated = currentList.filter(b => b !== code);
-  saveMissingBarcodesList(updated);
-  openMissingModal();
-  showToast(`✓ Barkot ${code} ditandai ketemu & dihapus dari list`);
-}
-
-function addNewMissingBarcode() {
-  const input = document.getElementById('newMissingInput');
-  const code = (input?.value || '').trim();
-  if (!code) {
-    showToast('Ketik nomor barkot terlebih dahulu');
-    return;
-  }
-  const currentList = getMissingBarcodesList();
-  if (currentList.includes(code)) {
-    showToast(`Barkot ${code} sudah ada di daftar`);
-    return;
-  }
-  currentList.push(code);
-  saveMissingBarcodesList(currentList);
-  if (input) input.value = '';
-  openMissingModal();
-  showToast(`✓ Barkot ${code} ditambahkan ke daftar belum ketemu`);
-}
-
-function resetMissingBarcodesDefault() {
-  if (confirm('Kembalikan daftar barkot belum ketemu ke data bawaan (7 bal)?')) {
-    saveMissingBarcodesList([...DEFAULT_MISSING_BARCODES]);
-    openMissingModal();
-    showToast('Daftar di-reset ke bawaan default');
-  }
-}
-
-let currentDate = '2026-08-29';
+let currentDate = '2026-08-30';
 let state = {
   list: [],
   doneMap: {}
@@ -5101,27 +4980,24 @@ let supabaseClient = null;
 let realtimeChannel = null;
 let activeSpotlightBal = null;
 
-// Ukuran Font State: '16pm' (iPhone 16 Pro Max), 'a16', 'lansia', 'normal'
-let currentFontSizeMode = localStorage.getItem('barkot_font_mode') || '16pm';
+// Ukuran Font State: 'a16' (Default), 'lansia', 'normal'
+let currentFontSizeMode = localStorage.getItem('barkot_font_mode') || 'a16';
 
 function initFontSize() {
   applyFontSize(currentFontSizeMode);
 }
 
 function cycleFontSize() {
-  if (currentFontSizeMode === '16pm') {
-    currentFontSizeMode = 'a16';
-  } else if (currentFontSizeMode === 'a16') {
+  if (currentFontSizeMode === 'a16') {
     currentFontSizeMode = 'lansia';
   } else if (currentFontSizeMode === 'lansia') {
     currentFontSizeMode = 'normal';
   } else {
-    currentFontSizeMode = '16pm';
+    currentFontSizeMode = 'a16';
   }
   localStorage.setItem('barkot_font_mode', currentFontSizeMode);
   applyFontSize(currentFontSizeMode);
   const labels = {
-    '16pm': 'Mode: iPhone 16 Pro Max (OLED 6.9")',
     'a16': 'Mode Teks: Besar (A16)',
     'lansia': 'Mode Teks: Ekstra Besar (Lansia)',
     'normal': 'Mode Teks: Normal'
@@ -5130,27 +5006,65 @@ function cycleFontSize() {
 }
 
 function applyFontSize(mode) {
-  document.body.classList.remove('font-mode-normal', 'font-mode-a16', 'font-mode-lansia', 'font-mode-16pm');
+  document.body.classList.remove('font-mode-normal', 'font-mode-a16', 'font-mode-lansia');
   document.body.classList.add('font-mode-' + mode);
   const btn = document.getElementById('fontSizeBtn');
   if (btn) {
-    let icon = '📱';
-    let text = ' 16 Pro Max';
-    if (mode === '16pm') {
-      icon = '📱';
-      text = ' 16 Pro Max';
-    } else if (mode === 'a16') {
-      icon = '📱';
-      text = ' A16';
-    } else if (mode === 'lansia') {
-      icon = '🔤';
-      text = ' Lansia';
-    } else if (mode === 'normal') {
-      icon = '🔤';
-      text = ' Normal';
-    }
-    btn.innerHTML = `<span class="btn-icon">${icon}</span><span class="btn-text">${text}</span>`;
+    if (mode === 'lansia') btn.textContent = '🔤 Lansia';
+    else if (mode === 'normal') btn.textContent = '🔤 Normal';
+    else btn.textContent = '🔤 A16';
   }
+}
+
+// ==========================================
+// MODAL 8 BAL BELUM KETEMU
+// ==========================================
+function openMissingModal() {
+  const container = document.getElementById('missingListContainer');
+  container.innerHTML = '';
+
+  const allFound = [];
+  for (const b of MISSING_BARCODES) {
+    for (const tgl of Object.keys(SEED_DATA)) {
+      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === b);
+      if (match) {
+        allFound.push({ ...match, tgl: tgl });
+        break;
+      }
+    }
+  }
+
+  allFound.forEach(it => {
+    const itemEl = document.createElement('div');
+    itemEl.style.cssText = 'background:#fafbf8; border:1px solid var(--color-mist); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+    itemEl.innerHTML = `
+      <div style="display:flex; flex-direction:column;">
+        <span style="font-family:var(--font-mono); font-size:16px; font-weight:700; color:var(--color-eucalyptus-dark);">Barkot ${it.barkot}</span>
+        <span style="font-family:var(--font-space); font-size:11.5px; color:var(--color-graphite);">Tgl: ${formatDateIndo(it.tgl)} · No Gud: ${it.no_gud} · GR: ${it.grade} · ${it.kg || '-'}kg</span>
+      </div>
+      <button class="oevra-btn-ghost" style="padding:6px 12px; font-size:11px; border-color:var(--color-eucalyptus);" onclick="jumpToMissingBal('${it.tgl}', ${it.no_gud})">🔍 Buka</button>
+    `;
+    container.appendChild(itemEl);
+  });
+
+  document.getElementById('missingModal').classList.add('open');
+}
+
+function closeMissingModal() {
+  document.getElementById('missingModal').classList.remove('open');
+}
+
+function jumpToMissingBal(tgl, no_gud) {
+  closeMissingModal();
+  onDateChanged(tgl);
+  setTimeout(() => {
+    const target = state.list.find(x => x.no_gud === no_gud);
+    if (target) {
+      showSpotlight(target);
+      const cardElem = Array.from(document.querySelectorAll('.bal-card')).find(el => el.querySelector('.card-no')?.textContent === String(no_gud));
+      if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
 }
 
 // ==========================================
@@ -5267,10 +5181,7 @@ function playBeep(isSuccess = true) {
 function toggleSound() {
   initAudio();
   soundEnabled = !soundEnabled;
-  const btn = document.getElementById('soundBtn');
-  if (btn) {
-    btn.innerHTML = soundEnabled ? '<span class="btn-icon">🔔</span><span class="btn-text"> ON</span>' : '<span class="btn-icon">🔕</span><span class="btn-text"> OFF</span>';
-  }
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔔 Bip: ON' : '🔕 Bip: OFF';
   showToast(soundEnabled ? 'Suara Bip Aktif' : 'Suara Bip Nonaktif');
 }
 
@@ -5301,14 +5212,12 @@ function toggleLockMode() {
 
 function updateLockBtnUI() {
   const btn = document.getElementById('lockBtn');
-  if (btn) {
-    if (lockModeEnabled) {
-      btn.innerHTML = '<span class="btn-icon">🔒</span><span class="btn-text"> ON</span>';
-      btn.className = 'draw-btn-ghost active-lock header-btn';
-    } else {
-      btn.innerHTML = '<span class="btn-icon">🔓</span><span class="btn-text"> OFF</span>';
-      btn.className = 'draw-btn-ghost header-btn';
-    }
+  if (lockModeEnabled) {
+    btn.textContent = '🔒 Kunci: ON';
+    btn.className = 'oevra-btn-ghost active-lock';
+  } else {
+    btn.textContent = '🔓 Kunci: OFF';
+    btn.className = 'oevra-btn-ghost';
   }
 }
 
@@ -5331,19 +5240,41 @@ function formatDateIndo(dateStr) {
   return `${hari}, ${d.getDate()} ${bulan} ${d.getFullYear()}`;
 }
 
+function renderQuickDates() {
+  const container = document.getElementById('quickDatesContainer');
+  if (!container) return;
+  
+  const dateSet = new Set(Object.keys(SEED_DATA));
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('barkot_local:')) {
+      dateSet.add(key.replace('barkot_local:', ''));
+    }
+  }
+  if (currentDate) dateSet.add(currentDate);
+
+  const sortedDates = Array.from(dateSet).sort();
+  container.innerHTML = '';
+
+  sortedDates.forEach(dateStr => {
+    const d = new Date(dateStr + 'T00:00:00');
+    const day = d.getDate();
+    const count = (SEED_DATA[dateStr] || []).length;
+    const pill = document.createElement('span');
+    pill.className = 'date-pill' + (dateStr === currentDate ? ' active' : '');
+    pill.textContent = `${day} Ags (${count})`;
+    pill.onclick = () => onDateChanged(dateStr);
+    container.appendChild(pill);
+  });
+}
+
 function onDateChanged(newDate) {
   if (!newDate) return;
   currentDate = newDate;
   document.getElementById('datePicker').value = currentDate;
   document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
 
-  document.querySelectorAll('.date-pill').forEach(chip => {
-    const chipText = chip.textContent;
-    const day = newDate.split('-')[2];
-    const isCurrent = chipText.includes(parseInt(day, 10) + ' Ags');
-    chip.classList.toggle('active', isCurrent);
-  });
-
+  renderQuickDates();
   hideSpotlight();
   loadDataForCurrentDate();
 }
@@ -5356,20 +5287,6 @@ function saveLocalState() {
 
 async function loadDataForCurrentDate() {
   let found = false;
-  const syncVersion = '2026_08_29_v2';
-  const lastSync = localStorage.getItem('barkot_sync_ver');
-  if (lastSync !== syncVersion) {
-    // Clear old cache to apply fresh checked state for all dates
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith('barkot_local:')) {
-        localStorage.removeItem(k);
-        i--;
-      }
-    }
-    localStorage.setItem('barkot_sync_ver', syncVersion);
-  }
-
   const raw = localStorage.getItem('barkot_local:' + currentDate);
   if (raw) {
     try {
@@ -5384,11 +5301,9 @@ async function loadDataForCurrentDate() {
 
   if (!found && SEED_DATA[currentDate]) {
     const doneMap = {};
-    const missingList = getMissingBarcodesList();
     const list = SEED_DATA[currentDate].map(x => {
-      const isMissing = missingList.includes(String(x.barkot || '').trim());
-      const isOut = Boolean(x.is_out);
-      const isDone = x.is_done !== undefined ? Boolean(x.is_done) : (!isMissing && !isOut);
+      const isMissing = MISSING_BARCODES.includes(String(x.barkot).trim());
+      const isDone = !isMissing;
       if (isDone) doneMap[x.no_gud] = true;
       return {
         ...x,
@@ -5409,7 +5324,6 @@ async function loadDataForCurrentDate() {
   }
 
   render();
-  updateMissingBannerCount();
 
   if (supabaseClient) {
     try {
@@ -5426,6 +5340,7 @@ async function loadDataForCurrentDate() {
           if (x.is_done) state.doneMap[x.no_gud] = true;
         });
         saveLocalState();
+        renderQuickDates();
         render();
       }
     } catch(err) {
@@ -5513,115 +5428,85 @@ async function uncheckAllBal() {
 // ==========================================
 // PENCARIAN GLOBAL INSTAN SELURUH DATA
 // ==========================================
-function handleUnifiedSearch(val) {
-  const q = String(val || '').trim();
-  const clearBtn = document.getElementById('searchClearBtn');
-  const matchesBox = document.getElementById('globalMatchesBox');
+function handleGlobalSearch(type) {
   const nogudInput = document.getElementById('searchNoGudInput');
   const barkotInput = document.getElementById('searchBarkotInput');
-  
-  if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+  const matchesBox = document.getElementById('globalMatchesBox');
+
+  let q = '';
+  if (type === 'nogud') {
+    q = nogudInput.value.trim();
+    if (q) barkotInput.value = '';
+  } else {
+    q = barkotInput.value.trim();
+    if (q) nogudInput.value = '';
+  }
 
   if (!q) {
-    if (nogudInput) nogudInput.value = '';
-    if (barkotInput) barkotInput.value = '';
-    if (matchesBox) {
-      matchesBox.style.display = 'none';
-      matchesBox.innerHTML = '';
-    }
+    matchesBox.style.display = 'none';
+    matchesBox.innerHTML = '';
     hideSpotlight();
     render();
     return;
   }
 
-  if (nogudInput) nogudInput.value = q;
-  if (barkotInput) barkotInput.value = q;
+  const allMatches = [];
 
-  const rawMatches = [];
-  const missingList = getMissingBarcodesList();
+  state.list.forEach(item => {
+    let match = false;
+    if (type === 'nogud') {
+      match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+    } else {
+      match = (item.barkot && String(item.barkot).includes(q));
+    }
+    if (match) {
+      allMatches.push({ ...item, tanggal: currentDate, isCurrentDate: true });
+    }
+  });
 
-  // Kumpulkan & Beri Bobot / Ranking Pencarian dari semua tanggal
   for (const tgl of Object.keys(SEED_DATA)) {
-    const isCur = (tgl === currentDate);
-    const sourceList = isCur ? state.list : SEED_DATA[tgl];
-    
-    sourceList.forEach(item => {
-      const noStr = String(item.no_gud || '');
-      const bcStr = String(item.barkot || '');
-      
-      let rank = 99;
-      if (noStr === q) {
-        rank = 1; // Prioritas 1: No Gud persis sama (misal 36 atau 37)
-      } else if (bcStr === q) {
-        rank = 2; // Prioritas 2: Barkot persis sama
-      } else if (noStr.startsWith(q)) {
-        rank = 3; // Prioritas 3: No Gud berawalan angka dicari (misal 36 -> 360, 361)
-      } else if (bcStr.startsWith(q)) {
-        rank = 4; // Prioritas 4: Barkot berawalan angka dicari
-      } else if (bcStr.includes(q)) {
-        rank = 5; // Prioritas 5: Barkot mengandung angka dicari
-      } else if (noStr.includes(q)) {
-        rank = 6; // Prioritas 6: No Gud mengandung angka dicari
+    if (tgl === currentDate) continue;
+    SEED_DATA[tgl].forEach(item => {
+      let match = false;
+      if (type === 'nogud') {
+        match = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
+      } else {
+        match = (item.barkot && String(item.barkot).includes(q));
       }
-
-      if (rank < 99) {
-        rawMatches.push({
-          rank: rank,
-          item: { ...item, tanggal: tgl, isCurrentDate: isCur }
-        });
+      if (match) {
+        allMatches.push({ ...item, tanggal: tgl, isCurrentDate: false });
       }
     });
   }
 
-  // Urutkan: Rank Terbaik (1 -> 6) -> Tanggal Aktif -> Tanggal Terbaru -> No Gud Terkecil
-  rawMatches.sort((a, b) => {
-    if (a.rank !== b.rank) return a.rank - b.rank;
-    if (a.item.isCurrentDate !== b.item.isCurrentDate) return a.item.isCurrentDate ? -1 : 1;
-    if (a.item.tanggal !== b.item.tanggal) return b.item.tanggal.localeCompare(a.item.tanggal);
-    return (a.item.no_gud || 0) - (b.item.no_gud || 0);
-  });
-
-  const allMatches = rawMatches.map(x => x.item);
-
   if (allMatches.length === 0) {
     matchesBox.style.display = 'block';
     matchesBox.innerHTML = `
-      <div style="padding:14px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase;">
+      <div style="padding:14px; text-align:center; font-family:var(--font-space); font-size:13px; color:var(--color-graphite);">
         Tidak ada data No Gud / Barkot "${q}" di seluruh arsip tanggal.
       </div>
     `;
     hideSpotlight();
+  } else if (allMatches.length === 1 && allMatches[0].isCurrentDate) {
+    matchesBox.style.display = 'none';
+    showSpotlight(allMatches[0]);
   } else {
     matchesBox.style.display = 'flex';
-    const totalCount = allMatches.length;
-    const shownList = allMatches.slice(0, 16);
+    matchesBox.innerHTML = '';
 
-    matchesBox.innerHTML = `
-      <div style="font-family:var(--font-roboto-mono); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--color-smoke); padding:2px 4px 6px;">
-        Ditemukan ${totalCount} Bal (${shownList.length} ditampilkan) — Klik tombol untuk buka:
-      </div>
-    `;
-
-    shownList.forEach(m => {
-      const isExactMatch = (String(m.no_gud) === q || String(m.barkot) === q);
+    allMatches.slice(0, 10).forEach(m => {
       const card = document.createElement('div');
-      card.className = 'global-match-card' + (isExactMatch ? ' highlight-match' : '');
-      const isMissing = missingList.includes(String(m.barkot || '').trim());
-      const isOut = Boolean(m.is_out);
+      card.className = 'global-match-card';
+      const isMissing = MISSING_BARCODES.includes(String(m.barkot).trim());
 
       card.innerHTML = `
-        <div style="flex:1;">
-          <div class="global-match-title" style="display:flex; align-items:center; gap:6px;">
-            <span>NO GUD <b>${m.no_gud}</b></span>
-            <span style="font-size:12.5px; font-weight:500; color:var(--color-smoke);">· ${m.barkot ? 'Barkot <b>' + m.barkot + '</b>' : '<i style="color:var(--color-smoke);">Tanpa Barkot</i>'}</span>
-            ${isOut ? '<span style="color:var(--color-out); font-weight:600; font-size:11px;">[OUT]</span>' : ''}
-            ${isExactMatch ? '<span style="background:var(--color-ink); color:var(--color-bone); font-size:9.5px; padding:1px 5px; border-radius:3px; font-weight:600;">COCOK</span>' : ''}
-          </div>
-          <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${m.ket ? '· 📝 ' + m.ket : ''} ${isMissing ? '· <b style="color:var(--color-ink);">⚠️ Belum Ketemu</b>' : ''}</div>
-          <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '<b style="color:var(--color-ink);">(Tgl Aktif)</b>' : ''}</div>
+        <div>
+          <div class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'}</div>
+          <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:var(--color-eucalyptus-dark);">⚠️ Belum Ketemu</b>' : ''}</div>
+          <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</div>
         </div>
-        <button class="draw-btn-ghost" style="padding:6px 12px; font-size:11px; min-height:30px; border-color:var(--color-ink); font-weight:600;" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
-          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka Tgl ' + parseInt(m.tanggal.split('-')[2], 10)}
+        <button class="oevra-btn-ghost" style="border-color:var(--color-eucalyptus); color:var(--color-eucalyptus-dark);" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
+          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka'}
         </button>
       `;
       matchesBox.appendChild(card);
@@ -5635,19 +5520,6 @@ function handleUnifiedSearch(val) {
   }
 
   render();
-}
-
-function clearUnifiedSearch() {
-  const input = document.getElementById('unifiedSearchInput');
-  if (input) input.value = '';
-  handleUnifiedSearch('');
-}
-
-function handleGlobalSearch(type) {
-  const nogudInput = document.getElementById('searchNoGudInput');
-  const barkotInput = document.getElementById('searchBarkotInput');
-  const q = (type === 'nogud' ? nogudInput?.value : barkotInput?.value) || '';
-  handleUnifiedSearch(q);
 }
 
 function jumpToGlobalBal(tgl, no_gud) {
@@ -5672,19 +5544,6 @@ function showSpotlight(item) {
   document.getElementById('spotGradeVal').textContent = item.grade ? `GRADE ${item.grade}` : 'GRADE —';
   document.getElementById('spotKgVal').textContent = item.kg ? `${item.kg} KG` : '— KG';
   
-  const spotKetEl = document.getElementById('spotKetVal');
-  if (spotKetEl) {
-    if (item.ket) {
-      spotKetEl.style.display = 'block';
-      spotKetEl.textContent = '📝 KET: ' + item.ket.toUpperCase();
-    } else {
-      spotKetEl.style.display = 'none';
-    }
-  }
-
-  const manualInput = document.getElementById('spotManualBarkotInput');
-  if (manualInput) manualInput.value = item.barkot || '';
-
   updateSpotlightUI();
   spotlight.style.display = 'block';
 }
@@ -5692,47 +5551,25 @@ function showSpotlight(item) {
 function updateSpotlightUI() {
   if (!activeSpotlightBal) return;
   const isDone = Boolean(state.doneMap[activeSpotlightBal.no_gud]);
-  const isOut = Boolean(activeSpotlightBal.is_out);
   const btn = document.getElementById('spotToggleBtn');
-  const outBtn = document.getElementById('spotOutBtn');
   const status = document.getElementById('spotStatusVal');
-  const barkotVal = document.getElementById('spotBarkotVal');
-
-  if (barkotVal) barkotVal.textContent = activeSpotlightBal.barkot || '—';
-
-  if (isOut) {
-    status.innerHTML = '<span style="color:var(--color-out); font-weight:500;">🚫 BAL OUT (TIDAK DIPROSES)</span>';
-    if (outBtn) {
-      outBtn.textContent = '✓ Jadikan Proses';
-      outBtn.style.color = 'var(--color-bone)';
-      outBtn.style.borderColor = 'var(--color-parchment)';
-    }
-  } else {
-    if (outBtn) {
-      outBtn.textContent = '🚫 Status: OUT';
-      outBtn.style.color = '#fca5a5';
-      outBtn.style.borderColor = 'var(--color-out)';
-    }
-    if (isDone) {
-      status.innerHTML = lockModeEnabled ? 
-        '<span style="color:var(--color-bone); font-weight:500;">🔒 SELESAI (TERKUNCI)</span>' : 
-        '<span style="color:var(--color-bone); font-weight:500;">✓ SELESAI DICEK</span>';
-    } else {
-      status.textContent = activeSpotlightBal.barkot ? 'BELUM DIBARKOT' : 'TANPA BARKOT';
-    }
-  }
 
   if (isDone) {
+    status.innerHTML = lockModeEnabled ? 
+      '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">🔒 SUDAH DIBARKOT (TERKUNCI)</span>' : 
+      '<span style="color:var(--color-eucalyptus-dark); font-weight:700;">✓ SUDAH DIBARKOT</span>';
+    
     if (lockModeEnabled) {
-      btn.textContent = '🔒 Bal Terkunci';
-      btn.className = 'draw-btn-ghost-dark';
+      btn.textContent = '🔒 Bal Terkunci (Buka Kunci untuk Edit)';
+      btn.className = 'oevra-btn-ghost';
     } else {
       btn.textContent = '↺ Batalkan Centang';
-      btn.className = 'draw-btn-ghost-dark';
+      btn.className = 'oevra-btn-ghost';
     }
   } else {
-    btn.textContent = '✓ Tandai Selesai';
-    btn.className = 'draw-btn-ghost-dark';
+    status.textContent = 'BELUM DIBARKOT';
+    btn.textContent = '✓ Tandai Sudah Ditempel';
+    btn.className = 'oevra-btn-filled';
   }
 }
 
@@ -5753,78 +5590,6 @@ function toggleSpotlightBal() {
   }
   
   toggleBal(activeSpotlightBal.no_gud);
-}
-
-async function toggleSpotlightOut() {
-  if (!activeSpotlightBal) return;
-  initAudio();
-  const target = state.list.find(x => x.no_gud === activeSpotlightBal.no_gud);
-  if (!target) return;
-
-  target.is_out = !target.is_out;
-  activeSpotlightBal.is_out = target.is_out;
-
-  if (target.is_out) {
-    showToast(`🚫 No Gud ${target.no_gud} ditandai sebagai OUT`);
-  } else {
-    showToast(`✓ No Gud ${target.no_gud} dikembalikan ke status Diproses`);
-  }
-
-  saveLocalState();
-  render();
-  updateSpotlightUI();
-
-  if (supabaseClient) {
-    try {
-      await supabaseClient
-        .from('barkot_data')
-        .upsert({
-          tanggal: currentDate,
-          no_gud: target.no_gud,
-          grade: target.grade || '',
-          barkot: target.barkot || '',
-          kg: target.kg || null,
-          is_done: Boolean(state.doneMap[target.no_gud]),
-          is_out: target.is_out
-        }, { onConflict: 'tanggal,no_gud' });
-    } catch(err) {
-      console.error('Supabase update out err', err);
-    }
-  }
-}
-
-async function saveSpotlightBarkot() {
-  if (!activeSpotlightBal) return;
-  const input = document.getElementById('spotManualBarkotInput');
-  const newBarkot = (input?.value || '').trim();
-  const target = state.list.find(x => x.no_gud === activeSpotlightBal.no_gud);
-  if (!target) return;
-
-  target.barkot = newBarkot;
-  activeSpotlightBal.barkot = newBarkot;
-  
-  saveLocalState();
-  render();
-  updateSpotlightUI();
-  showToast(`✓ No Barkot untuk No Gud ${target.no_gud} disimpan: ${newBarkot || '(Kosong)'}`);
-
-  if (supabaseClient) {
-    try {
-      await supabaseClient
-        .from('barkot_data')
-        .upsert({
-          tanggal: currentDate,
-          no_gud: target.no_gud,
-          grade: target.grade || '',
-          barkot: target.barkot || '',
-          kg: target.kg || null,
-          is_done: Boolean(state.doneMap[target.no_gud]),
-          is_out: target.is_out
-        }, { onConflict: 'tanggal,no_gud' });
-    } catch(err) {
-      console.error('Supabase barkot update err', err);
-    }
-  }
 }
 
 // ==========================================
@@ -5877,8 +5642,7 @@ async function forceToggleBal(no_gud, newStatus) {
           barkot: target ? target.barkot : '',
           kg: target ? target.kg : null,
           is_done: newStatus,
-          done_at: newStatus ? new Date().toISOString() : null,
-          is_out: target ? Boolean(target.is_out) : false
+          done_at: newStatus ? new Date().toISOString() : null
         }, { onConflict: 'tanggal,no_gud' });
     } catch(err) {
       console.error('Supabase update err', err);
@@ -5899,20 +5663,17 @@ function setFilter(type, elem) {
 function render() {
   const grid = document.getElementById('balGrid');
   const emptyMsg = document.getElementById('emptyMsg');
-  const searchQ = (document.getElementById('unifiedSearchInput')?.value || document.getElementById('searchNoGudInput')?.value || '').trim();
+  const nogudQ = document.getElementById('searchNoGudInput').value.trim();
+  const barkotQ = document.getElementById('searchBarkotInput').value.trim();
 
   grid.innerHTML = '';
 
   const total = state.list.length;
-  const withBarkotCount = state.list.filter(x => x.barkot && String(x.barkot).trim() !== '' && !x.is_out).length;
-  const noBarkotCount = state.list.filter(x => (!x.barkot || String(x.barkot).trim() === '') && !x.is_out).length;
-  const outCount = state.list.filter(x => Boolean(x.is_out)).length;
   const doneCount = Object.keys(state.doneMap).length;
   const remainCount = Math.max(0, total - doneCount);
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
-  const missingList = getMissingBarcodesList();
-  const missingCountInDate = state.list.filter(x => missingList.includes(String(x.barkot || '').trim())).length;
+  const missingCountInDate = state.list.filter(x => MISSING_BARCODES.includes(String(x.barkot).trim())).length;
 
   document.getElementById('countDone').textContent = doneCount;
   document.getElementById('countTotal').textContent = total;
@@ -5920,39 +5681,24 @@ function render() {
   document.getElementById('pctLabel').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
 
-  const tabAll = document.getElementById('tabAll');
-  const tabWithBarkot = document.getElementById('tabWithBarkot');
-  const tabNoBarkot = document.getElementById('tabNoBarkot');
-  const tabOut = document.getElementById('tabOut');
-  const tabPending = document.getElementById('tabPending');
-  const tabDone = document.getElementById('tabDone');
-  const tabMissing = document.getElementById('tabMissing');
-
-  if (tabAll) tabAll.textContent = `Semua (${total})`;
-  if (tabWithBarkot) tabWithBarkot.textContent = `Berbarkot (${withBarkotCount})`;
-  if (tabNoBarkot) tabNoBarkot.textContent = `Tanpa Barkot (${noBarkotCount})`;
-  if (tabOut) tabOut.textContent = `🚫 OUT (${outCount})`;
-  if (tabPending) tabPending.textContent = `Belum (${remainCount})`;
-  if (tabDone) tabDone.textContent = `Sudah (${doneCount})`;
-  if (tabMissing) tabMissing.textContent = `⚠️ Hilang (${missingCountInDate})`;
+  document.getElementById('tabAll').textContent = `Semua (${total})`;
+  document.getElementById('tabPending').textContent = `Belum (${remainCount})`;
+  document.getElementById('tabDone').textContent = `Sudah (${doneCount})`;
+  document.getElementById('tabMissing').textContent = `⚠️ Belum Ketemu (${missingCountInDate})`;
 
   const filtered = state.list.filter(item => {
     const isDone = Boolean(state.doneMap[item.no_gud]);
-    const isMissing = missingList.includes(String(item.barkot || '').trim());
-    const hasBarkot = Boolean(item.barkot && String(item.barkot).trim() !== '');
-    const isOut = Boolean(item.is_out);
+    const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
 
-    if (currentFilter === 'with_barkot' && (!hasBarkot || isOut)) return false;
-    if (currentFilter === 'no_barkot' && (hasBarkot || isOut)) return false;
-    if (currentFilter === 'out' && !isOut) return false;
     if (currentFilter === 'pending' && isDone) return false;
     if (currentFilter === 'done' && !isDone) return false;
     if (currentFilter === 'missing' && !isMissing) return false;
     
-    if (searchQ) {
-      const matchGud = String(item.no_gud) === searchQ || String(item.no_gud).startsWith(searchQ);
-      const matchBarkot = item.barkot && String(item.barkot).includes(searchQ);
-      return matchGud || matchBarkot;
+    if (nogudQ) {
+      return String(item.no_gud).includes(nogudQ);
+    }
+    if (barkotQ) {
+      return item.barkot && String(item.barkot).includes(barkotQ);
     }
     return true;
   });
@@ -5966,57 +5712,37 @@ function render() {
     emptyMsg.style.display = 'none';
     for (const item of filtered) {
       const isDone = Boolean(state.doneMap[item.no_gud]);
-      const isMissing = missingList.includes(String(item.barkot || '').trim());
-      const isOut = Boolean(item.is_out);
-      const isSearchMatch = searchQ && (String(item.no_gud) === searchQ || (item.barkot && String(item.barkot).trim() === searchQ));
+      const isMissing = MISSING_BARCODES.includes(String(item.barkot).trim());
+      const isSearchMatch = (nogudQ && String(item.no_gud) === nogudQ) || 
+                            (barkotQ && String(item.barkot).trim() === barkotQ);
 
       const card = document.createElement('div');
       card.className = 'bal-card' + 
                        (isDone ? ' done' : '') + 
-                       (isOut ? ' out-item' : '') +
                        (isMissing && !isDone ? ' missing-item' : '') + 
                        (isSearchMatch ? ' highlight' : '');
 
-      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode" style="color:var(--color-smoke); font-size:10px; font-style:italic;">Tanpa Barkot</span>';
+      const barkotHtml = item.barkot ? `<span class="meta-tag meta-tag-barcode">${item.barkot}</span>` : '<span class="meta-tag meta-tag-barcode">—</span>';
       const gradeHtml = item.grade ? `<span class="meta-tag">GR ${item.grade}</span>` : '';
       const kgHtml = (item.kg !== '' && item.kg !== undefined && item.kg !== null) ? `<span class="meta-tag">${item.kg}kg</span>` : '';
-      const ketHtml = item.ket ? `<span class="meta-tag" style="border-color:var(--color-ink); color:var(--color-ink); font-weight:500;">📝 ${item.ket}</span>` : '';
 
       const lockIndicator = (isDone && lockModeEnabled) ? '🔒' : (isDone ? '✓' : '');
-      
-      let badgeHtml = '';
-      if (isOut) {
-        badgeHtml = '<span class="out-flag">OUT</span>';
-      } else if (isMissing && !isDone) {
-        badgeHtml = '<span class="missing-flag">Belum Ketemu</span>';
-      }
-
-      let statusLabel = 'NO GUD';
-      if (isOut) {
-        statusLabel = '🚫 OUT (TIDAK DIPROSES)';
-      } else if (isDone) {
-        statusLabel = lockModeEnabled ? 'TERKUNCI' : 'SELESAI';
-      } else if (isMissing) {
-        statusLabel = 'BELUM KETEMU';
-      }
+      const missingBadge = (isMissing && !isDone) ? '<span class="missing-flag">Belum Ketemu</span>' : '';
 
       card.innerHTML = `
-        ${badgeHtml}
+        ${missingBadge}
         ${isDone ? `<span class="badge-top-right">${lockIndicator}</span>` : ''}
         <div class="card-no">${item.no_gud}</div>
         <div class="card-meta">
           ${barkotHtml}
           ${gradeHtml}
           ${kgHtml}
-          ${ketHtml}
         </div>
-        <div class="card-status-label">${statusLabel}</div>
+        <div class="card-status-label">${isDone ? (lockModeEnabled ? 'TERKUNCI' : 'SELESAI') : (isMissing ? 'BELUM KETEMU' : 'NO GUD')}</div>
       `;
       card.onclick = () => {
         showSpotlight(item);
-        if (!isOut) {
-          toggleBal(item.no_gud);
-        }
+        toggleBal(item.no_gud);
       };
       grid.appendChild(card);
     }
@@ -6083,21 +5809,14 @@ function handleExcelUpload(event) {
           const g1 = row[1] !== undefined && row[1] !== null ? String(row[1]).trim() : '';
           const g2 = row[2] !== undefined && row[2] !== null ? String(row[2]).trim() : '';
           const grade = g1 || g2;
-          const barkotRaw = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '';
-          const barkot = (barkotRaw === '-' || barkotRaw === '—' || barkotRaw.toLowerCase() === 'none') ? '' : barkotRaw;
+          const barkot = row[3] !== undefined && row[3] !== null ? String(row[3]).trim() : '';
           const kg = row[4] !== undefined && row[4] !== null ? row[4] : null;
-          const ket = row[5] !== undefined && row[5] !== null ? String(row[5]).trim() : '';
-
-          const isOut = ket.toLowerCase().includes('out') || ket.toLowerCase().includes('oot') || grade.toLowerCase().includes('out');
-
           parsedItems.push({
             tanggal: detectedDate,
             no_gud: no_gud,
             grade: grade,
             barkot: barkot,
             kg: kg,
-            ket: ket,
-            is_out: isOut,
             is_done: false
           });
         }
@@ -6523,6 +6242,7 @@ async function stopScanner() {
 // Inisialisasi awal
 document.getElementById('datePicker').value = currentDate;
 document.getElementById('dateDisplayLabel').textContent = formatDateIndo(currentDate);
+renderQuickDates();
 initFontSize();
 initLockMode();
 initSupabase();
