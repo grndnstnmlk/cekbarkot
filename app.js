@@ -52,11 +52,11 @@ function getSeedData() {
 // ==========================================
 function getMissingBarcodesList() {
   const stored = localStorage.getItem('barkot_missing_list_v2');
-  if (stored) {
+  if (stored !== null) {
     try {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+      if (Array.isArray(parsed)) {
+        return parsed.map(x => String(x).trim()).filter(Boolean);
       }
     } catch(e) {}
   }
@@ -64,16 +64,18 @@ function getMissingBarcodesList() {
 }
 
 function saveMissingBarcodesList(list) {
-  localStorage.setItem('barkot_missing_list_v2', JSON.stringify(list));
+  const cleanList = Array.isArray(list) ? list.map(x => String(x).trim()).filter(Boolean) : [];
+  localStorage.setItem('barkot_missing_list_v2', JSON.stringify(cleanList));
   updateMissingBannerUI();
-  render();
+  loadDataForCurrentDate();
 }
 
 function removeMissingBarcode(code) {
-  const list = getMissingBarcodesList().filter(x => x !== code);
+  const target = String(code || '').trim();
+  const list = getMissingBarcodesList().filter(x => String(x).trim() !== target);
   saveMissingBarcodesList(list);
   openMissingModal();
-  showToast(`Barkot #${code} dihapus dari daftar`);
+  showToast(`✓ Barkot #${target} berhasil dihapus dari daftar`);
 }
 
 function addNewMissingBarcode() {
@@ -84,7 +86,7 @@ function addNewMissingBarcode() {
     return;
   }
   const list = getMissingBarcodesList();
-  if (!list.includes(val)) {
+  if (!list.some(x => String(x).trim() === val)) {
     list.unshift(val);
     saveMissingBarcodesList(list);
     if (input) input.value = '';
@@ -96,10 +98,10 @@ function addNewMissingBarcode() {
 }
 
 function resetMissingBarcodesDefault() {
-  if (confirm('Kembalikan daftar barcode belum ditempel ke default (9 barcode resmi)?')) {
+  if (confirm('Kembalikan daftar barcode belum ditempel ke default (8 barcode resmi)?')) {
     saveMissingBarcodesList([...MISSING_BARCODES_DEFAULT]);
     openMissingModal();
-    showToast('Daftar direset ke 9 barcode resmi');
+    showToast('Daftar direset ke 8 barcode resmi');
   }
 }
 
