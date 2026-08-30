@@ -1283,8 +1283,31 @@ function closeMissingModal() {
 }
 
 // ==========================================
-// CAMERA BARCODE SCANNER (Html5Qrcode)
+// CAMERA BARCODE SCANNER (Html5Qrcode 1D/2D)
 // ==========================================
+function getBarcodeFormats() {
+  if (typeof Html5QrcodeSupportedFormats !== 'undefined') {
+    return [
+      Html5QrcodeSupportedFormats.CODE_128,
+      Html5QrcodeSupportedFormats.CODE_39,
+      Html5QrcodeSupportedFormats.CODE_93,
+      Html5QrcodeSupportedFormats.EAN_13,
+      Html5QrcodeSupportedFormats.EAN_8,
+      Html5QrcodeSupportedFormats.UPC_A,
+      Html5QrcodeSupportedFormats.UPC_E,
+      Html5QrcodeSupportedFormats.ITF,
+      Html5QrcodeSupportedFormats.QR_CODE
+    ];
+  }
+  return undefined;
+}
+
+function getScannerQrBox(viewfinderWidth, viewfinderHeight) {
+  const width = Math.floor(Math.min(viewfinderWidth * 0.92, 340));
+  const height = Math.floor(Math.min(viewfinderHeight * 0.50, 160));
+  return { width: Math.max(width, 220), height: Math.max(height, 100) };
+}
+
 async function startScanner() {
   const modal = document.getElementById('scannerModal');
   if (modal) {
@@ -1296,7 +1319,15 @@ async function startScanner() {
 
   try {
     if (!html5QrScanner) {
-      html5QrScanner = new Html5Qrcode('scannerReader');
+      const formats = getBarcodeFormats();
+      const config = {
+        verbose: false,
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true
+        }
+      };
+      if (formats) config.formatsToSupport = formats;
+      html5QrScanner = new Html5Qrcode('scannerReader', config);
     }
 
     const cameras = await Html5Qrcode.getCameras();
@@ -1308,14 +1339,14 @@ async function startScanner() {
       await html5QrScanner.start(
         currentCameraId,
         {
-          fps: 20,
-          qrbox: { width: 280, height: 180 },
-          aspectRatio: 1.333
+          fps: 15,
+          qrbox: getScannerQrBox,
+          aspectRatio: 1.333333
         },
         (decodedText) => onBarcodeDetected(decodedText),
         (errorMessage) => {}
       );
-      document.getElementById('scannerStatus').textContent = 'Arahkan laser ke stiker barcode...';
+      document.getElementById('scannerStatus').textContent = 'Arahkan laser ke garis barcode...';
     } else {
       document.getElementById('scannerStatus').textContent = 'Kamera tidak ditemukan pada perangkat ini.';
     }
@@ -1366,7 +1397,7 @@ async function switchCamera() {
     await html5QrScanner.stop();
     await html5QrScanner.start(
       currentCameraId,
-      { fps: 20, qrbox: { width: 280, height: 180 } },
+      { fps: 15, qrbox: getScannerQrBox, aspectRatio: 1.333333 },
       (decodedText) => onBarcodeDetected(decodedText),
       () => {}
     );
@@ -1375,12 +1406,21 @@ async function switchCamera() {
 }
 
 function onBarcodeDetected(code) {
-  const cleanCode = String(code || '').trim();
-  if (!cleanCode) return;
+  const rawCode = String(code || '').trim();
+  if (!rawCode) return;
 
-  playBeep(987, 'sine', 0.15);
+  const cleanCode = rawCode;
+  const digitsOnly = rawCode.replace(/[^0-9]/g, '');
 
-  const matchedBal = state.list.find(x => x.barkot && String(x.barkot).trim() === cleanCode);
+  const seed = getSeedData();
+  
+  // 1. Cari di tanggal aktif saat ini
+  let matchedBal = state.list.find(x => {
+    if (!x.barkot) return false;
+    const bStr = String(x.barkot).trim();
+    return bStr === cleanCode || (digitsOnly && bStr === digitsOnly) || cleanCode.includes(bStr);
+  });
+
   const resultBox = document.getElementById('scannerResultBox');
 
   if (matchedBal) {
@@ -1390,18 +1430,22 @@ function onBarcodeDetected(code) {
     resultBox.style.display = 'block';
 
     state.doneMap[matchedBal.no_gud] = true;
+    matchedBal.is_done = true;
     saveLocalState();
     syncLocalItemToCloud(matchedBal, true);
     render();
     playBeep(987, 'sine', 0.15);
     triggerHaptic('success');
-    showToast(`✓ NO GUD ${matchedBal.no_gud} (#${cleanCode}) DITANDAI SELESAI!`);
+    showToast(`✓ NO GUD ${matchedBal.no_gud} (#${matchedBal.barkot}) DITANDAI SELESAI!`);
   } else {
-    // Search in other dates
+    // 2. Cari di tanggal lain
     let foundOther = null;
-    const seed = getSeedData();
     for (const tgl of Object.keys(seed)) {
-      const it = (seed[tgl] || []).find(x => x.barkot && String(x.barkot).trim() === cleanCode);
+      const it = (seed[tgl] || []).find(x => {
+        if (!x.barkot) return false;
+        const bStr = String(x.barkot).trim();
+        return bStr === cleanCode || (digitsOnly && bStr === digitsOnly) || cleanCode.includes(bStr);
+      });
       if (it) {
         foundOther = { ...it, tanggal: tgl };
         break;
@@ -1415,7 +1459,7 @@ function onBarcodeDetected(code) {
       resultBox.style.display = 'block';
       playBeep(600, 'sine', 0.15);
       triggerHaptic('tap');
-      showToast(`Barkot #${cleanCode} ditemukan pada data ${formatDateShort(foundOther.tanggal)}`);
+      showToast(`Barkot #${foundOther.barkot} ditemukan pada data ${formatDateShort(foundOther.tanggal)}`);
     } else {
       document.getElementById('scanFoundNoGud').textContent = `BARCODE: ${cleanCode}`;
       document.getElementById('scanFoundBarkot').textContent = 'TIDAK DITEMUKAN DI DATASET';
