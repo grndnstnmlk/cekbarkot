@@ -47,10 +47,7 @@ function getSeedData() {
 }
 
 // ==========================================
-// DYNAMIC MISSING BARCODES STORAGE
-// ==========================================
-// ==========================================
-// DYNAMIC MISSING BARCODES STORAGE
+// DYNAMIC MISSING BARCODES STORAGE (SHARED VIA CLOUD)
 // ==========================================
 function getMissingBarcodesList() {
   const stored = localStorage.getItem('barkot_missing_list_v2');
@@ -65,11 +62,25 @@ function getMissingBarcodesList() {
   return [...MISSING_BARCODES_DEFAULT];
 }
 
-function saveMissingBarcodesList(list) {
+async function saveMissingBarcodesList(list) {
   const cleanList = Array.isArray(list) ? list.map(x => String(x).trim()).filter(Boolean) : [];
   localStorage.setItem('barkot_missing_list_v2', JSON.stringify(cleanList));
   updateMissingBannerUI();
   loadDataForCurrentDate();
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient
+        .from('barkot_settings')
+        .upsert({
+          key: 'missing_barcodes',
+          value: cleanList,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'key' });
+    } catch(e) {
+      console.warn('saveMissingBarcodesList cloud error:', e);
+    }
+  }
 }
 
 function removeMissingBarcode(code) {
@@ -1411,12 +1422,33 @@ function initSupabase() {
       updateCloudStatusUI('Online');
       setupRealtime();
       fetchAllDoneFromCloud();
+      fetchMissingListFromCloud();
     } catch(e) {
       console.warn('Supabase init error:', e);
       updateCloudStatusUI('Offline');
     }
   } else {
     updateCloudStatusUI('Offline');
+  }
+}
+
+async function fetchMissingListFromCloud() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient
+      .from('barkot_settings')
+      .select('value')
+      .eq('key', 'missing_barcodes')
+      .single();
+    
+    if (!error && data && Array.isArray(data.value)) {
+      const cleanList = data.value.map(x => String(x).trim()).filter(Boolean);
+      localStorage.setItem('barkot_missing_list_v2', JSON.stringify(cleanList));
+      updateMissingBannerUI();
+      loadDataForCurrentDate();
+    }
+  } catch(e) {
+    console.warn('fetchMissingListFromCloud err:', e);
   }
 }
 
@@ -1580,6 +1612,18 @@ function setupRealtime() {
 
           // Selalu update UI banner & modal
           updateMissingBannerUI();
+          const modal = document.getElementById('missingModal');
+          if (modal && (modal.classList.contains('open') || modal.style.display === 'flex')) {
+            openMissingModal();
+          }
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'barkot_settings' }, payload => {
+        if (payload.new && payload.new.key === 'missing_barcodes' && Array.isArray(payload.new.value)) {
+          const cleanList = payload.new.value.map(x => String(x).trim()).filter(Boolean);
+          localStorage.setItem('barkot_missing_list_v2', JSON.stringify(cleanList));
+          updateMissingBannerUI();
+          loadDataForCurrentDate();
           const modal = document.getElementById('missingModal');
           if (modal && (modal.classList.contains('open') || modal.style.display === 'flex')) {
             openMissingModal();

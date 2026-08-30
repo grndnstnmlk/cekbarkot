@@ -36,7 +36,27 @@ FOR ALL
 USING (true) 
 WITH CHECK (true);
 
--- 4. Aktifkan Fitur Realtime (Aman dijalankan berulang kali)
+-- 4. Buat Tabel Pengaturan / Shared Missing Barcodes
+CREATE TABLE IF NOT EXISTS public.barkot_settings (
+    key TEXT PRIMARY KEY,
+    value JSONB NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
+);
+
+ALTER TABLE public.barkot_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public Full Access Settings" ON public.barkot_settings;
+CREATE POLICY "Public Full Access Settings" 
+ON public.barkot_settings 
+FOR ALL 
+USING (true) 
+WITH CHECK (true);
+
+-- Isi Pengaturan Awal (7 Barcode Belum Ditempel)
+INSERT INTO public.barkot_settings (key, value)
+VALUES ('missing_barcodes', '["33419", "33422", "33744", "32277", "32278", "34240", "943647"]'::jsonb)
+ON CONFLICT (key) DO NOTHING;
+
+-- 5. Aktifkan Fitur Realtime (Aman dijalankan berulang kali)
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -46,6 +66,15 @@ BEGIN
         AND tablename = 'barkot_data'
     ) THEN
         ALTER PUBLICATION supabase_realtime ADD TABLE public.barkot_data;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND schemaname = 'public' 
+        AND tablename = 'barkot_settings'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.barkot_settings;
     END IF;
 END $$;
 
