@@ -8,9 +8,9 @@
 <meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="DrawHistory Cek Barkot">
+<meta name="apple-mobile-web-app-title" content="T.B.K JH Cek Barkot">
 <meta name="theme-color" content="#faf6f3">
-<title>Cek Barkot — DrawHistory Editorial Edition</title>
+<title>Cek Barkot — T.B.K JH</title>
 
 <!-- Google Fonts: Inter (Eloquia Text substitute), Roboto Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -468,12 +468,18 @@
 
   /* Global Search Match Cards Container */
   .global-matches-container {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    max-height: 260px;
+    gap: 8px;
+    max-height: 380px;
     overflow-y: auto;
+    padding-right: 4px;
+  }
+  .global-match-card.highlight-match {
+    border: 2px solid var(--color-ink);
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .global-match-card {
     background: var(--color-bone);
@@ -946,11 +952,11 @@
 </head>
 <body class="font-mode-16pm">
 
-<!-- DrawHistory Announcement Top Bar -->
+<!-- T.B.K JH Announcement Top Bar -->
 <div class="draw-announcement">
   <div class="draw-announcement-left">
     <span class="saffron-dot"></span>
-    <span>DRAWHISTORY · CEK BARKOT GUDANG INDUK</span>
+    <span>T.B.K JH · CEK BARKOT GUDANG INDUK</span>
   </div>
   <div id="cloudStatusBadge" style="font-family:var(--font-roboto-mono); font-size:10px; text-transform:uppercase;">
     <span id="cloudStatusText">Offline</span>
@@ -985,7 +991,8 @@
         <span class="date-pill" onclick="onDateChanged('2026-08-24')">24 Ags</span>
         <span class="date-pill" onclick="onDateChanged('2026-08-26')">26 Ags</span>
         <span class="date-pill" onclick="onDateChanged('2026-08-27')">27 Ags</span>
-        <span class="date-pill active" onclick="onDateChanged('2026-08-28')">28 Ags</span>
+        <span class="date-pill" onclick="onDateChanged('2026-08-28')">28 Ags</span>
+        <span class="date-pill active" onclick="onDateChanged('2026-08-29')">29 Ags</span>
       </div>
     </div>
   </div>
@@ -4430,6 +4437,320 @@ const SEED_DATA = {
       "kg": 45,
       "is_done": false
     }
+  ],
+  "2026-08-29": [
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 64,
+      "grade": "56",
+      "barkot": "942825",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 179,
+      "grade": "65",
+      "barkot": "942823",
+      "kg": 43,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 223,
+      "grade": "52",
+      "barkot": "33837",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 276,
+      "grade": "48",
+      "barkot": "33464",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 307,
+      "grade": "63",
+      "barkot": "942824",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 308,
+      "grade": "63",
+      "barkot": "942822",
+      "kg": 39,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 536,
+      "grade": "66",
+      "barkot": "34701",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 537,
+      "grade": "66",
+      "barkot": "34702",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 538,
+      "grade": "65",
+      "barkot": "34458",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 539,
+      "grade": "66",
+      "barkot": "34247",
+      "kg": 49,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 540,
+      "grade": "68",
+      "barkot": "34248",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 541,
+      "grade": "65",
+      "barkot": "34461",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 542,
+      "grade": "66",
+      "barkot": "34703",
+      "kg": 34,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 543,
+      "grade": "66",
+      "barkot": "34249",
+      "kg": 32,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 544,
+      "grade": "65",
+      "barkot": "34460",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 545,
+      "grade": "66",
+      "barkot": "34250",
+      "kg": 32,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 546,
+      "grade": "50",
+      "barkot": "33831",
+      "kg": 34,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 547,
+      "grade": "50",
+      "barkot": "34531",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 548,
+      "grade": "48",
+      "barkot": "33832",
+      "kg": 49,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 549,
+      "grade": "52",
+      "barkot": "34340",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 551,
+      "grade": "50",
+      "barkot": "33838",
+      "kg": 46,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 552,
+      "grade": "50",
+      "barkot": "33835",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 553,
+      "grade": "50",
+      "barkot": "33834",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 554,
+      "grade": "48",
+      "barkot": "33833",
+      "kg": 36,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 555,
+      "grade": "50",
+      "barkot": "33461",
+      "kg": 42,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 557,
+      "grade": "66",
+      "barkot": "34246",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 558,
+      "grade": "65",
+      "barkot": "34459",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 559,
+      "grade": "60",
+      "barkot": "34344",
+      "kg": 36,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 560,
+      "grade": "63",
+      "barkot": "34464",
+      "kg": 31,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 561,
+      "grade": "62",
+      "barkot": "34343",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 564,
+      "grade": "53",
+      "barkot": "34532",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 565,
+      "grade": "63",
+      "barkot": "34463",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 566,
+      "grade": "53",
+      "barkot": "34341",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 567,
+      "grade": "54",
+      "barkot": "34342",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 571,
+      "grade": "61",
+      "barkot": "34462",
+      "kg": 47,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 572,
+      "grade": "50",
+      "barkot": "33462",
+      "kg": 38,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 573,
+      "grade": "67",
+      "barkot": "34704",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 574,
+      "grade": "50",
+      "barkot": "33836",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 575,
+      "grade": "50",
+      "barkot": "34463",
+      "kg": 38,
+      "is_done": false
+    }
   ]
 };
 
@@ -4452,6 +4773,93 @@ function saveMissingBarcodesList(arr) {
   } catch(e) {}
   updateMissingBannerCount();
   render();
+}
+
+function openMissingModal() {
+  const modal = document.getElementById('missingModal');
+  const container = document.getElementById('missingListContainer');
+  const list = getMissingBarcodesList();
+  
+  if (!modal || !container) return;
+
+  container.innerHTML = '';
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="padding:16px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase;">
+        ✓ Semua barcode sudah ditempel / ditemukan!
+      </div>
+    `;
+  } else {
+    // Cari detail No Gud, Tanggal, Grade untuk setiap barcode yang belum ditempel
+    list.forEach(code => {
+      let matchedItem = null;
+      let matchedDate = null;
+
+      for (const tgl of Object.keys(SEED_DATA)) {
+        const item = SEED_DATA[tgl].find(x => String(x.barkot || '').trim() === String(code).trim());
+        if (item) {
+          matchedItem = item;
+          matchedDate = tgl;
+          break;
+        }
+      }
+
+      const card = document.createElement('div');
+      card.className = 'global-match-card';
+      card.style.background = '#fff';
+      card.style.border = '1.5px solid var(--color-ink)';
+      card.style.padding = '10px 12px';
+
+      if (matchedItem) {
+        card.innerHTML = `
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:var(--font-roboto-mono); font-size:16px; font-weight:700; color:var(--color-ink); background:var(--color-ash); padding:2px 8px; border-radius:4px;">
+                NO GUD ${matchedItem.no_gud}
+              </span>
+              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:600; color:var(--color-ink);">
+                Barkot: <b>${code}</b>
+              </span>
+            </div>
+            <div style="font-family:var(--font-eloquia-text); font-size:12px; color:var(--color-smoke); margin-top:4px;">
+              GRADE ${matchedItem.grade || '—'} · ${matchedItem.kg ? matchedItem.kg + ' KG' : '— KG'} · 📅 ${formatDateIndo(matchedDate)}
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:var(--color-ink); font-weight:600;" onclick="closeMissingModal(); jumpToGlobalBal('${matchedDate}', ${matchedItem.no_gud})">
+              🔍 Buka Tgl ${parseInt(matchedDate.split('-')[2], 10)}
+            </button>
+            <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:#22c55e; color:#15803d;" onclick="removeMissingBarcode('${code}')" title="Tandai Sudah Ditempel/Ketemu">
+              ✓ Ketemu
+            </button>
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div style="flex:1;">
+            <div style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
+              Barkot: <b>${code}</b>
+            </div>
+            <div style="font-family:var(--font-eloquia-text); font-size:11.5px; color:var(--color-smoke);">
+              (Tidak terdaftar di data induk bawaan)
+            </div>
+          </div>
+          <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:#22c55e; color:#15803d;" onclick="removeMissingBarcode('${code}')">
+            ✓ Ketemu
+          </button>
+        `;
+      }
+
+      container.appendChild(card);
+    });
+  }
+
+  modal.classList.add('open');
+}
+
+function closeMissingModal() {
+  const modal = document.getElementById('missingModal');
+  if (modal) modal.classList.remove('open');
 }
 
 function updateMissingBannerCount() {
@@ -4507,7 +4915,7 @@ function resetMissingBarcodesDefault() {
   }
 }
 
-let currentDate = '2026-08-28';
+let currentDate = '2026-08-29';
 let state = {
   list: [],
   doneMap: {}
@@ -4827,7 +5235,7 @@ function saveLocalState() {
 
 async function loadDataForCurrentDate() {
   let found = false;
-  const syncVersion = '2026_08_28_v9';
+  const syncVersion = '2026_08_29_v1';
   const lastSync = localStorage.getItem('barkot_sync_ver');
   if (lastSync !== syncVersion) {
     // Clear old cache to apply fresh checked state for all dates
@@ -5008,59 +5416,91 @@ function handleUnifiedSearch(val) {
   if (nogudInput) nogudInput.value = q;
   if (barkotInput) barkotInput.value = q;
 
-  const allMatches = [];
+  const rawMatches = [];
   const missingList = getMissingBarcodesList();
 
-  // Cari di tanggal aktif
-  state.list.forEach(item => {
-    const isNoGudMatch = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
-    const isBarkotMatch = item.barkot && String(item.barkot).includes(q);
-    if (isNoGudMatch || isBarkotMatch) {
-      allMatches.push({ ...item, tanggal: currentDate, isCurrentDate: true });
-    }
-  });
-
-  // Cari di arsip tanggal lain
+  // Kumpulkan & Beri Bobot / Ranking Pencarian dari semua tanggal
   for (const tgl of Object.keys(SEED_DATA)) {
-    if (tgl === currentDate) continue;
-    SEED_DATA[tgl].forEach(item => {
-      const isNoGudMatch = String(item.no_gud) === q || String(item.no_gud).startsWith(q);
-      const isBarkotMatch = item.barkot && String(item.barkot).includes(q);
-      if (isNoGudMatch || isBarkotMatch) {
-        allMatches.push({ ...item, tanggal: tgl, isCurrentDate: false });
+    const isCur = (tgl === currentDate);
+    const sourceList = isCur ? state.list : SEED_DATA[tgl];
+    
+    sourceList.forEach(item => {
+      const noStr = String(item.no_gud || '');
+      const bcStr = String(item.barkot || '');
+      
+      let rank = 99;
+      if (noStr === q) {
+        rank = 1; // Prioritas 1: No Gud persis sama (misal 36 atau 37)
+      } else if (bcStr === q) {
+        rank = 2; // Prioritas 2: Barkot persis sama
+      } else if (noStr.startsWith(q)) {
+        rank = 3; // Prioritas 3: No Gud berawalan angka dicari (misal 36 -> 360, 361)
+      } else if (bcStr.startsWith(q)) {
+        rank = 4; // Prioritas 4: Barkot berawalan angka dicari
+      } else if (bcStr.includes(q)) {
+        rank = 5; // Prioritas 5: Barkot mengandung angka dicari
+      } else if (noStr.includes(q)) {
+        rank = 6; // Prioritas 6: No Gud mengandung angka dicari
+      }
+
+      if (rank < 99) {
+        rawMatches.push({
+          rank: rank,
+          item: { ...item, tanggal: tgl, isCurrentDate: isCur }
+        });
       }
     });
   }
 
+  // Urutkan: Rank Terbaik (1 -> 6) -> Tanggal Aktif -> Tanggal Terbaru -> No Gud Terkecil
+  rawMatches.sort((a, b) => {
+    if (a.rank !== b.rank) return a.rank - b.rank;
+    if (a.item.isCurrentDate !== b.item.isCurrentDate) return a.item.isCurrentDate ? -1 : 1;
+    if (a.item.tanggal !== b.item.tanggal) return b.item.tanggal.localeCompare(a.item.tanggal);
+    return (a.item.no_gud || 0) - (b.item.no_gud || 0);
+  });
+
+  const allMatches = rawMatches.map(x => x.item);
+
   if (allMatches.length === 0) {
     matchesBox.style.display = 'block';
     matchesBox.innerHTML = `
-      <div style="padding:12px; text-align:center; font-family:var(--font-roboto-mono); font-size:11.5px; color:var(--color-smoke); text-transform:uppercase;">
+      <div style="padding:14px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase;">
         Tidak ada data No Gud / Barkot "${q}" di seluruh arsip tanggal.
       </div>
     `;
     hideSpotlight();
-  } else if (allMatches.length === 1 && allMatches[0].isCurrentDate) {
-    matchesBox.style.display = 'none';
-    showSpotlight(allMatches[0]);
   } else {
     matchesBox.style.display = 'flex';
-    matchesBox.innerHTML = '';
+    const totalCount = allMatches.length;
+    const shownList = allMatches.slice(0, 16);
 
-    allMatches.slice(0, 8).forEach(m => {
+    matchesBox.innerHTML = `
+      <div style="font-family:var(--font-roboto-mono); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--color-smoke); padding:2px 4px 6px;">
+        Ditemukan ${totalCount} Bal (${shownList.length} ditampilkan) — Klik tombol untuk buka:
+      </div>
+    `;
+
+    shownList.forEach(m => {
+      const isExactMatch = (String(m.no_gud) === q || String(m.barkot) === q);
       const card = document.createElement('div');
-      card.className = 'global-match-card';
+      card.className = 'global-match-card' + (isExactMatch ? ' highlight-match' : '');
       const isMissing = missingList.includes(String(m.barkot || '').trim());
       const isOut = Boolean(m.is_out);
 
       card.innerHTML = `
-        <div>
-          <div class="global-match-title">NO GUD ${m.no_gud} · ${m.barkot ? 'Barkot ' + m.barkot : 'Tanpa Barkot'} ${isOut ? '<span style="color:var(--color-out); font-weight:500;">[OUT]</span>' : ''}</div>
-          <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${isMissing ? '· <b style="color:var(--color-ink);">⚠️ Belum Ketemu</b>' : ''}</div>
-          <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '(Hari Ini)' : ''}</div>
+        <div style="flex:1;">
+          <div class="global-match-title" style="display:flex; align-items:center; gap:6px;">
+            <span>NO GUD <b>${m.no_gud}</b></span>
+            <span style="font-size:12.5px; font-weight:500; color:var(--color-smoke);">· ${m.barkot ? 'Barkot <b>' + m.barkot + '</b>' : '<i style="color:var(--color-smoke);">Tanpa Barkot</i>'}</span>
+            ${isOut ? '<span style="color:var(--color-out); font-weight:600; font-size:11px;">[OUT]</span>' : ''}
+            ${isExactMatch ? '<span style="background:var(--color-ink); color:var(--color-bone); font-size:9.5px; padding:1px 5px; border-radius:3px; font-weight:600;">COCOK</span>' : ''}
+          </div>
+          <div class="global-match-sub">GRADE ${m.grade || '—'} · ${m.kg ? m.kg + ' KG' : '— KG'} ${m.ket ? '· 📝 ' + m.ket : ''} ${isMissing ? '· <b style="color:var(--color-ink);">⚠️ Belum Ketemu</b>' : ''}</div>
+          <div class="global-match-date-badge">📅 ${formatDateIndo(m.tanggal)} ${m.isCurrentDate ? '<b style="color:var(--color-ink);">(Tgl Aktif)</b>' : ''}</div>
         </div>
-        <button class="draw-btn-ghost" style="padding:4px 10px; font-size:11px; min-height:28px;" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
-          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka'}
+        <button class="draw-btn-ghost" style="padding:6px 12px; font-size:11px; min-height:30px; border-color:var(--color-ink); font-weight:600;" onclick="jumpToGlobalBal('${m.tanggal}', ${m.no_gud})">
+          ${m.isCurrentDate ? '🔍 Sorot' : '🚀 Buka Tgl ' + parseInt(m.tanggal.split('-')[2], 10)}
         </button>
       `;
       matchesBox.appendChild(card);
