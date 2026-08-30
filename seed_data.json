@@ -3257,6 +3257,25 @@
     },
     {
       "tanggal": "2026-08-29",
+      "no_gud": 205,
+      "grade": "64",
+      "barkot": "",
+      "kg": 34,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out mate"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 212,
+      "grade": "64",
+      "barkot": "",
+      "kg": 45,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
       "no_gud": 223,
       "grade": "52",
       "barkot": "33837",
@@ -3265,11 +3284,50 @@
     },
     {
       "tanggal": "2026-08-29",
+      "no_gud": 229,
+      "grade": "48",
+      "barkot": "",
+      "kg": 34,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out jelek"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 239,
+      "grade": "58",
+      "barkot": "",
+      "kg": 41,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 240,
+      "grade": "58",
+      "barkot": "",
+      "kg": 43,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out mate"
+    },
+    {
+      "tanggal": "2026-08-29",
       "no_gud": 276,
       "grade": "48",
       "barkot": "33464",
       "kg": 30,
       "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 290,
+      "grade": "65",
+      "barkot": "",
+      "kg": 44,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out mate"
     },
     {
       "tanggal": "2026-08-29",
@@ -3401,6 +3459,16 @@
     },
     {
       "tanggal": "2026-08-29",
+      "no_gud": 550,
+      "grade": "48",
+      "barkot": "",
+      "kg": 42,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out nyabe"
+    },
+    {
+      "tanggal": "2026-08-29",
       "no_gud": 551,
       "grade": "50",
       "barkot": "33838",
@@ -3481,6 +3549,24 @@
     },
     {
       "tanggal": "2026-08-29",
+      "no_gud": 562,
+      "grade": "68",
+      "barkot": "",
+      "kg": 42,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 563,
+      "grade": "68",
+      "barkot": "",
+      "kg": 33,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
       "no_gud": 564,
       "grade": "53",
       "barkot": "34532",
@@ -3510,6 +3596,34 @@
       "barkot": "34342",
       "kg": 30,
       "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 568,
+      "grade": "46",
+      "barkot": "",
+      "kg": 30,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 569,
+      "grade": "68",
+      "barkot": "",
+      "kg": 50,
+      "is_done": false,
+      "ket": "L"
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 570,
+      "grade": "46",
+      "barkot": "",
+      "kg": 47,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out jelek"
     },
     {
       "tanggal": "2026-08-29",
@@ -3550,6 +3664,16 @@
       "barkot": "34463",
       "kg": 38,
       "is_done": false
+    },
+    {
+      "tanggal": "2026-08-29",
+      "no_gud": 576,
+      "grade": "58",
+      "barkot": "",
+      "kg": 39,
+      "is_done": false,
+      "is_out": true,
+      "ket": "out kotor"
     }
   ]
 }
