@@ -552,12 +552,16 @@ function performGlobalSearch(q) {
 }
 
 function jumpToDateAndHighlight(dateStr, noGud) {
-  if (dateStr !== currentDate) {
+  if (dateStr && dateStr !== '—' && dateStr !== currentDate) {
     onDateChanged(dateStr);
   }
-  const item = state.list.find(x => x.no_gud === noGud);
+  const item = state.list.find(x => String(x.no_gud) === String(noGud));
   if (item) {
     showSpotlight(item);
+    const spotlight = document.getElementById('spotlightCard');
+    if (spotlight) {
+      spotlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 }
 
@@ -1055,12 +1059,16 @@ function openMissingModal() {
     container.appendChild(itemEl);
   });
 
+  modal.classList.add('open');
   modal.style.display = 'flex';
 }
 
 function closeMissingModal() {
   const modal = document.getElementById('missingModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
 }
 
 // ==========================================
@@ -1068,7 +1076,10 @@ function closeMissingModal() {
 // ==========================================
 async function startScanner() {
   const modal = document.getElementById('scannerModal');
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
   document.getElementById('scannerStatus').textContent = 'Memulai kamera...';
   document.getElementById('scannerResultBox').style.display = 'none';
 
@@ -1110,7 +1121,10 @@ async function stopScanner() {
     } catch(e) {}
   }
   const modal = document.getElementById('scannerModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
 }
 
 function toggleTorch() {
@@ -1332,6 +1346,18 @@ function initApp() {
   initSupabase();
   renderQuickDates();
   loadDataForCurrentDate();
+
+  // Close modals when clicking backdrop overlay
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList.contains('modal-overlay')) {
+      if (e.target.id === 'scannerModal') {
+        stopScanner();
+      } else {
+        e.target.classList.remove('open');
+        e.target.style.display = 'none';
+      }
+    }
+  });
 }
 
 if (document.readyState === 'loading') {
