@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Modular Stylesheet (T.B.K JH Design Tokens & Typography) -->
-<link rel="stylesheet" href="style.css?v=2.5">
+<link rel="stylesheet" href="style.css?v=2.6">
 
 <!-- Third-Party Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -193,7 +193,7 @@
 
     <!-- Form Tambah Barcode Belum Ketemu -->
     <div style="display:flex; gap:6px; margin-bottom:12px;">
-      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot baru (misal: 31155)..." style="font-size:12px; min-height:34px; padding:4px 10px;">
+      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot atau No Gud..." style="font-size:12px; min-height:34px; padding:4px 10px;" onkeydown="if(event.key==='Enter') addNewMissingBarcode()">
       <button class="draw-btn-ghost" style="background:var(--color-obsidian); color:var(--color-bone); border-color:var(--color-obsidian); padding:4px 14px; font-size:11px; min-height:34px; white-space:nowrap;" onclick="addNewMissingBarcode()">+ Tambah</button>
     </div>
 
@@ -255,7 +255,7 @@
 <div class="toast" id="toast"></div>
 
 <!-- Application Scripts (Data & Logic separated) -->
-<script src="seed_data.js?v=2.5"></script>
-<script src="app.js?v=2.5"></script>
+<script src="seed_data.js?v=2.6"></script>
+<script src="app.js?v=2.6"></script>
 </body>
 </html>

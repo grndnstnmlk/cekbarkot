@@ -49,27 +49,20 @@ function getSeedData() {
 // ==========================================
 // DYNAMIC MISSING BARCODES STORAGE
 // ==========================================
+// ==========================================
+// DYNAMIC MISSING BARCODES STORAGE
+// ==========================================
 function getMissingBarcodesList() {
-  const seed = getSeedData();
-  const doneCodes = new Set();
-  Object.keys(seed).forEach(tgl => {
-    (seed[tgl] || []).forEach(it => {
-      if (it.is_done && it.barkot) doneCodes.add(String(it.barkot).trim());
-    });
-  });
-
   const stored = localStorage.getItem('barkot_missing_list_v2');
   if (stored !== null) {
     try {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed)) {
-        return parsed
-          .map(x => String(x).trim())
-          .filter(x => Boolean(x) && !doneCodes.has(x));
+        return parsed.map(x => String(x).trim()).filter(Boolean);
       }
     } catch(e) {}
   }
-  return MISSING_BARCODES_DEFAULT.filter(x => !doneCodes.has(String(x).trim()));
+  return [...MISSING_BARCODES_DEFAULT];
 }
 
 function saveMissingBarcodesList(list) {
@@ -87,7 +80,7 @@ function removeMissingBarcode(code) {
   // Tandai bal selesai jika ada di dataset dan sinkronkan ke Supabase
   const seed = getSeedData();
   Object.keys(seed).forEach(tgl => {
-    const it = (seed[tgl] || []).find(x => String(x.barkot).trim() === target);
+    const it = (seed[tgl] || []).find(x => String(x.barkot).trim() === target || String(x.no_gud).trim() === target);
     if (it) {
       it.is_done = true;
       try {
@@ -117,30 +110,87 @@ function removeMissingBarcode(code) {
   showToast(`✓ Barkot #${target} dihapus dari daftar & ditandai selesai!`);
 }
 
-function addNewMissingBarcode() {
+async function addNewMissingBarcode() {
   const input = document.getElementById('newMissingInput');
   const val = (input ? input.value : '').trim();
   if (!val) {
-    showToast('Ketikkan nomor barcode dahulu!');
+    showToast('Ketikkan nomor barcode atau No Gud dahulu!');
     return;
   }
-  const list = getMissingBarcodesList();
-  if (!list.some(x => String(x).trim() === val)) {
-    list.unshift(val);
-    saveMissingBarcodesList(list);
-    if (input) input.value = '';
-    openMissingModal();
-    showToast(`Barkot #${val} ditambahkan`);
-  } else {
-    showToast(`Barkot #${val} sudah ada di daftar`);
+
+  const seed = getSeedData();
+  let targetBarkot = val;
+  let targetNoGud = null;
+  let targetItem = null;
+  let targetTgl = null;
+
+  // Cari di dataset apakah sesuai nomor barkot atau nomor gudang
+  for (const tgl of Object.keys(seed)) {
+    const it = (seed[tgl] || []).find(x => 
+      (x.barkot && String(x.barkot).trim() === val) || 
+      String(x.no_gud).trim() === val
+    );
+    if (it) {
+      targetItem = it;
+      targetTgl = tgl;
+      if (it.barkot) targetBarkot = String(it.barkot).trim();
+      targetNoGud = it.no_gud;
+      break;
+    }
   }
+
+  const list = getMissingBarcodesList();
+  if (!list.some(x => String(x).trim() === targetBarkot)) {
+    list.unshift(targetBarkot);
+  }
+
+  // Jika item ada di dataset, ubah statusnya menjadi belum selesai (is_done = false)
+  if (targetItem && targetTgl) {
+    targetItem.is_done = false;
+    try {
+      const key = 'barkot_local:' + targetTgl;
+      const raw = localStorage.getItem(key);
+      const st = raw ? JSON.parse(raw) : { list: seed[targetTgl] || [], doneMap: {} };
+      if (st.doneMap) delete st.doneMap[targetNoGud];
+      localStorage.setItem(key, JSON.stringify(st));
+    } catch(e) {}
+
+    if (targetTgl === currentDate) {
+      delete state.doneMap[targetNoGud];
+      const curIt = state.list.find(x => x.no_gud === targetNoGud);
+      if (curIt) curIt.is_done = false;
+    }
+
+    if (supabaseClient) {
+      try {
+        await supabaseClient
+          .from('barkot_data')
+          .upsert({
+            tanggal: targetTgl,
+            no_gud: targetNoGud,
+            grade: targetItem.grade,
+            barkot: targetItem.barkot || null,
+            kg: targetItem.kg !== undefined && targetItem.kg !== null ? targetItem.kg : null,
+            is_done: false,
+            done_at: null
+          }, { onConflict: 'tanggal,no_gud' });
+      } catch(e) {}
+    }
+  }
+
+  saveMissingBarcodesList(list);
+  saveLocalState();
+  render();
+  if (input) input.value = '';
+  openMissingModal();
+  showToast(`✓ Barkot #${targetBarkot} ditambahkan ke daftar belum ditempel`);
 }
 
 function resetMissingBarcodesDefault() {
-  if (confirm('Kembalikan daftar barcode belum ditempel ke default (8 barcode resmi)?')) {
+  if (confirm('Kembalikan daftar barcode belum ditempel ke default (7 barcode resmi)?')) {
     saveMissingBarcodesList([...MISSING_BARCODES_DEFAULT]);
     openMissingModal();
-    showToast('Daftar direset ke 8 barcode resmi');
+    showToast('Daftar direset ke 7 barcode resmi');
   }
 }
 
