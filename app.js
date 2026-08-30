@@ -1405,22 +1405,62 @@ async function switchCamera() {
   }
 }
 
+function extractCandidateBarcodes(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return [];
+
+  const candidates = new Set();
+  candidates.add(s);
+
+  // 1. Bersihkan karakter non-alphanumeric
+  const cleanAlnum = s.replace(/[^A-Za-z0-9]/g, '');
+  candidates.add(cleanAlnum);
+
+  // 2. Ambil digit di akhir string (misal: "26MDR034088" -> "034088" & "34088")
+  const trailingMatch = cleanAlnum.match(/(\d{4,8})$/);
+  if (trailingMatch) {
+    const trailingDigits = trailingMatch[1];
+    candidates.add(trailingDigits);
+    const noLeadingZeros = trailingDigits.replace(/^0+/, '');
+    if (noLeadingZeros.length >= 3) {
+      candidates.add(noLeadingZeros);
+    }
+  }
+
+  // 3. Ambil semua deretan angka 4-8 digit di manapun posisinya
+  const allDigitSeqs = cleanAlnum.match(/\d{4,8}/g);
+  if (allDigitSeqs) {
+    allDigitSeqs.forEach(seq => {
+      candidates.add(seq);
+      const noZero = seq.replace(/^0+/, '');
+      if (noZero.length >= 3) candidates.add(noZero);
+    });
+  }
+
+  return Array.from(candidates);
+}
+
 function onBarcodeDetected(code) {
   const rawCode = String(code || '').trim();
   if (!rawCode) return;
 
-  const cleanCode = rawCode;
-  const digitsOnly = rawCode.replace(/[^0-9]/g, '');
-
+  const candidates = extractCandidateBarcodes(rawCode);
   const seed = getSeedData();
-  
-  // 1. Cari di tanggal aktif saat ini
-  let matchedBal = state.list.find(x => {
-    if (!x.barkot) return false;
-    const bStr = String(x.barkot).trim();
-    return bStr === cleanCode || (digitsOnly && bStr === digitsOnly) || cleanCode.includes(bStr);
-  });
 
+  const matchesItem = (item) => {
+    if (!item || !item.barkot) return false;
+    const itemBarkot = String(item.barkot).trim();
+    const itemBarkotNoZero = itemBarkot.replace(/^0+/, '');
+    return candidates.some(c => 
+      c === itemBarkot || 
+      c === itemBarkotNoZero || 
+      rawCode.includes(itemBarkot) ||
+      (item.no_gud && c === String(item.no_gud).trim())
+    );
+  };
+
+  // 1. Cari di tanggal aktif saat ini
+  let matchedBal = state.list.find(matchesItem);
   const resultBox = document.getElementById('scannerResultBox');
 
   if (matchedBal) {
@@ -1441,11 +1481,7 @@ function onBarcodeDetected(code) {
     // 2. Cari di tanggal lain
     let foundOther = null;
     for (const tgl of Object.keys(seed)) {
-      const it = (seed[tgl] || []).find(x => {
-        if (!x.barkot) return false;
-        const bStr = String(x.barkot).trim();
-        return bStr === cleanCode || (digitsOnly && bStr === digitsOnly) || cleanCode.includes(bStr);
-      });
+      const it = (seed[tgl] || []).find(matchesItem);
       if (it) {
         foundOther = { ...it, tanggal: tgl };
         break;
@@ -1455,16 +1491,39 @@ function onBarcodeDetected(code) {
     if (foundOther) {
       document.getElementById('scanFoundNoGud').textContent = `NO GUD ${foundOther.no_gud} (Tgl ${formatDateShort(foundOther.tanggal)})`;
       document.getElementById('scanFoundBarkot').textContent = `Barkot: ${foundOther.barkot}`;
-      document.getElementById('scanFoundMeta').textContent = `GRADE ${foundOther.grade || '—'} · ${foundOther.kg ? foundOther.kg + ' KG' : '—'}`;
+      document.getElementById('scanFoundMeta').textContent = `GRADE ${foundOther.grade || '—'} · ${foundOther.kg ? foundOther.kg + ' KG' : '—'} (Klik untuk buka)`;
       resultBox.style.display = 'block';
+      resultBox.style.cursor = 'pointer';
+      resultBox.onclick = () => {
+        jumpToDateAndHighlight(foundOther.tanggal, foundOther.no_gud);
+        stopScanner();
+      };
+
+      // Tandai juga bal tersebut selesai di storage tanggal asalnya & cloud
+      try {
+        const key = 'barkot_local:' + foundOther.tanggal;
+        const raw = localStorage.getItem(key);
+        const st = raw ? JSON.parse(raw) : { list: (seed[foundOther.tanggal] || []), doneMap: {} };
+        if (!st.doneMap) st.doneMap = {};
+        st.doneMap[foundOther.no_gud] = true;
+        localStorage.setItem(key, JSON.stringify(st));
+      } catch(e) {}
+
+      if (supabaseClient) {
+        syncLocalItemToCloud(foundOther, true);
+      }
+
       playBeep(600, 'sine', 0.15);
       triggerHaptic('tap');
-      showToast(`Barkot #${foundOther.barkot} ditemukan pada data ${formatDateShort(foundOther.tanggal)}`);
+      showToast(`Barkot #${foundOther.barkot} ditemukan pada data ${formatDateShort(foundOther.tanggal)} (No Gud ${foundOther.no_gud})`);
     } else {
-      document.getElementById('scanFoundNoGud').textContent = `BARCODE: ${cleanCode}`;
+      const displayCode = candidates.find(c => /^\d{4,6}$/.test(c)) || rawCode;
+      document.getElementById('scanFoundNoGud').textContent = `BARCODE: ${displayCode}`;
       document.getElementById('scanFoundBarkot').textContent = 'TIDAK DITEMUKAN DI DATASET';
-      document.getElementById('scanFoundMeta').textContent = 'Periksa apakah nomor barcode sesuai';
+      document.getElementById('scanFoundMeta').textContent = `Hasil Pindai Fisik: ${rawCode}`;
       resultBox.style.display = 'block';
+      resultBox.style.cursor = 'default';
+      resultBox.onclick = null;
       playBeep(260, 'sawtooth', 0.25);
       triggerHaptic('error');
     }
