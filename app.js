@@ -501,6 +501,20 @@ function playBeep(freq = 880, type = 'sine', duration = 0.12) {
   } catch(e) {}
 }
 
+function triggerHaptic(type = 'success') {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try {
+      if (type === 'success') {
+        navigator.vibrate([40, 30, 40]); // Getar ganda pendek sukses
+      } else if (type === 'error' || type === 'warning') {
+        navigator.vibrate([160, 60, 160]); // Getar panjang peringatan
+      } else if (type === 'tap') {
+        navigator.vibrate(25); // Getar sentuh mikro
+      }
+    } catch(e) {}
+  }
+}
+
 // ==========================================
 // DATA LOADING & LOCAL STORAGE
 // ==========================================
@@ -863,6 +877,7 @@ function toggleBal(noGud) {
 
   if (isDone && lockModeEnabled) {
     playBeep(300, 'sawtooth', 0.15);
+    triggerHaptic('error');
     showToast(`🔒 No Gud ${noGud} terkunci! Matikan tombol 🔒 ON di atas jika ingin membatalkan centang.`);
     return;
   }
@@ -871,10 +886,12 @@ function toggleBal(noGud) {
     delete state.doneMap[noGud];
     item.is_done = false;
     playBeep(440, 'sine', 0.08);
+    triggerHaptic('tap');
   } else {
     state.doneMap[noGud] = true;
     item.is_done = true;
     playBeep(880, 'sine', 0.12);
+    triggerHaptic('success');
   }
 
   saveLocalState();
@@ -1376,6 +1393,8 @@ function onBarcodeDetected(code) {
     saveLocalState();
     syncLocalItemToCloud(matchedBal, true);
     render();
+    playBeep(987, 'sine', 0.15);
+    triggerHaptic('success');
     showToast(`✓ NO GUD ${matchedBal.no_gud} (#${cleanCode}) DITANDAI SELESAI!`);
   } else {
     // Search in other dates
@@ -1394,6 +1413,8 @@ function onBarcodeDetected(code) {
       document.getElementById('scanFoundBarkot').textContent = `Barkot: ${foundOther.barkot}`;
       document.getElementById('scanFoundMeta').textContent = `GRADE ${foundOther.grade || '—'} · ${foundOther.kg ? foundOther.kg + ' KG' : '—'}`;
       resultBox.style.display = 'block';
+      playBeep(600, 'sine', 0.15);
+      triggerHaptic('tap');
       showToast(`Barkot #${cleanCode} ditemukan pada data ${formatDateShort(foundOther.tanggal)}`);
     } else {
       document.getElementById('scanFoundNoGud').textContent = `BARCODE: ${cleanCode}`;
@@ -1401,6 +1422,7 @@ function onBarcodeDetected(code) {
       document.getElementById('scanFoundMeta').textContent = 'Periksa apakah nomor barcode sesuai';
       resultBox.style.display = 'block';
       playBeep(260, 'sawtooth', 0.25);
+      triggerHaptic('error');
     }
   }
 }
