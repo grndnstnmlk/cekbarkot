@@ -51,16 +51,26 @@ function getSeedData() {
 // DYNAMIC MISSING BARCODES STORAGE
 // ==========================================
 function getMissingBarcodesList() {
+  const seed = getSeedData();
+  const doneCodes = new Set();
+  Object.keys(seed).forEach(tgl => {
+    (seed[tgl] || []).forEach(it => {
+      if (it.is_done && it.barkot) doneCodes.add(String(it.barkot).trim());
+    });
+  });
+
   const stored = localStorage.getItem('barkot_missing_list_v2');
   if (stored !== null) {
     try {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed)) {
-        return parsed.map(x => String(x).trim()).filter(Boolean);
+        return parsed
+          .map(x => String(x).trim())
+          .filter(x => Boolean(x) && !doneCodes.has(x));
       }
     } catch(e) {}
   }
-  return [...MISSING_BARCODES_DEFAULT];
+  return MISSING_BARCODES_DEFAULT.filter(x => !doneCodes.has(String(x).trim()));
 }
 
 function saveMissingBarcodesList(list) {
@@ -74,8 +84,38 @@ function removeMissingBarcode(code) {
   const target = String(code || '').trim();
   const list = getMissingBarcodesList().filter(x => String(x).trim() !== target);
   saveMissingBarcodesList(list);
+
+  // Tandai bal selesai jika ada di dataset dan sinkronkan ke Supabase
+  const seed = getSeedData();
+  Object.keys(seed).forEach(tgl => {
+    const it = (seed[tgl] || []).find(x => String(x.barkot).trim() === target);
+    if (it) {
+      it.is_done = true;
+      try {
+        const key = 'barkot_local:' + tgl;
+        const raw = localStorage.getItem(key);
+        const st = raw ? JSON.parse(raw) : { list: seed[tgl] || [], doneMap: {} };
+        if (!st.doneMap) st.doneMap = {};
+        st.doneMap[it.no_gud] = true;
+        localStorage.setItem(key, JSON.stringify(st));
+      } catch(e) {}
+
+      if (tgl === currentDate) {
+        state.doneMap[it.no_gud] = true;
+        const curIt = state.list.find(x => x.no_gud === it.no_gud);
+        if (curIt) curIt.is_done = true;
+      }
+
+      if (supabaseClient) {
+        syncLocalItemToCloud({ ...it, tanggal: tgl }, true);
+      }
+    }
+  });
+
+  saveLocalState();
+  render();
   openMissingModal();
-  showToast(`✓ Barkot #${target} berhasil dihapus dari daftar`);
+  showToast(`✓ Barkot #${target} dihapus dari daftar & ditandai selesai!`);
 }
 
 function addNewMissingBarcode() {
@@ -170,11 +210,28 @@ function getAllMissingAndDualItems() {
   const missingCodes = getMissingBarcodesList();
   missingCodes.forEach(b => {
     let found = null;
+    let foundIsDone = false;
     for (const tgl of allDates) {
       const match = (seed[tgl] || []).find(x => String(x.barkot).trim() === String(b).trim());
       if (match) {
+        let isDone = Boolean(match.is_done);
+        try {
+          const tglKey = 'barkot_local:' + tgl;
+          const tglRaw = localStorage.getItem(tglKey);
+          if (tglRaw) {
+            const parsed = JSON.parse(tglRaw);
+            if (parsed.doneMap && parsed.doneMap[match.no_gud]) {
+              isDone = true;
+            }
+          }
+        } catch(e) {}
+
+        if (isDone) {
+          foundIsDone = true;
+        }
+
         const isAlreadyInDual = dualList.some(d => d.no_gud === match.no_gud && d.tanggal === tgl);
-        if (!isAlreadyInDual) {
+        if (!isAlreadyInDual && !isDone) {
           found = { ...match, tanggal: tgl };
         }
         break;
@@ -182,7 +239,7 @@ function getAllMissingAndDualItems() {
     }
     if (found) {
       missingList.push(found);
-    } else {
+    } else if (!foundIsDone) {
       const inDual = dualList.some(d => String(d.barkot).trim() === String(b).trim());
       if (!inDual) {
         missingList.push({
