@@ -2943,7 +2943,7 @@
       "no_gud": 519,
       "grade": "66",
       "barkot": "34229",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 4kg"
     },
@@ -2952,7 +2952,7 @@
       "no_gud": 512,
       "grade": "60",
       "barkot": "34328",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 3kg"
     },
@@ -2961,7 +2961,7 @@
       "no_gud": 513,
       "grade": "64",
       "barkot": "34240",
-      "kg": null,
+      "kg": 50,
       "is_done": false,
       "ket": "kurangi 2kg"
     },
@@ -2994,7 +2994,7 @@
       "no_gud": 521,
       "grade": "50",
       "barkot": "33812",
-      "kg": null,
+      "kg": 47,
       "is_done": true
     },
     {
@@ -3002,7 +3002,7 @@
       "no_gud": 522,
       "grade": "50",
       "barkot": "33813",
-      "kg": null,
+      "kg": 37,
       "is_done": true
     },
     {
@@ -3010,7 +3010,7 @@
       "no_gud": 523,
       "grade": "50",
       "barkot": "33814",
-      "kg": null,
+      "kg": 45,
       "is_done": true
     },
     {
@@ -3018,7 +3018,7 @@
       "no_gud": 524,
       "grade": "50",
       "barkot": "33445",
-      "kg": null,
+      "kg": 30,
       "is_done": true,
       "ket": "tambah 2kg"
     },
@@ -3044,7 +3044,7 @@
       "no_gud": 525,
       "grade": "66",
       "barkot": "34237",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 1,5 kg"
     },
@@ -3053,7 +3053,7 @@
       "no_gud": 526,
       "grade": "66",
       "barkot": "34238",
-      "kg": null,
+      "kg": 42,
       "is_done": true
     },
     {
@@ -3071,7 +3071,7 @@
       "no_gud": 527,
       "grade": "66",
       "barkot": "34239",
-      "kg": null,
+      "kg": 36,
       "is_done": true
     },
     {
@@ -3079,7 +3079,7 @@
       "no_gud": 528,
       "grade": "64",
       "barkot": "34417",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 4kg"
     },
@@ -3088,7 +3088,7 @@
       "no_gud": 529,
       "grade": "66",
       "barkot": "34236",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 4kg"
     },
@@ -3158,7 +3158,7 @@
       "no_gud": 531,
       "grade": "64",
       "barkot": "34235",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 6kg"
     },
@@ -3167,7 +3167,7 @@
       "no_gud": 532,
       "grade": "68",
       "barkot": "34232",
-      "kg": null,
+      "kg": 43,
       "is_done": true
     },
     {
@@ -3175,7 +3175,7 @@
       "no_gud": 533,
       "grade": "66",
       "barkot": "34234",
-      "kg": null,
+      "kg": 50,
       "is_done": true,
       "ket": "kurangi 3kg"
     },
@@ -3200,7 +3200,7 @@
       "no_gud": 534,
       "grade": "64",
       "barkot": "34231",
-      "kg": null,
+      "kg": 50,
       "is_done": true
     },
     {
@@ -3208,7 +3208,7 @@
       "no_gud": 535,
       "grade": "66",
       "barkot": "34230",
-      "kg": null,
+      "kg": 50,
       "is_done": true
     },
     {
