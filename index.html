@@ -1144,30 +1144,30 @@
 
 <!-- Modal Bal Belum Ketemu (Dinamis: Bisa Tambah & Hapus) -->
 <div class="modal-overlay" id="missingModal">
-  <div class="modal-card">
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+  <div class="modal-card" style="max-width: 520px; width: 94%; max-height: 92vh; padding: 18px 16px; border-radius: 16px; display: flex; flex-direction: column;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
       <div>
-        <p style="font-family:var(--font-roboto-mono); font-size:10px; font-weight:400; text-transform:uppercase; color:var(--color-smoke); margin:0 0 2px;">Daftar Belum Ditempel</p>
-        <h3 class="modal-title" id="missingModalTitle" style="margin:0;">Bal Belum Ketemu</h3>
+        <p style="font-family:var(--font-roboto-mono); font-size:10.5px; font-weight:600; text-transform:uppercase; color:var(--color-smoke); margin:0 0 2px; letter-spacing:0.04em;">Daftar Belum Ditempel</p>
+        <h3 class="modal-title" id="missingModalTitle" style="margin:0; font-size:18px;">Bal Belum Ketemu</h3>
       </div>
-      <button class="draw-btn-ghost" style="padding:3px 8px; font-size:11px; min-height:26px;" onclick="closeMissingModal()">✕</button>
+      <button class="draw-btn-ghost" style="padding:4px 10px; font-size:12px; min-height:28px; font-weight:bold;" onclick="closeMissingModal()">✕</button>
     </div>
-    <p style="font-family:var(--font-eloquia-text); font-size:12.5px; color:var(--color-smoke); margin:0 0 12px;">
+    <p style="font-family:var(--font-eloquia-text); font-size:12px; color:var(--color-smoke); margin:0 0 10px; line-height:1.4;">
       Daftar barcode yang belum ditempel fisik balnya. Anda dapat menghapus barcode yang sudah ditemukan atau menambah barcode baru:
     </p>
 
     <!-- Form Tambah Barcode Belum Ketemu -->
-    <div style="display:flex; gap:6px; margin-bottom:12px;">
-      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot baru (misal: 31155)..." style="font-size:12px; min-height:34px; padding:4px 10px;">
-      <button class="draw-btn-ghost" style="background:var(--color-obsidian); color:var(--color-bone); border-color:var(--color-obsidian); padding:4px 14px; font-size:11px; min-height:34px; white-space:nowrap;" onclick="addNewMissingBarcode()">+ Tambah</button>
+    <div style="display:flex; gap:6px; margin-bottom:10px;">
+      <input type="text" id="newMissingInput" class="unified-search-input" inputmode="numeric" pattern="[0-9]*" placeholder="Nomor barkot baru (misal: 31155)..." style="font-size:13px; min-height:38px; padding:6px 12px; flex:1;" onkeydown="if(event.key==='Enter') addNewMissingBarcode()">
+      <button class="draw-btn-ghost" style="background:var(--color-obsidian); color:var(--color-bone); border-color:var(--color-obsidian); padding:6px 16px; font-size:12px; min-height:38px; font-weight:600; white-space:nowrap;" onclick="addNewMissingBarcode()">+ Tambah</button>
     </div>
 
     <!-- List Item Belum Ketemu -->
-    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto;"></div>
+    <div class="missing-list-group" id="missingListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:55vh; overflow-y:auto; padding-right:2px;"></div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid var(--color-ash);">
-      <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; color:var(--color-smoke);" onclick="resetMissingBarcodesDefault()">↺ Reset Default</button>
-      <button class="draw-btn-ghost" onclick="closeMissingModal()">Tutup</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid var(--color-ash);">
+      <button class="draw-btn-ghost" style="font-size:11px; padding:5px 10px; color:var(--color-smoke);" onclick="resetMissingBarcodesDefault()">↺ Reset Default</button>
+      <button class="draw-btn-ghost" style="font-size:12px; padding:5px 16px; font-weight:600;" onclick="closeMissingModal()">Tutup</button>
     </div>
   </div>
 </div>
@@ -4931,6 +4931,7 @@ function saveMissingBarcodesList(arr) {
 }
 
 function openMissingModal() {
+  updateMissingBannerCount();
   const modal = document.getElementById('missingModal');
   const container = document.getElementById('missingListContainer');
   const list = getMissingBarcodesList();
@@ -4940,7 +4941,7 @@ function openMissingModal() {
   container.innerHTML = '';
   if (list.length === 0) {
     container.innerHTML = `
-      <div style="padding:16px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase;">
+      <div style="padding:24px 16px; text-align:center; font-family:var(--font-roboto-mono); font-size:12px; color:var(--color-smoke); text-transform:uppercase; background:var(--color-mist-light); border-radius:10px; border:1px dashed var(--color-ash);">
         ✓ Semua barcode sudah ditempel / ditemukan!
       </div>
     `;
@@ -4959,49 +4960,66 @@ function openMissingModal() {
         }
       }
 
+      if (!matchedItem && state.list) {
+        const item = state.list.find(x => String(x.barkot || '').trim() === String(code).trim());
+        if (item) {
+          matchedItem = item;
+          matchedDate = currentDate;
+        }
+      }
+
       const card = document.createElement('div');
-      card.className = 'global-match-card';
-      card.style.background = '#fff';
-      card.style.border = '1.5px solid var(--color-ink)';
-      card.style.padding = '10px 12px';
+      card.style.cssText = 'background:#ffffff; border:1.5px solid var(--color-ink); border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; gap:8px; box-shadow:0 1px 4px rgba(0,0,0,0.05);';
 
       if (matchedItem) {
+        const isOut = Boolean(matchedItem.is_out);
         card.innerHTML = `
-          <div style="flex:1;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-family:var(--font-roboto-mono); font-size:16px; font-weight:700; color:var(--color-ink); background:var(--color-ash); padding:2px 8px; border-radius:4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span style="font-family:var(--font-roboto-mono); font-size:15.5px; font-weight:800; color:#ffffff; background:var(--color-ink); padding:3px 10px; border-radius:6px; letter-spacing:-0.3px; display:inline-flex; align-items:center;">
                 NO GUD ${matchedItem.no_gud}
               </span>
-              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:600; color:var(--color-ink);">
-                Barkot: <b>${code}</b>
+              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
+                Barkot <b>${code}</b>
               </span>
+              ${isOut ? '<span style="color:var(--color-out); font-weight:700; font-size:11px; background:#fee2e2; padding:2px 6px; border-radius:4px;">OUT</span>' : ''}
             </div>
-            <div style="font-family:var(--font-eloquia-text); font-size:12px; color:var(--color-smoke); margin-top:4px;">
-              GRADE ${matchedItem.grade || '—'} · ${matchedItem.kg ? matchedItem.kg + ' KG' : '— KG'} · 📅 ${formatDateIndo(matchedDate)}
+
+            <div style="display:flex; gap:6px; flex-shrink:0; align-items:center;">
+              <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:var(--color-ink); font-weight:600; background:var(--color-mist-light); border-radius:8px;" onclick="closeMissingModal(); jumpToGlobalBal('${matchedDate}', ${matchedItem.no_gud})">
+                🔍 Buka
+              </button>
+              <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:#16a34a; color:#15803d; background:#f0fdf4; font-weight:700; border-radius:8px;" onclick="removeMissingBarcode('${code}')" title="Tandai Sudah Ditempel / Ketemu">
+                ✓ Ketemu
+              </button>
             </div>
           </div>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:var(--color-ink); font-weight:600;" onclick="closeMissingModal(); jumpToGlobalBal('${matchedDate}', ${matchedItem.no_gud})">
-              🔍 Buka Tgl ${parseInt(matchedDate.split('-')[2], 10)}
-            </button>
-            <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:#22c55e; color:#15803d;" onclick="removeMissingBarcode('${code}')" title="Tandai Sudah Ditempel/Ketemu">
-              ✓ Ketemu
-            </button>
+
+          <div style="font-family:var(--font-suisse, -apple-system, sans-serif); font-size:12px; color:var(--color-smoke); line-height:1.4; display:flex; flex-wrap:wrap; gap:4px 10px; padding-top:6px; border-top:1px dashed var(--color-ash); align-items:center;">
+            <span>📅 <b>${formatDateIndo(matchedDate)}</b></span>
+            <span>GRADE: <b style="color:var(--color-ink);">${matchedItem.grade || '—'}</b></span>
+            <span>BERAT: <b style="color:var(--color-ink);">${matchedItem.kg ? matchedItem.kg + ' KG' : '—'}</b></span>
+            ${matchedItem.ket ? `<span style="color:var(--color-graphite);">📝 <b>${matchedItem.ket}</b></span>` : ''}
           </div>
         `;
       } else {
         card.innerHTML = `
-          <div style="flex:1;">
-            <div style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
-              Barkot: <b>${code}</b>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:var(--font-roboto-mono); font-size:13px; font-weight:700; color:#b91c1c; background:#fee2e2; padding:3px 8px; border-radius:6px;">
+                MANUAL
+              </span>
+              <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:700; color:var(--color-ink);">
+                Barkot <b>${code}</b>
+              </span>
             </div>
-            <div style="font-family:var(--font-eloquia-text); font-size:11.5px; color:var(--color-smoke);">
-              (Tidak terdaftar di data induk bawaan)
-            </div>
+            <button class="draw-btn-ghost" style="padding:5px 12px; font-size:11px; min-height:32px; border-color:#16a34a; color:#15803d; background:#f0fdf4; font-weight:700; border-radius:8px;" onclick="removeMissingBarcode('${code}')">
+              ✓ Ketemu
+            </button>
           </div>
-          <button class="draw-btn-ghost" style="padding:4px 8px; font-size:11px; min-height:28px; border-color:#22c55e; color:#15803d;" onclick="removeMissingBarcode('${code}')">
-            ✓ Ketemu
-          </button>
+          <div style="font-family:var(--font-suisse, -apple-system, sans-serif); font-size:11.5px; color:var(--color-smoke); padding-top:4px; border-top:1px dashed var(--color-ash);">
+            <i>(Nomor barkot dicatat di lapangan / belum terdaftar di data induk bawaan)</i>
+          </div>
         `;
       }
 
@@ -5133,75 +5151,6 @@ function applyFontSize(mode) {
     }
     btn.innerHTML = `<span class="btn-icon">${icon}</span><span class="btn-text">${text}</span>`;
   }
-}
-
-// ==========================================
-// MODAL BAL BELUM KETEMU (DINAMIS)
-// ==========================================
-function openMissingModal() {
-  updateMissingBannerCount();
-  const container = document.getElementById('missingListContainer');
-  container.innerHTML = '';
-  const currentMissing = getMissingBarcodesList();
-
-  if (currentMissing.length === 0) {
-    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--color-graphite); font-size:12px;">Semua barcode sudah ditemukan! Tidak ada barcode hilang.</div>';
-    document.getElementById('missingModal').classList.add('open');
-    return;
-  }
-
-  currentMissing.forEach(code => {
-    let matchInfo = null;
-    for (const tgl of Object.keys(SEED_DATA)) {
-      const match = SEED_DATA[tgl].find(x => String(x.barkot).trim() === code);
-      if (match) {
-        matchInfo = { ...match, tgl: tgl };
-        break;
-      }
-    }
-    if (!matchInfo && state.list) {
-      const match = state.list.find(x => String(x.barkot).trim() === code);
-      if (match) matchInfo = { ...match, tgl: currentDate };
-    }
-
-    const itemEl = document.createElement('div');
-    itemEl.style.cssText = 'background:var(--color-parchment); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
-    
-    const subText = matchInfo ? 
-      `Tgl: ${formatDateIndo(matchInfo.tgl)} · No Gud: ${matchInfo.no_gud} · GR: ${matchInfo.grade || '—'} · ${matchInfo.kg ? matchInfo.kg + 'kg' : '—'}` :
-      'Nomor barkot dicatat di lapangan';
-
-    itemEl.innerHTML = `
-      <div style="display:flex; flex-direction:column; min-width:0;">
-        <span style="font-family:var(--font-roboto-mono); font-size:14px; font-weight:500; color:var(--color-ink);">Barkot ${code}</span>
-        <span style="font-family:var(--font-eloquia-text); font-size:11.5px; color:var(--color-smoke); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${subText}</span>
-      </div>
-      <div style="display:flex; gap:6px; flex-shrink:0;">
-        ${matchInfo ? `<button class="draw-btn-ghost" style="padding:4px 10px; font-size:10.5px;" onclick="jumpToMissingBal('${matchInfo.tgl}', ${matchInfo.no_gud})">🔍 Buka</button>` : ''}
-        <button class="draw-btn-ghost" style="padding:4px 10px; font-size:10.5px; border-color:var(--color-out); color:var(--color-out);" title="Hapus dari daftar (Sudah Ketemu)" onclick="removeMissingBarcode('${code}')">✓ Ketemu</button>
-      </div>
-    `;
-    container.appendChild(itemEl);
-  });
-
-  document.getElementById('missingModal').classList.add('open');
-}
-
-function closeMissingModal() {
-  document.getElementById('missingModal').classList.remove('open');
-}
-
-function jumpToMissingBal(tgl, no_gud) {
-  closeMissingModal();
-  onDateChanged(tgl);
-  setTimeout(() => {
-    const target = state.list.find(x => x.no_gud === no_gud);
-    if (target) {
-      showSpotlight(target);
-      const cardElem = Array.from(document.querySelectorAll('.bal-card')).find(el => el.querySelector('.card-no')?.textContent === String(no_gud));
-      if (cardElem) cardElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, 100);
 }
 
 // ==========================================
