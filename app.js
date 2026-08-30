@@ -1,6 +1,6 @@
 // ==========================================
 // CEK BARKOT — APPLOGIC & SUPABASE CONTROLLER
-// DrawHistory Editorial Edition
+// T.B.K JH Edition
 // ==========================================
 
 const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
