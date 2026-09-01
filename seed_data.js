@@ -680,7 +680,7 @@ var SEED_DATA = {
       "grade": "52",
       "barkot": "30624",
       "kg": 34,
-      "is_done": true
+      "is_done": false
     },
     {
       "tanggal": "2026-08-22",
@@ -2282,7 +2282,7 @@ var SEED_DATA = {
       "grade": "50",
       "barkot": "33422",
       "kg": 37,
-      "is_done": false
+      "is_done": true
     },
     {
       "tanggal": "2026-08-26",
@@ -2300,7 +2300,7 @@ var SEED_DATA = {
       "grade": "56",
       "barkot": "33744",
       "kg": 40,
-      "is_done": false
+      "is_done": true
     },
     {
       "tanggal": "2026-08-26",
@@ -2419,7 +2419,7 @@ var SEED_DATA = {
       "grade": "66",
       "barkot": "32278",
       "kg": 33,
-      "is_done": false
+      "is_done": true
     },
     {
       "tanggal": "2026-08-26",
@@ -2444,7 +2444,7 @@ var SEED_DATA = {
       "grade": "55",
       "barkot": "33419",
       "kg": 46,
-      "is_done": false
+      "is_done": true
     },
     {
       "tanggal": "2026-08-26",
@@ -2460,7 +2460,7 @@ var SEED_DATA = {
       "grade": "65",
       "barkot": "32277",
       "kg": 47,
-      "is_done": false
+      "is_done": true
     }
   ],
   "2026-08-27": [
@@ -2962,7 +2962,7 @@ var SEED_DATA = {
       "grade": "64",
       "barkot": "34240",
       "kg": 50,
-      "is_done": false,
+      "is_done": true,
       "ket": "kurangi 2kg"
     },
     {
@@ -3036,7 +3036,7 @@ var SEED_DATA = {
       "grade": "55",
       "barkot": "943647",
       "kg": 50,
-      "is_done": false,
+      "is_done": true,
       "ket": "kurangi 2kg"
     },
     {
