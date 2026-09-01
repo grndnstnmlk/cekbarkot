@@ -1,4 +1,4 @@
-# 🌿 Aplikasi Cek Barkot Tembakau (Cloud & Realtime)
+# 🌿 Stock Djarum (Cloud & Realtime)
 
 Aplikasi berbasis web untuk mandor / petugas lapangan gudang tembakau guna mencentang dan mengecek **No Gud** yang sudah ditempeli barcode secara cepat langsung dari HP/Tablet/Laptop dengan sinkronisasi database **Supabase**.
 

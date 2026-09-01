@@ -957,7 +957,7 @@ function copyWaSummary() {
   const remainCount = Math.max(0, total - doneCount);
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
-  const text = `*REKAP CEK BARKOT GUDANG INDUK*\n📅 Tanggal: ${formatDateIndo(currentDate)}\n✅ Selesai: ${doneCount} Bal (${pct}%)\n⏳ Belum: ${remainCount} Bal\n📦 Total: ${total} Bal`;
+  const text = `*REKAP STOCK DJARUM GUDANG INDUK*\n📅 Tanggal: ${formatDateIndo(currentDate)}\n✅ Selesai: ${doneCount} Bal (${pct}%)\n⏳ Belum: ${remainCount} Bal\n📦 Total: ${total} Bal`;
   navigator.clipboard.writeText(text).then(() => {
     showToast('Rekap WhatsApp berhasil disalin ke clipboard!');
   }).catch(() => {
