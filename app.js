@@ -486,8 +486,14 @@ function toggleSound() {
 function playBeep(freq = 880, type = 'sine', duration = 0.12) {
   if (!soundEnabled) return;
   try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx || audioCtx.state === 'closed') {
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = type;
@@ -1690,6 +1696,10 @@ async function syncAllLocalToCloud() {
 function setupRealtime() {
   if (!supabaseClient) return;
   try {
+    if (realtimeChannel) {
+      try { supabaseClient.removeChannel(realtimeChannel); } catch(e) {}
+      realtimeChannel = null;
+    }
     realtimeChannel = supabaseClient
       .channel('barkot_data_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'barkot_data' }, payload => {
@@ -1771,7 +1781,7 @@ function showToast(msg) {
 }
 
 // ==========================================
-// INITIALIZATION
+// INITIALIZATION & MOBILE STABILITY
 // ==========================================
 function initApp() {
   const picker = document.getElementById('datePicker');
@@ -1793,6 +1803,25 @@ function initApp() {
       } else {
         e.target.classList.remove('open');
         e.target.style.display = 'none';
+      }
+    }
+  });
+
+  // Mobile App-Switch & Screen Sleep Handler (Mencegah Crash & Memory Leak)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Saat berpindah ke WhatsApp / layar HP terkunci, matikan stream kamera agar RAM tidak jebol
+      const scannerModal = document.getElementById('scannerModal');
+      if (scannerModal && scannerModal.classList.contains('open')) {
+        stopScanner();
+      }
+      if (audioCtx && audioCtx.state === 'running') {
+        audioCtx.suspend().catch(() => {});
+      }
+    } else {
+      // Saat user kembali ke browser, pulihkan audio
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
       }
     }
   });
