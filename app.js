@@ -11,7 +11,7 @@ const MISSING_BARCODES_DEFAULT = [
   "30624"
 ];
 
-let currentDate = '2026-08-31';
+let currentDate = '2026-09-01';
 let state = {
   list: [],
   doneMap: {}

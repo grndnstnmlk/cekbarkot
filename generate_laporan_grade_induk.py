@@ -18,6 +18,7 @@ files = [
     ("2026-08-29", "29-8", "SABTU", "grade lengkap tgl 29.xlsx"),
     ("2026-08-30", "30-8", "MINGGU", "grade tgl 30.xlsx"),
     ("2026-08-31", "31-8", "SENIN", "grade tgl 31.xlsx"),
+    ("2026-09-01", "1-9", "SELASA", "grade_tgl_1_september_sorted.xlsx"),
 ]
 
 all_items = []
@@ -111,7 +112,7 @@ cell_a1.alignment = align_center
 # Row 2: Subtitle
 ws1.merge_cells("A2:F2")
 cell_a2 = ws1["A2"]
-cell_a2.value = "TANGGAL: 21-8 s/d 31-8          HARI: ......................          TAHUN: 2026"
+cell_a2.value = "TANGGAL: 21-8 s/d 1-9          HARI: ......................          TAHUN: 2026"
 cell_a2.font = font_subtitle
 cell_a2.alignment = align_center
 for col in range(1, 7):
@@ -203,12 +204,12 @@ ws2.column_dimensions['H'].width = 12.0
 ws2.column_dimensions['I'].width = 25.0
 
 ws2.merge_cells("A1:I1")
-ws2["A1"].value = "REKAP DATA BAL DENGAN BARKOT (21 - 31 AGUSTUS 2026)"
+ws2["A1"].value = "REKAP DATA BAL DENGAN BARKOT (21 AGUSTUS - 1 SEPTEMBER 2026)"
 ws2["A1"].font = Font(name="Arial", size=16, bold=True)
 ws2["A1"].alignment = align_center
 
 ws2.merge_cells("A2:I2")
-ws2["A2"].value = "Diurutkan berdasarkan No Gudang terkecil sampai terbesar | Total: 390 Bal Berbarkot"
+ws2["A2"].value = f"Diurutkan berdasarkan No Gudang terkecil sampai terbesar | Total: {len(all_items)} Bal Berbarkot"
 ws2["A2"].font = Font(name="Arial", size=10, italic=True)
 ws2["A2"].alignment = align_center
 
@@ -277,7 +278,7 @@ ws3["A1"].font = Font(name="Arial", size=16, bold=True)
 ws3["A1"].alignment = align_center
 
 ws3.merge_cells("A2:G2")
-ws3["A2"].value = "Periode: 21 Agustus 2026 s/d 31 Agustus 2026"
+ws3["A2"].value = "Periode: 21 Agustus 2026 s/d 1 September 2026"
 ws3["A2"].font = Font(name="Arial", size=10, italic=True)
 ws3["A2"].alignment = align_center
 
