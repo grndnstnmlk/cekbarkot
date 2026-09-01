@@ -3,3 +3,5 @@ update_app.py
 *.tmp
 .DS_Store
 supabase_logs.json
+~$*
+

@@ -106,3 +106,19 @@ Format rekapitulasi pesan singkat siap kirim ke grup WhatsApp operasional:
 - Total bal terdaftar, total selesai, total sisa (belum).
 - Persentase progress (misal: `98.2%`).
 - Rincian No Gud / Barkot yang belum selesai ditempel.
+
+---
+
+## 7. 🛠️ Prosedur Upsert & Troubleshooting Mobile Sync (HP Lapangan)
+
+### Troubleshooting Data Tidak Terupdate di HP:
+1. **Verifikasi Jumlah Record Supabase Cloud vs Local Seed Data**:
+   - Jika data tanggal tertentu (misal: tanggal 31) tidak muncul/tidak lengkap di HP, periksa jumlah record di Supabase Cloud (`barkot_data`).
+   - Lakukan bulk upsert seluruh baris bal dari `seed_data.json` / `seed_data.js` ke Supabase REST API dengan query parameter `?on_conflict=tanggal,no_gud`.
+2. **Cache Busting Asset JavaScript (`index.html`)**:
+   - Browser mobile HP (Chrome Android & Safari iOS) melakukan caching agresif pada file `.js`.
+   - Wajib menaikkan versi query string pada [`index.html`](file:///c:/Users/xenov/Downloads/cekbarkot/index.html) (contoh: `seed_data.js?v=3.3` & `app.js?v=3.3`) setiap kali ada penambahan data atau pembaruan logika aplikasi.
+3. **Pemberihan Cache & Reload di HP Lapangan**:
+   - Instruksikan petugas lapangan/mandor untuk menekan tombol **`🔄 Muat Ulang`** pada panel *Sinkronisasi Cloud & Berkas*.
+   - Atau lakukan *hard refresh* / muat ulang halaman di browser HP untuk mengambil file JavaScript versi terbaru.
+
