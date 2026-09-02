@@ -374,6 +374,17 @@
   .missing-bal-banner:active {
     background: var(--color-olive-charcoal);
   }
+  .missing-bal-banner.all-done {
+    background: #064e3b;
+    border-color: #059669;
+  }
+  .missing-bal-banner.all-done:active {
+    background: #047857;
+  }
+  .missing-bal-banner.all-done .saffron-dot {
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  }
   .missing-banner-left {
     display: flex;
     align-items: center;

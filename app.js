@@ -242,18 +242,35 @@ function getAllMissingAndDualItems() {
   allDates.forEach(tgl => {
     (seed[tgl] || []).forEach(item => {
       if (item.barkot && String(item.barkot).trim() !== '') {
+        // Cek apakah item ini sudah selesai
+        let itemIsDone = Boolean(item.is_done);
+        try {
+          const tglKey = 'barkot_local:' + tgl;
+          const tglRaw = localStorage.getItem(tglKey);
+          if (tglRaw) {
+            const parsed = JSON.parse(tglRaw);
+            if (parsed.doneMap && parsed.doneMap[item.no_gud]) {
+              itemIsDone = true;
+            }
+          }
+        } catch(e) {}
+
         if (!seenNoGud[item.no_gud]) {
-          seenNoGud[item.no_gud] = { ...item, tanggal: tgl };
+          seenNoGud[item.no_gud] = { ...item, tanggal: tgl, is_done: itemIsDone };
         } else {
           const primary = seenNoGud[item.no_gud];
-          dualList.push({
-            ...item,
-            tanggal: tgl,
-            primaryDate: primary.tanggal,
-            primaryBarkot: primary.barkot,
-            primaryGrade: primary.grade,
-            primaryKg: primary.kg
-          });
+          // Hanya masukkan ke dualList jika bal sekunder BELUM selesai (belum ditempel)
+          if (!itemIsDone) {
+            dualList.push({
+              ...item,
+              tanggal: tgl,
+              is_done: itemIsDone,
+              primaryDate: primary.tanggal,
+              primaryBarkot: primary.barkot,
+              primaryGrade: primary.grade,
+              primaryKg: primary.kg
+            });
+          }
         }
       }
     });
@@ -317,11 +334,22 @@ function updateMissingBannerUI() {
   const titleEl = document.getElementById('missingBannerTitle');
   const btnEl = document.getElementById('missingBannerBtn');
 
-  if (titleEl) {
-    titleEl.textContent = `${totalCount} Bal Belum Ditempel / Barkot Ganda`;
-  }
-  if (btnEl) {
-    btnEl.textContent = `Lihat & Kelola (${totalCount}) →`;
+  if (totalCount === 0) {
+    banner.classList.add('all-done');
+    if (titleEl) {
+      titleEl.textContent = '✓ Semua Bal Sudah Ditempel';
+    }
+    if (btnEl) {
+      btnEl.textContent = 'Kelola Daftar →';
+    }
+  } else {
+    banner.classList.remove('all-done');
+    if (titleEl) {
+      titleEl.textContent = `${totalCount} Bal Belum Ditempel`;
+    }
+    if (btnEl) {
+      btnEl.textContent = `Lihat & Kelola (${totalCount}) →`;
+    }
   }
 }
 
@@ -1213,11 +1241,25 @@ function openMissingModal() {
   container.innerHTML = '';
   const { dualList, missingList } = getAllMissingAndDualItems();
 
-  // 1. Barkot Ganda Section
+  if (dualList.length === 0 && missingList.length === 0) {
+    const emptyEl = document.createElement('div');
+    emptyEl.style.cssText = 'text-align:center; padding: 28px 12px 20px; color: var(--color-ink);';
+    emptyEl.innerHTML = `
+      <div style="font-size:36px; margin-bottom:10px;">✅</div>
+      <div style="font-weight:700; font-size:15px; margin-bottom:4px;">Semua Bal Sudah Ditempel!</div>
+      <div style="font-size:12px; color:var(--color-smoke); line-height:1.5;">Seluruh barcode fisik dan nomor bal ganda telah terpasang dan selesai dicentang.</div>
+    `;
+    container.appendChild(emptyEl);
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+    return;
+  }
+
+  // 1. Barkot Ganda Section (Hanya yang belum terpasang)
   if (dualList.length > 0) {
     const header1 = document.createElement('div');
     header1.style.cssText = 'font-family:var(--font-roboto-mono); font-size:11px; font-weight:600; text-transform:uppercase; color:#b45309; margin:8px 0 4px;';
-    header1.textContent = `⚠️ Barkot Ganda (${dualList.length} Bal — Sudah Masuk di Tanggal Awal)`;
+    header1.textContent = `⚠️ Barkot Ganda Belum Selesai (${dualList.length} Bal)`;
     container.appendChild(header1);
 
     dualList.forEach(it => {
@@ -1231,42 +1273,44 @@ function openMissingModal() {
             ↩️ <i>Sudah tertempel di <b>${formatDateShort(it.primaryDate)}</b> (Barkot <b>${it.primaryBarkot}</b>)</i>
           </div>
         </div>
-        <button class="draw-btn-ghost" style="font-size:10.5px; padding:3px 8px; min-height:26px; border-color:#b45309; color:#b45309;" onclick="jumpToDateAndHighlight('${it.primaryDate}', ${it.no_gud}); closeMissingModal();">🔍 Buka Tgl Awal</button>
+        <button class="draw-btn-ghost" style="font-size:10.5px; padding:3px 8px; min-height:26px; border-color:#b45309; color:#b45309;" onclick="jumpToDateAndHighlight('${it.tanggal}', ${it.no_gud}); closeMissingModal();">🔍 Buka</button>
       `;
       container.appendChild(itemEl);
     });
   }
 
   // 2. Missing Physical Barcodes Section
-  const header2 = document.createElement('div');
-  header2.style.cssText = 'font-family:var(--font-roboto-mono); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-smoke); margin:12px 0 4px;';
-  header2.textContent = `Daftar Belum Ditempel / Hilang (${missingList.length} Bal)`;
-  container.appendChild(header2);
+  if (missingList.length > 0) {
+    const header2 = document.createElement('div');
+    header2.style.cssText = 'font-family:var(--font-roboto-mono); font-size:11px; font-weight:600; text-transform:uppercase; color:var(--color-smoke); margin:12px 0 4px;';
+    header2.textContent = `Daftar Belum Ditempel / Hilang (${missingList.length} Bal)`;
+    container.appendChild(header2);
 
-  missingList.forEach(it => {
-    const itemEl = document.createElement('div');
-    itemEl.style.cssText = 'background:var(--color-bone); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
-    
-    const ketBadge = it.ket ? `<span style="display:inline-block; margin-top:2px; font-size:11px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:4px; padding:1px 6px;">📝 ${it.ket}</span>` : '';
+    missingList.forEach(it => {
+      const itemEl = document.createElement('div');
+      itemEl.style.cssText = 'background:var(--color-bone); border:1px solid var(--color-ash); border-radius:var(--radius-buttons); padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+      
+      const ketBadge = it.ket ? `<span style="display:inline-block; margin-top:2px; font-size:11px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:4px; padding:1px 6px;">📝 ${it.ket}</span>` : '';
 
-    itemEl.innerHTML = `
-      <div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="font-family:var(--font-roboto-mono); font-weight:700; font-size:14px; color:var(--color-ink);">${it.no_gud !== '—' ? `NO GUD ${it.no_gud}` : 'BELUM ADA NO GUD'}</span>
-          <span style="font-family:var(--font-roboto-mono); font-weight:500; font-size:12px; color:var(--color-smoke); background:var(--color-parchment); border:1px solid var(--color-ash); border-radius:4px; padding:1px 6px;">Barkot #${it.barkot}</span>
+      itemEl.innerHTML = `
+        <div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-family:var(--font-roboto-mono); font-weight:700; font-size:14px; color:var(--color-ink);">${it.no_gud !== '—' ? `NO GUD ${it.no_gud}` : 'BELUM ADA NO GUD'}</span>
+            <span style="font-family:var(--font-roboto-mono); font-weight:500; font-size:12px; color:var(--color-smoke); background:var(--color-parchment); border:1px solid var(--color-ash); border-radius:4px; padding:1px 6px;">Barkot #${it.barkot}</span>
+          </div>
+          <div style="font-size:11.5px; color:var(--color-smoke); margin-top:3px;">
+            📅 Tgl: <b>${formatDateShort(it.tanggal)}</b> · GR ${it.grade} · ${it.kg ? it.kg + 'kg' : '—'}
+          </div>
+          ${ketBadge}
         </div>
-        <div style="font-size:11.5px; color:var(--color-smoke); margin-top:3px;">
-          📅 Tgl: <b>${formatDateShort(it.tanggal)}</b> · GR ${it.grade} · ${it.kg ? it.kg + 'kg' : '—'}
+        <div style="display:flex; gap:4px; align-items:center;">
+          ${it.tanggal !== '—' ? `<button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 10px; min-height:28px;" onclick="jumpToDateAndHighlight('${it.tanggal}', ${it.no_gud}); closeMissingModal();">🔍 Buka</button>` : ''}
+          <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px; border-color:var(--color-out); color:var(--color-out);" onclick="removeMissingBarcode('${it.barkot}')" title="Hapus dari daftar">✕</button>
         </div>
-        ${ketBadge}
-      </div>
-      <div style="display:flex; gap:4px; align-items:center;">
-        ${it.tanggal !== '—' ? `<button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 10px; min-height:28px;" onclick="jumpToDateAndHighlight('${it.tanggal}', ${it.no_gud}); closeMissingModal();">🔍 Buka</button>` : ''}
-        <button class="draw-btn-ghost" style="font-size:10.5px; padding:4px 8px; min-height:28px; border-color:var(--color-out); color:var(--color-out);" onclick="removeMissingBarcode('${it.barkot}')" title="Hapus dari daftar">✕</button>
-      </div>
-    `;
-    container.appendChild(itemEl);
-  });
+      `;
+      container.appendChild(itemEl);
+    });
+  }
 
   modal.classList.add('open');
   modal.style.display = 'flex';
