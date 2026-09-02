@@ -6,10 +6,8 @@
 const DEFAULT_SUPABASE_URL = 'https://jrpklibocgicubevyshm.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycGtsaWJvY2dpY3ViZXZ5c2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTA3NjUsImV4cCI6MjEwMzQyNjc2NX0.xGoel8SNa2v9DcZBYwKcmjzGF7j6LJ-OQkr919JyYSc';
 
-// Barcode Belum Ditempel (Hanya No Gud 346 #30624)
-const MISSING_BARCODES_DEFAULT = [
-  "30624"
-];
+// Barcode Belum Ditempel (Semua barcode fisik / no ganda sudah selesai dipasang)
+const MISSING_BARCODES_DEFAULT = [];
 
 let currentDate = '2026-09-01';
 let state = {
@@ -192,10 +190,10 @@ async function addNewMissingBarcode() {
 }
 
 function resetMissingBarcodesDefault() {
-  if (confirm('Kembalikan daftar barcode belum ditempel ke default (No Gud 346 / #30624)?')) {
+  if (confirm('Kosongkan/reset daftar barcode belum ditempel?')) {
     saveMissingBarcodesList([...MISSING_BARCODES_DEFAULT]);
     openMissingModal();
-    showToast('Daftar direset ke No Gud 346');
+    showToast('Daftar barcode belum ditempel telah direset');
   }
 }
 
