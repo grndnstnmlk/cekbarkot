@@ -4560,5 +4560,208 @@ window.SEED_DATA = {
       "is_out": true,
       "ket": "out nyabe"
     }
+  ],
+  "2026-09-03": [
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 698,
+      "grade": "63",
+      "barkot": "35489",
+      "kg": 33,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 699,
+      "grade": "63",
+      "barkot": "35490",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 697,
+      "grade": "72",
+      "barkot": "39096",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 696,
+      "grade": "72",
+      "barkot": "39097",
+      "kg": 39,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 692,
+      "grade": "66",
+      "barkot": "39780",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 693,
+      "grade": "72",
+      "barkot": "39098",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 694,
+      "grade": "70",
+      "barkot": "39092",
+      "kg": 38,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 695,
+      "grade": "72",
+      "barkot": "39091",
+      "kg": 43,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 688,
+      "grade": "70",
+      "barkot": "39095",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 700,
+      "grade": "68",
+      "barkot": "39779",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 691,
+      "grade": "68",
+      "barkot": "39778",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 701,
+      "grade": "68",
+      "barkot": "39776",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 689,
+      "grade": "70",
+      "barkot": "39094",
+      "kg": 38,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 702,
+      "grade": "68",
+      "barkot": "39093",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 690,
+      "grade": "68",
+      "barkot": "39777",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 703,
+      "grade": "70",
+      "barkot": "39089",
+      "kg": 45,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 687,
+      "grade": "72",
+      "barkot": "39090",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 704,
+      "grade": "68",
+      "barkot": "39088",
+      "kg": 32,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 705,
+      "grade": "58",
+      "barkot": "39775",
+      "kg": 34,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 706,
+      "grade": "58",
+      "barkot": "39774",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 707,
+      "grade": "70",
+      "barkot": "39086",
+      "kg": 48,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 708,
+      "grade": "70",
+      "barkot": "39084",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 709,
+      "grade": "70",
+      "barkot": "39085",
+      "kg": 39,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 710,
+      "grade": "72",
+      "barkot": "",
+      "kg": 31,
+      "is_done": false,
+      "ket": "@60.000"
+    },
+    {
+      "tanggal": "2026-09-03",
+      "no_gud": 711,
+      "grade": "70",
+      "barkot": "39087",
+      "kg": 38,
+      "is_done": false
+    }
   ]
 };

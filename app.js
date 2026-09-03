@@ -9,7 +9,7 @@ const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 // Barcode Belum Ditempel (Semua barcode fisik / no ganda sudah selesai dipasang)
 const MISSING_BARCODES_DEFAULT = [];
 
-let currentDate = '2026-09-02';
+let currentDate = '2026-09-03';
 let state = {
   list: [],
   doneMap: {}
@@ -394,12 +394,10 @@ function renderQuickDates() {
   container.innerHTML = '';
 
   sortedDates.forEach(dateStr => {
-    const d = new Date(dateStr + 'T00:00:00');
-    const day = d.getDate();
     const count = (seed[dateStr] || []).length;
     const pill = document.createElement('span');
     pill.className = 'date-pill' + (dateStr === currentDate ? ' active' : '');
-    pill.textContent = `${day} Ags (${count})`;
+    pill.textContent = `${formatDateShort(dateStr)} (${count})`;
     pill.onclick = () => onDateChanged(dateStr);
     container.appendChild(pill);
   });
