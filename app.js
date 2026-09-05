@@ -9,7 +9,7 @@ const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 // Barcode Belum Ditempel (Semua barcode fisik / no ganda sudah selesai dipasang)
 const MISSING_BARCODES_DEFAULT = [];
 
-let currentDate = '2026-09-04';
+let currentDate = '2026-09-05';
 let state = {
   list: [],
   doneMap: {}

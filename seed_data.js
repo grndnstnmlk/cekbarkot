@@ -1,4 +1,4 @@
-// SEED DATA: REKAP BAL GUDANG INDUK (21 AGUSTUS - 4 SEPTEMBER 2026)
+// SEED DATA: REKAP BAL GUDANG INDUK (21 AGUSTUS - 5 SEPTEMBER 2026)
 const SEED_DATA = {
   "2026-08-21": [
     {
@@ -5030,6 +5030,208 @@ const SEED_DATA = {
       "is_out": true,
       "ket": "mote"
     }
+  ],
+  "2026-09-05": [
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 715,
+      "grade": "66",
+      "barkot": "940845",
+      "kg": 46,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 747,
+      "grade": "70",
+      "barkot": "123139",
+      "kg": 45,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 748,
+      "grade": "68",
+      "barkot": "123140",
+      "kg": 34,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 749,
+      "grade": "64",
+      "barkot": "123301",
+      "kg": 40,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 751,
+      "grade": "64",
+      "barkot": "39200",
+      "kg": 41,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 752,
+      "grade": "64",
+      "barkot": "39325",
+      "kg": 42,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 753,
+      "grade": "64",
+      "barkot": "123302",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 755,
+      "grade": "60",
+      "barkot": "123303",
+      "kg": 48,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 761,
+      "grade": "72",
+      "barkot": "123141",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 762,
+      "grade": "72",
+      "barkot": "123143",
+      "kg": 42,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 763,
+      "grade": "72",
+      "barkot": "123142",
+      "kg": 42,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 764,
+      "grade": "64",
+      "barkot": "123304",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 765,
+      "grade": "66",
+      "barkot": "940842",
+      "kg": 50,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 766,
+      "grade": "62",
+      "barkot": "940847",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 767,
+      "grade": "62",
+      "barkot": "940843",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 768,
+      "grade": "70",
+      "barkot": "123144",
+      "kg": 39,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 769,
+      "grade": "68",
+      "barkot": "123305",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 770,
+      "grade": "66",
+      "barkot": "940844",
+      "kg": 44,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 771,
+      "grade": "62",
+      "barkot": "940848",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 772,
+      "grade": "65",
+      "barkot": "940840",
+      "kg": 35,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 773,
+      "grade": "60",
+      "barkot": "940841",
+      "kg": 37,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 786,
+      "grade": "65",
+      "barkot": "123307",
+      "kg": 36,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 787,
+      "grade": "68",
+      "barkot": "940846",
+      "kg": 30,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 788,
+      "grade": "70",
+      "barkot": "123306",
+      "kg": 34,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-05",
+      "no_gud": 789,
+      "grade": "70",
+      "barkot": "123145",
+      "kg": 34,
+      "is_done": false
+    }
   ]
 };
 
@@ -5040,4 +5242,3 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = SEED_DATA;
 }
-
