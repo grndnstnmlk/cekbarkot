@@ -23,6 +23,7 @@ files = [
     ("2026-09-03", "3-9", "KAMIS", "grade 3 sep.xlsx"),
     ("2026-09-04", "4-9", "JUMAT", "grade 4 sep.xlsx"),
     ("2026-09-05", "5-9", "SABTU", "grade 5 sep.xlsx"),
+    ("2026-09-06", "6-9", "MINGGU", "grade 6 september.xlsx"),
 ]
 
 all_items = []
@@ -116,7 +117,7 @@ cell_a1.alignment = align_center
 # Row 2: Subtitle
 ws1.merge_cells("A2:F2")
 cell_a2 = ws1["A2"]
-cell_a2.value = "TANGGAL: 21-8 s/d 5-9          HARI: ......................          TAHUN: 2026"
+cell_a2.value = "TANGGAL: 21-8 s/d 6-9          HARI: ......................          TAHUN: 2026"
 cell_a2.font = font_subtitle
 cell_a2.alignment = align_center
 for col in range(1, 7):
@@ -208,7 +209,7 @@ ws2.column_dimensions['H'].width = 12.0
 ws2.column_dimensions['I'].width = 25.0
 
 ws2.merge_cells("A1:I1")
-ws2["A1"].value = "REKAP DATA BAL DENGAN BARKOT (21 AGUSTUS - 5 SEPTEMBER 2026)"
+ws2["A1"].value = "REKAP DATA BAL DENGAN BARKOT (21 AGUSTUS - 6 SEPTEMBER 2026)"
 ws2["A1"].font = Font(name="Arial", size=16, bold=True)
 ws2["A1"].alignment = align_center
 
@@ -282,7 +283,7 @@ ws3["A1"].font = Font(name="Arial", size=16, bold=True)
 ws3["A1"].alignment = align_center
 
 ws3.merge_cells("A2:G2")
-ws3["A2"].value = "Periode: 21 Agustus 2026 s/d 5 September 2026"
+ws3["A2"].value = "Periode: 21 Agustus 2026 s/d 6 September 2026"
 ws3["A2"].font = Font(name="Arial", size=10, italic=True)
 ws3["A2"].alignment = align_center
 
