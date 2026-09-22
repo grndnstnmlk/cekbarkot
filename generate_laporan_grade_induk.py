@@ -37,6 +37,7 @@ files = [
     ("2026-09-19", "19-9", "SABTU", "grade 19 september.xlsx"),
     ("2026-09-20", "20-9", "MINGGU", "grade 20 sep.xlsx"),
     ("2026-09-21", "21-9", "SENIN", "grade 21 sep.xlsx"),
+    ("2026-09-22", "22-9", "SELASA", "grade 22 sep.xlsx"),
 ]
 
 all_items = []
