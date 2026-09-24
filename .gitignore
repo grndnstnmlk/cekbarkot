@@ -4,4 +4,5 @@ update_app.py
 .DS_Store
 supabase_logs.json
 ~$*
-
+__pycache__/
+*.pyc

@@ -122,3 +122,25 @@ Format rekapitulasi pesan singkat siap kirim ke grup WhatsApp operasional:
    - Instruksikan petugas lapangan/mandor untuk menekan tombol **`🔄 Muat Ulang`** pada panel *Sinkronisasi Cloud & Berkas*.
    - Atau lakukan *hard refresh* / muat ulang halaman di browser HP untuk mengambil file JavaScript versi terbaru.
 
+---
+
+## 8. ⚡ Protokol Otomasi Pembaruan Harian (Prompt "update")
+
+Setiap hari ketika ada file Excel rekap grade tembakau baru di folder `Laporan Grade Induk/` (contoh: `grade 23 sep.xlsx`, `grade 24 sep.xlsx`), pengguna cukup memasukkan prompt sederhana seperti **`"update"`**.
+
+### Perintah Eksekusi Otomatis:
+Cukup jalankan pipeline otomasi terintegrasi:
+```bash
+python daily_update.py
+```
+
+### Tahapan yang Dijalankan oleh Pipeline:
+1. **Deteksi Berkas**: Mencari file `.xlsx` baru di folder `Laporan Grade Induk/` dan membaca baris tanggal.
+2. **Ekstraksi Data**: Membaca nomor gudang, grade, barkot valid, dan berat bal.
+3. **Rekap Master**: Memperbarui `generate_laporan_grade_induk.py` dan mengeksekusinya untuk meregenerasi seluruh file rekap Excel.
+4. **Pembaruan Data Lokal**: Menuliskan data baru ke `seed_data.json`, `seed_data.js`, dan `supabase_schema.sql`.
+5. **Sinkronisasi Supabase Cloud**: Melakukan bulk upsert langsung ke endpoint REST API Supabase (`/rest/v1/barkot_data`).
+6. **Frontend & Cache Busting**: Mengubah `currentDate` di `app.js`, memperbarui label tanggal, dan menaikkan versi query string pada `index.html` (contoh: `v=6.6`).
+7. **Deploy Otomatis**: Melakukan staging, git commit deskriptif, dan push ke branch `main` GitHub Pages (`https://grndnstnmlk.github.io/cekbarkot/`).
+
+
