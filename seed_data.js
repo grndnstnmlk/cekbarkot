@@ -11009,5 +11009,615 @@ const SEED_DATA = {
       "kg": 50.0,
       "is_done": false
     }
+  ],
+  "2026-09-26": [
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1524,
+      "grade": "67",
+      "barkot": "379711",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1571,
+      "grade": "69",
+      "barkot": "377196",
+      "kg": 49.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1592,
+      "grade": "68",
+      "barkot": "378586",
+      "kg": 49.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1593,
+      "grade": "70",
+      "barkot": "379464",
+      "kg": 45.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1617,
+      "grade": "68",
+      "barkot": "379713",
+      "kg": 34.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1633,
+      "grade": "68",
+      "barkot": "377181",
+      "kg": 44.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1655,
+      "grade": "68",
+      "barkot": "377182",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1658,
+      "grade": "70",
+      "barkot": "379712",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1659,
+      "grade": "70",
+      "barkot": "379714",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1660,
+      "grade": "67",
+      "barkot": "379469",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1661,
+      "grade": "68",
+      "barkot": "379467",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1662,
+      "grade": "68",
+      "barkot": "379468",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1663,
+      "grade": "72",
+      "barkot": "379518",
+      "kg": 45.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1664,
+      "grade": "72",
+      "barkot": "379519",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1665,
+      "grade": "72",
+      "barkot": "379516",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1666,
+      "grade": "72",
+      "barkot": "379517",
+      "kg": 44.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1667,
+      "grade": "72",
+      "barkot": "379514",
+      "kg": 41.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1668,
+      "grade": "72",
+      "barkot": "379515",
+      "kg": 36.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1669,
+      "grade": "70",
+      "barkot": "379087",
+      "kg": 32.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1670,
+      "grade": "70",
+      "barkot": "379088",
+      "kg": 34.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1671,
+      "grade": "68",
+      "barkot": "378590",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1672,
+      "grade": "66",
+      "barkot": "379460",
+      "kg": 30.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1673,
+      "grade": "55",
+      "barkot": "35142",
+      "kg": 31.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1675,
+      "grade": "62",
+      "barkot": "377178",
+      "kg": 40.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1676,
+      "grade": "65",
+      "barkot": "379459",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1677,
+      "grade": "55",
+      "barkot": "35270",
+      "kg": 32.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1680,
+      "grade": "70",
+      "barkot": "379199",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1681,
+      "grade": "70",
+      "barkot": "379200",
+      "kg": 45.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1682,
+      "grade": "68",
+      "barkot": "379701",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1683,
+      "grade": "67",
+      "barkot": "378583",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1684,
+      "grade": "68",
+      "barkot": "379702",
+      "kg": 47.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1685,
+      "grade": "68",
+      "barkot": "379703",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1686,
+      "grade": "67",
+      "barkot": "378582",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1687,
+      "grade": "68",
+      "barkot": "379704",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1688,
+      "grade": "68",
+      "barkot": "379706",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1689,
+      "grade": "68",
+      "barkot": "379705",
+      "kg": 48.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1693,
+      "grade": "68",
+      "barkot": "379709",
+      "kg": 49.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1694,
+      "grade": "68",
+      "barkot": "379710",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1695,
+      "grade": "67",
+      "barkot": "378588",
+      "kg": 49.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1696,
+      "grade": "68",
+      "barkot": "379089",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1697,
+      "grade": "68",
+      "barkot": "379466",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1698,
+      "grade": "68",
+      "barkot": "379090",
+      "kg": 48.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1699,
+      "grade": "62",
+      "barkot": "378589",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1700,
+      "grade": "62",
+      "barkot": "377190",
+      "kg": 49.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1701,
+      "grade": "62",
+      "barkot": "377188",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1702,
+      "grade": "62",
+      "barkot": "377189",
+      "kg": 47.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1703,
+      "grade": "62",
+      "barkot": "377186",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1704,
+      "grade": "62",
+      "barkot": "377187",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1705,
+      "grade": "58",
+      "barkot": "377191",
+      "kg": 47.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1706,
+      "grade": "68",
+      "barkot": "379715",
+      "kg": 40.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1707,
+      "grade": "60",
+      "barkot": "379470",
+      "kg": 39.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1708,
+      "grade": "67",
+      "barkot": "379716",
+      "kg": 44.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1709,
+      "grade": "66",
+      "barkot": "377184",
+      "kg": 44.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1710,
+      "grade": "65",
+      "barkot": "378591",
+      "kg": 39.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1712,
+      "grade": "62",
+      "barkot": "377194",
+      "kg": 36.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1713,
+      "grade": "62",
+      "barkot": "377192",
+      "kg": 40.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1714,
+      "grade": "62",
+      "barkot": "377195",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1715,
+      "grade": "65",
+      "barkot": "378592",
+      "kg": 46.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1716,
+      "grade": "62",
+      "barkot": "377180",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1717,
+      "grade": "62",
+      "barkot": "377179",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1718,
+      "grade": "64",
+      "barkot": "379707",
+      "kg": 34.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1720,
+      "grade": "62",
+      "barkot": "377183",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1721,
+      "grade": "60",
+      "barkot": "377185",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1722,
+      "grade": "62",
+      "barkot": "377193",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1724,
+      "grade": "65",
+      "barkot": "378585",
+      "kg": 39.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1725,
+      "grade": "60",
+      "barkot": "378584",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1726,
+      "grade": "67",
+      "barkot": "378593",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1727,
+      "grade": "68",
+      "barkot": "379465",
+      "kg": 45.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1728,
+      "grade": "68",
+      "barkot": "379708",
+      "kg": 50.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1729,
+      "grade": "64",
+      "barkot": "379461",
+      "kg": 43.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1730,
+      "grade": "64",
+      "barkot": "377850",
+      "kg": 32.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1731,
+      "grade": "64",
+      "barkot": "379462",
+      "kg": 36.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1732,
+      "grade": "64",
+      "barkot": "379401",
+      "kg": 38.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1736,
+      "grade": "68",
+      "barkot": "378587",
+      "kg": 42.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1737,
+      "grade": "68",
+      "barkot": "379463",
+      "kg": 44.0,
+      "is_done": false
+    },
+    {
+      "tanggal": "2026-09-26",
+      "no_gud": 1738,
+      "grade": "58",
+      "barkot": "35143",
+      "kg": 38.0,
+      "is_done": false
+    }
   ]
 };
