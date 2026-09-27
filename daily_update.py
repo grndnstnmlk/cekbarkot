@@ -157,7 +157,7 @@ def run_generate_script():
     else:
         print("  [✓] File Excel rekap berhasil diperbarui.")
 
-def update_seed_data(iso_date, items):
+def update_seed_data(iso_date, items, existing_status=None):
     """Memperbarui seed_data.json dan seed_data.js."""
     json_path = os.path.join(BASE_DIR, "seed_data.json")
     js_path = os.path.join(BASE_DIR, "seed_data.js")
@@ -165,6 +165,15 @@ def update_seed_data(iso_date, items):
     with open(json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
+    # Pertahankan is_done status jika sebelumnya sudah ada yang dicentang
+    old_items_map = {x['no_gud']: x.get('is_done', False) for x in data.get(iso_date, [])}
+    for it in items:
+        ng = it['no_gud']
+        if existing_status and ng in existing_status and existing_status[ng].get('is_done'):
+            it['is_done'] = True
+        elif old_items_map.get(ng):
+            it['is_done'] = True
+            
     data[iso_date] = items
     
     with open(json_path, 'w', encoding='utf-8') as f:
@@ -197,11 +206,36 @@ def update_supabase_schema(iso_date, items):
         sql
     )
     
-    # Cek apakah tanggal sudah ada di INSERT
-    if f"('{iso_date}'," in sql:
-        print(f"  [i] Record {iso_date} sudah ada di supabase_schema.sql")
+    # Periksa apakah tanggal sudah ada di INSERT
+    lines = sql.splitlines()
+    has_date = any(line.strip().startswith(f"('{iso_date}',") for line in lines)
+    if has_date:
+        date_lines = [l for l in lines if l.strip().startswith(f"('{iso_date}',")]
+        ends_with_semi = date_lines[-1].strip().endswith(';')
+        
+        replacement = []
+        for idx, it in enumerate(items):
+            is_last = (idx == len(items) - 1)
+            term = ';' if (is_last and ends_with_semi) else ','
+            grade_val = f"'{it['grade']}'" if it['grade'] else 'NULL'
+            barkot_val = f"'{it['barkot']}'" if it['barkot'] else 'NULL'
+            kg_val = f"{it['kg']:.1f}" if it['kg'] is not None else 'NULL'
+            is_done_val = 'true' if it.get('is_done') else 'false'
+            replacement.append(f"('{it['tanggal']}', {it['no_gud']}, {grade_val}, {barkot_val}, {kg_val}, {is_done_val}){term}")
+            
+        new_lines = []
+        inserted = False
+        for line in lines:
+            if line.strip().startswith(f"('{iso_date}',"):
+                if not inserted:
+                    new_lines.extend(replacement)
+                    inserted = True
+            else:
+                new_lines.append(line)
+        sql = '\n'.join(new_lines) + '\n'
         with open(schema_path, 'w', encoding='utf-8') as f:
             f.write(sql)
+        print(f"  [✓] supabase_schema.sql diperbarui dengan data terbaru ({len(items)} bal, Total {total_bal} bal).")
         return
     
     # Ganti titik koma terakhir menjadi koma dan tambahkan baris baru
@@ -225,22 +259,55 @@ def update_supabase_schema(iso_date, items):
         print(f"  [✓] supabase_schema.sql diperbarui (Total {total_bal} bal).")
 
 def sync_to_supabase(items):
-    """Bulk upsert langsung ke REST API Supabase Cloud."""
+    """Bulk upsert langsung ke REST API Supabase Cloud dengan menjaga status is_done & done_at."""
     if not items:
-        return
+        return {}
     
     iso_date = items[0]['tanggal']
+    print(f"  [*] Mengambil status existing dari Supabase Cloud untuk {iso_date}...")
+    existing_status = {}
+    try:
+        q_url = f"{SUPABASE_URL}/rest/v1/barkot_data?tanggal=eq.{iso_date}&select=no_gud,is_done,done_at"
+        q_req = urllib.request.Request(q_url, headers={
+            'apikey': SUPABASE_KEY,
+            'Authorization': f'Bearer {SUPABASE_KEY}'
+        })
+        with urllib.request.urlopen(q_req) as q_resp:
+            rows = json.loads(q_resp.read().decode('utf-8'))
+            for r in rows:
+                existing_status[r['no_gud']] = {
+                    'is_done': r.get('is_done', False),
+                    'done_at': r.get('done_at')
+                }
+            done_cnt = sum(1 for v in existing_status.values() if v['is_done'])
+            print(f"  [i] Ditemukan {done_cnt} bal yang sudah dicentang (is_done=True). Status akan dipertahankan.")
+    except Exception as e:
+        print(f"  [!] Peringatan cek status Supabase: {e}")
+
+    # Sinkronisasi status ke items lokal juga
+    for it in items:
+        ng = it['no_gud']
+        if ng in existing_status and existing_status[ng]['is_done']:
+            it['is_done'] = True
+            if existing_status[ng]['done_at']:
+                it['done_at'] = existing_status[ng]['done_at']
+
     print(f"  [*] Mengirim {len(items)} record {iso_date} ke Supabase Cloud REST API...")
     payload = []
     for it in items:
-        payload.append({
+        ng = it['no_gud']
+        ex = existing_status.get(ng, {})
+        row = {
             'tanggal': it['tanggal'],
-            'no_gud': it['no_gud'],
+            'no_gud': ng,
             'grade': it['grade'] or None,
             'barkot': it['barkot'] or None,
             'kg': it['kg'],
-            'is_done': False
-        })
+            'is_done': ex.get('is_done', it.get('is_done', False))
+        }
+        if ex.get('done_at') or it.get('done_at'):
+            row['done_at'] = ex.get('done_at') or it.get('done_at')
+        payload.append(row)
         
     url = f"{SUPABASE_URL}/rest/v1/barkot_data?on_conflict=tanggal,no_gud"
     headers = {
@@ -257,19 +324,23 @@ def sync_to_supabase(items):
     except Exception as e:
         print(f"  [!] Peringatan sync Supabase: {e}")
         
-    # Verifikasi jumlah record
+    # Verifikasi jumlah record & total kg
     try:
-        v_url = f"{SUPABASE_URL}/rest/v1/barkot_data?select=count&tanggal=eq.{iso_date}"
+        v_url = f"{SUPABASE_URL}/rest/v1/barkot_data?select=count,kg&tanggal=eq.{iso_date}"
         v_req = urllib.request.Request(v_url, headers={
             'apikey': SUPABASE_KEY,
-            'Authorization': f'Bearer {SUPABASE_KEY}',
-            'Prefer': 'count=exact'
+            'Authorization': f'Bearer {SUPABASE_KEY}'
         })
         with urllib.request.urlopen(v_req) as v_resp:
             body = json.loads(v_resp.read().decode('utf-8'))
-            print(f"  [✓] Verifikasi Cloud: Total {body[0]['count']} bal aktif di tabel Supabase.")
+            tot_count = len(body)
+            tot_cloud_kg = sum(x['kg'] for x in body if x.get('kg') is not None)
+            kg_count = sum(1 for x in body if x.get('kg') is not None)
+            print(f"  [✓] Verifikasi Cloud: Total {tot_count} bal ({kg_count} dengan Kg, total {tot_cloud_kg:.1f} Kg) aktif di tabel Supabase.")
     except Exception as e:
         print(f"  [!] Gagal memverifikasi count Supabase: {e}")
+        
+    return existing_status
 
 def update_frontend(iso_date):
     """Memperbarui currentDate di app.js dan bump versi cache di index.html."""
@@ -331,9 +402,11 @@ def git_commit_and_push(iso_date, items, cache_ver):
     bln_name = BULAN_MAP.get(m_num, 'September').capitalize()
     thn = parts[0]
     
+    total_kg = sum(x['kg'] for x in items if x.get('kg') is not None)
+    kg_str = f", {total_kg:.1f} kg" if total_kg > 0 else ""
     commit_msg = (
-        f"feat: tambah data bal tembakau tanggal {d_num} {bln_name} {thn} "
-        f"({len(items)} bal, No Gud {min_ng}-{max_ng}), sync Supabase, update rekap excel, dan bump cache version {cache_ver}"
+        f"feat: update data bal tembakau tanggal {d_num} {bln_name} {thn} "
+        f"({len(items)} bal{kg_str}, No Gud {min_ng}-{max_ng}), sync Supabase, update rekap excel, dan bump cache version {cache_ver}"
     )
     
     subprocess.run(["git", "add", "."], cwd=BASE_DIR, check=True)
@@ -411,14 +484,14 @@ def run_pipeline(target_file=None):
     update_generate_script(iso_date, tgl_short, hari, fname)
     run_generate_script()
     
-    # 3. Update seed_data.json & seed_data.js
-    update_seed_data(iso_date, items)
+    # 3. Sync to Supabase Cloud (mempertahankan bal yang sudah discan di lapangan)
+    existing_status = sync_to_supabase(items)
     
-    # 4. Update supabase_schema.sql
+    # 4. Update seed_data.json & seed_data.js
+    update_seed_data(iso_date, items, existing_status)
+    
+    # 5. Update supabase_schema.sql
     update_supabase_schema(iso_date, items)
-    
-    # 5. Sync to Supabase Cloud
-    sync_to_supabase(items)
     
     # 6. Update app.js & index.html
     cache_ver = update_frontend(iso_date)

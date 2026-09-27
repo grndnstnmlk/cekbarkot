@@ -11626,7 +11626,7 @@ const SEED_DATA = {
       "no_gud": 1656,
       "grade": "70",
       "barkot": "380215",
-      "kg": null,
+      "kg": 49.0,
       "is_done": false
     },
     {
@@ -11634,7 +11634,7 @@ const SEED_DATA = {
       "no_gud": 1723,
       "grade": "62",
       "barkot": "282376",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -11642,7 +11642,7 @@ const SEED_DATA = {
       "no_gud": 1734,
       "grade": "70",
       "barkot": "380076",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -11650,7 +11650,7 @@ const SEED_DATA = {
       "no_gud": 1735,
       "grade": "70",
       "barkot": "380075",
-      "kg": null,
+      "kg": 34.0,
       "is_done": false
     },
     {
@@ -11658,7 +11658,7 @@ const SEED_DATA = {
       "no_gud": 1740,
       "grade": "70",
       "barkot": "380214",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -11666,7 +11666,7 @@ const SEED_DATA = {
       "no_gud": 1742,
       "grade": "70",
       "barkot": "380305",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -11674,7 +11674,7 @@ const SEED_DATA = {
       "no_gud": 1743,
       "grade": "70",
       "barkot": "380310",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -11682,7 +11682,7 @@ const SEED_DATA = {
       "no_gud": 1744,
       "grade": "70",
       "barkot": "380308",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -11690,7 +11690,7 @@ const SEED_DATA = {
       "no_gud": 1745,
       "grade": "70",
       "barkot": "380307",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -11698,7 +11698,7 @@ const SEED_DATA = {
       "no_gud": 1746,
       "grade": "70",
       "barkot": "380311",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -11706,7 +11706,7 @@ const SEED_DATA = {
       "no_gud": 1747,
       "grade": "70",
       "barkot": "380309",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -11714,7 +11714,7 @@ const SEED_DATA = {
       "no_gud": 1748,
       "grade": "70",
       "barkot": "380199",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -11722,7 +11722,7 @@ const SEED_DATA = {
       "no_gud": 1749,
       "grade": "70",
       "barkot": "380217",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -11730,15 +11730,16 @@ const SEED_DATA = {
       "no_gud": 1750,
       "grade": "70",
       "barkot": "380301",
-      "kg": null,
-      "is_done": false
+      "kg": 42.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:26:42.975+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1751,
       "grade": "70",
       "barkot": "380200",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -11746,7 +11747,7 @@ const SEED_DATA = {
       "no_gud": 1752,
       "grade": "72",
       "barkot": "380303",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -11754,7 +11755,7 @@ const SEED_DATA = {
       "no_gud": 1753,
       "grade": "70",
       "barkot": "380302",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -11762,7 +11763,7 @@ const SEED_DATA = {
       "no_gud": 1756,
       "grade": "63",
       "barkot": "379993",
-      "kg": null,
+      "kg": 35.0,
       "is_done": false
     },
     {
@@ -11770,7 +11771,7 @@ const SEED_DATA = {
       "no_gud": 1757,
       "grade": "64",
       "barkot": "380000",
-      "kg": null,
+      "kg": 32.0,
       "is_done": false
     },
     {
@@ -11778,7 +11779,7 @@ const SEED_DATA = {
       "no_gud": 1758,
       "grade": "63",
       "barkot": "380401",
-      "kg": null,
+      "kg": 31.0,
       "is_done": false
     },
     {
@@ -11786,7 +11787,7 @@ const SEED_DATA = {
       "no_gud": 1759,
       "grade": "63",
       "barkot": "380402",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -11794,15 +11795,16 @@ const SEED_DATA = {
       "no_gud": 1760,
       "grade": "64",
       "barkot": "380221",
-      "kg": null,
-      "is_done": false
+      "kg": 44.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:12:46.479+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1761,
       "grade": "63",
       "barkot": "380222",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -11810,7 +11812,7 @@ const SEED_DATA = {
       "no_gud": 1762,
       "grade": "65",
       "barkot": "380404",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -11818,7 +11820,7 @@ const SEED_DATA = {
       "no_gud": 1763,
       "grade": "55",
       "barkot": "282377",
-      "kg": null,
+      "kg": 32.0,
       "is_done": false
     },
     {
@@ -11826,7 +11828,7 @@ const SEED_DATA = {
       "no_gud": 1764,
       "grade": "55",
       "barkot": "282378",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -11834,7 +11836,7 @@ const SEED_DATA = {
       "no_gud": 1765,
       "grade": "65",
       "barkot": "380405",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -11842,23 +11844,25 @@ const SEED_DATA = {
       "no_gud": 1766,
       "grade": "64",
       "barkot": "380403",
-      "kg": null,
-      "is_done": false
+      "kg": 30.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:08:02.876+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1767,
       "grade": "55",
       "barkot": "379421",
-      "kg": null,
-      "is_done": false
+      "kg": 42.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:11:49.358+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1769,
       "grade": "65",
       "barkot": "380410",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -11866,7 +11870,7 @@ const SEED_DATA = {
       "no_gud": 1770,
       "grade": "65",
       "barkot": "380406",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -11874,7 +11878,7 @@ const SEED_DATA = {
       "no_gud": 1771,
       "grade": "60",
       "barkot": "379420",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -11882,7 +11886,7 @@ const SEED_DATA = {
       "no_gud": 1772,
       "grade": "60",
       "barkot": "379422",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -11890,7 +11894,7 @@ const SEED_DATA = {
       "no_gud": 1773,
       "grade": "63",
       "barkot": "380411",
-      "kg": null,
+      "kg": 32.0,
       "is_done": false
     },
     {
@@ -11898,7 +11902,7 @@ const SEED_DATA = {
       "no_gud": 1774,
       "grade": "63",
       "barkot": "380409",
-      "kg": null,
+      "kg": 33.0,
       "is_done": false
     },
     {
@@ -11906,7 +11910,7 @@ const SEED_DATA = {
       "no_gud": 1775,
       "grade": "62",
       "barkot": "380407",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -11914,7 +11918,7 @@ const SEED_DATA = {
       "no_gud": 1776,
       "grade": "62",
       "barkot": "380408",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -11922,7 +11926,7 @@ const SEED_DATA = {
       "no_gud": 1777,
       "grade": "65",
       "barkot": "380077",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -11930,7 +11934,7 @@ const SEED_DATA = {
       "no_gud": 1778,
       "grade": "68",
       "barkot": "380306",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -11938,15 +11942,16 @@ const SEED_DATA = {
       "no_gud": 1779,
       "grade": "67",
       "barkot": "380078",
-      "kg": null,
-      "is_done": false
+      "kg": 32.0,
+      "is_done": true,
+      "done_at": "2026-09-27T12:58:41.117+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1780,
       "grade": "68",
       "barkot": "380224",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -11954,7 +11959,7 @@ const SEED_DATA = {
       "no_gud": 1781,
       "grade": "67",
       "barkot": "380223",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -11962,7 +11967,7 @@ const SEED_DATA = {
       "no_gud": 1782,
       "grade": "70",
       "barkot": "380312",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -11970,7 +11975,7 @@ const SEED_DATA = {
       "no_gud": 1783,
       "grade": "67",
       "barkot": "380226",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -11978,7 +11983,7 @@ const SEED_DATA = {
       "no_gud": 1784,
       "grade": "68",
       "barkot": "380225",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -11986,7 +11991,7 @@ const SEED_DATA = {
       "no_gud": 1785,
       "grade": "68",
       "barkot": "380228",
-      "kg": null,
+      "kg": 41.0,
       "is_done": false
     },
     {
@@ -11994,7 +11999,7 @@ const SEED_DATA = {
       "no_gud": 1786,
       "grade": "68",
       "barkot": "380412",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -12002,7 +12007,7 @@ const SEED_DATA = {
       "no_gud": 1787,
       "grade": "70",
       "barkot": "380227",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -12010,15 +12015,16 @@ const SEED_DATA = {
       "no_gud": 1788,
       "grade": "68",
       "barkot": "380079",
-      "kg": null,
-      "is_done": false
+      "kg": 42.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:38:40.251+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1789,
       "grade": "68",
       "barkot": "380231",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -12026,15 +12032,16 @@ const SEED_DATA = {
       "no_gud": 1790,
       "grade": "68",
       "barkot": "380235",
-      "kg": null,
-      "is_done": false
+      "kg": 50.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:04:56.143+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1791,
       "grade": "68",
       "barkot": "380229",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12042,7 +12049,7 @@ const SEED_DATA = {
       "no_gud": 1792,
       "grade": "68",
       "barkot": "380232",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12050,7 +12057,7 @@ const SEED_DATA = {
       "no_gud": 1793,
       "grade": "70",
       "barkot": "380314",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12058,7 +12065,7 @@ const SEED_DATA = {
       "no_gud": 1794,
       "grade": "70",
       "barkot": "380313",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12066,7 +12073,7 @@ const SEED_DATA = {
       "no_gud": 1796,
       "grade": "68",
       "barkot": "380230",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -12074,7 +12081,7 @@ const SEED_DATA = {
       "no_gud": 1797,
       "grade": "68",
       "barkot": "380080",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12082,7 +12089,7 @@ const SEED_DATA = {
       "no_gud": 1798,
       "grade": "68",
       "barkot": "380234",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -12090,7 +12097,7 @@ const SEED_DATA = {
       "no_gud": 1799,
       "grade": "68",
       "barkot": "380233",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -12098,7 +12105,7 @@ const SEED_DATA = {
       "no_gud": 1802,
       "grade": "64",
       "barkot": "379413",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -12106,7 +12113,7 @@ const SEED_DATA = {
       "no_gud": 1803,
       "grade": "64",
       "barkot": "379412",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -12114,7 +12121,7 @@ const SEED_DATA = {
       "no_gud": 1804,
       "grade": "64",
       "barkot": "379415",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -12122,7 +12129,7 @@ const SEED_DATA = {
       "no_gud": 1805,
       "grade": "64",
       "barkot": "379414",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -12130,15 +12137,16 @@ const SEED_DATA = {
       "no_gud": 1806,
       "grade": "65",
       "barkot": "379416",
-      "kg": null,
-      "is_done": false
+      "kg": 44.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:34:40.965+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1811,
       "grade": "66",
       "barkot": "379991",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -12146,7 +12154,7 @@ const SEED_DATA = {
       "no_gud": 1812,
       "grade": "66",
       "barkot": "379989",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -12154,7 +12162,7 @@ const SEED_DATA = {
       "no_gud": 1813,
       "grade": "65",
       "barkot": "379988",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -12162,7 +12170,7 @@ const SEED_DATA = {
       "no_gud": 1814,
       "grade": "66",
       "barkot": "379990",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -12170,23 +12178,25 @@ const SEED_DATA = {
       "no_gud": 1815,
       "grade": "66",
       "barkot": "379992",
-      "kg": null,
-      "is_done": false
+      "kg": 40.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:32:33.167+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1816,
       "grade": "68",
       "barkot": "380216",
-      "kg": null,
-      "is_done": false
+      "kg": 44.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:32:49.542+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1822,
       "grade": "66",
       "barkot": "379994",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -12194,23 +12204,25 @@ const SEED_DATA = {
       "no_gud": 1823,
       "grade": "65",
       "barkot": "379995",
-      "kg": null,
-      "is_done": false
+      "kg": 42.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:16:50.822+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1824,
       "grade": "65",
       "barkot": "379986",
-      "kg": null,
-      "is_done": false
+      "kg": 42.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:16:02.789+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1825,
       "grade": "67",
       "barkot": "379996",
-      "kg": null,
+      "kg": 35.0,
       "is_done": false
     },
     {
@@ -12218,7 +12230,7 @@ const SEED_DATA = {
       "no_gud": 1826,
       "grade": "70",
       "barkot": "380304",
-      "kg": null,
+      "kg": 33.0,
       "is_done": false
     },
     {
@@ -12226,15 +12238,16 @@ const SEED_DATA = {
       "no_gud": 1827,
       "grade": "62",
       "barkot": "379419",
-      "kg": null,
-      "is_done": false
+      "kg": 46.0,
+      "is_done": true,
+      "done_at": "2026-09-27T13:17:40.612+00:00"
     },
     {
       "tanggal": "2026-09-27",
       "no_gud": 1828,
       "grade": "60",
       "barkot": "379418",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -12242,7 +12255,7 @@ const SEED_DATA = {
       "no_gud": 1829,
       "grade": "60",
       "barkot": "379417",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -12250,7 +12263,7 @@ const SEED_DATA = {
       "no_gud": 1831,
       "grade": "67",
       "barkot": "380220",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12258,7 +12271,7 @@ const SEED_DATA = {
       "no_gud": 1832,
       "grade": "67",
       "barkot": "379997",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -12266,7 +12279,7 @@ const SEED_DATA = {
       "no_gud": 1833,
       "grade": "68",
       "barkot": "380218",
-      "kg": null,
+      "kg": 49.0,
       "is_done": false
     },
     {
@@ -12274,7 +12287,7 @@ const SEED_DATA = {
       "no_gud": 1834,
       "grade": "67",
       "barkot": "379999",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12282,7 +12295,7 @@ const SEED_DATA = {
       "no_gud": 1835,
       "grade": "68",
       "barkot": "380219",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12290,7 +12303,7 @@ const SEED_DATA = {
       "no_gud": 1836,
       "grade": "67",
       "barkot": "379998",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12298,7 +12311,7 @@ const SEED_DATA = {
       "no_gud": 1837,
       "grade": "67",
       "barkot": "379985",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12306,7 +12319,7 @@ const SEED_DATA = {
       "no_gud": 1838,
       "grade": "68",
       "barkot": "379987",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -12314,7 +12327,7 @@ const SEED_DATA = {
       "no_gud": 1839,
       "grade": "60",
       "barkot": "379410",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -12322,7 +12335,7 @@ const SEED_DATA = {
       "no_gud": 1841,
       "grade": "60",
       "barkot": "379411",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     }
   ]

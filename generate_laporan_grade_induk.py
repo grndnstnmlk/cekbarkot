@@ -7,6 +7,16 @@ from openpyxl.utils import get_column_letter
 sys.stdout.reconfigure(encoding='utf-8')
 
 folder = r"c:\Users\xenov\Downloads\cekbarkot\Laporan Grade Induk"
+
+MONTH_NAMES = {
+    '01': 'Januari', '02': 'Februari', '03': 'Maret', '04': 'April',
+    '05': 'Mei', '06': 'Juni', '07': 'Juli', '08': 'Agustus',
+    '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Desember'
+}
+
+def fmt_date_id(dt_str):
+    parts = dt_str.split('-')
+    return f"{int(parts[2])} {MONTH_NAMES.get(parts[1], parts[1])} {parts[0]}"
 files = [
     ("2026-08-21", "21-8", "JUMAT", "grade tgl 21.xlsx"),
     ("2026-08-22", "22-8", "SABTU", "grade tgl 22.xlsx"),
@@ -136,7 +146,9 @@ cell_a1.alignment = align_center
 # Row 2: Subtitle
 ws1.merge_cells("A2:F2")
 cell_a2 = ws1["A2"]
-cell_a2.value = "TANGGAL: 21-8 s/d 8-9          HARI: ......................          TAHUN: 2026"
+first_short = files[0][1]
+last_short = files[-1][1]
+cell_a2.value = f"TANGGAL: {first_short} s/d {last_short}          HARI: ......................          TAHUN: 2026"
 cell_a2.font = font_subtitle
 cell_a2.alignment = align_center
 for col in range(1, 7):
@@ -228,7 +240,9 @@ ws2.column_dimensions['H'].width = 12.0
 ws2.column_dimensions['I'].width = 25.0
 
 ws2.merge_cells("A1:I1")
-ws2["A1"].value = "REKAP DATA BAL DENGAN BARKOT (21 AGUSTUS - 8 SEPTEMBER 2026)"
+start_date_label = fmt_date_id(files[0][0])
+end_date_label = fmt_date_id(files[-1][0])
+ws2["A1"].value = f"REKAP DATA BAL DENGAN BARKOT ({start_date_label.upper()} - {end_date_label.upper()})"
 ws2["A1"].font = Font(name="Arial", size=16, bold=True)
 ws2["A1"].alignment = align_center
 
@@ -302,7 +316,7 @@ ws3["A1"].font = Font(name="Arial", size=16, bold=True)
 ws3["A1"].alignment = align_center
 
 ws3.merge_cells("A2:G2")
-ws3["A2"].value = "Periode: 21 Agustus 2026 s/d 6 September 2026"
+ws3["A2"].value = f"Periode: {start_date_label} s/d {end_date_label}"
 ws3["A2"].font = Font(name="Arial", size=10, italic=True)
 ws3["A2"].alignment = align_center
 
