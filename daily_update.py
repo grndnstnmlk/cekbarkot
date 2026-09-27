@@ -303,10 +303,9 @@ def sync_to_supabase(items):
             'grade': it['grade'] or None,
             'barkot': it['barkot'] or None,
             'kg': it['kg'],
-            'is_done': ex.get('is_done', it.get('is_done', False))
+            'is_done': ex.get('is_done', it.get('is_done', False)),
+            'done_at': ex.get('done_at') or it.get('done_at') or None
         }
-        if ex.get('done_at') or it.get('done_at'):
-            row['done_at'] = ex.get('done_at') or it.get('done_at')
         payload.append(row)
         
     url = f"{SUPABASE_URL}/rest/v1/barkot_data?on_conflict=tanggal,no_gud"
@@ -326,17 +325,18 @@ def sync_to_supabase(items):
         
     # Verifikasi jumlah record & total kg
     try:
-        v_url = f"{SUPABASE_URL}/rest/v1/barkot_data?select=count,kg&tanggal=eq.{iso_date}"
+        v_url = f"{SUPABASE_URL}/rest/v1/barkot_data?select=no_gud,kg,is_done&tanggal=eq.{iso_date}"
         v_req = urllib.request.Request(v_url, headers={
             'apikey': SUPABASE_KEY,
             'Authorization': f'Bearer {SUPABASE_KEY}'
         })
         with urllib.request.urlopen(v_req) as v_resp:
-            body = json.loads(v_resp.read().decode('utf-8'))
-            tot_count = len(body)
-            tot_cloud_kg = sum(x['kg'] for x in body if x.get('kg') is not None)
-            kg_count = sum(1 for x in body if x.get('kg') is not None)
-            print(f"  [✓] Verifikasi Cloud: Total {tot_count} bal ({kg_count} dengan Kg, total {tot_cloud_kg:.1f} Kg) aktif di tabel Supabase.")
+            rows = json.loads(v_resp.read().decode('utf-8'))
+            tot_count = len(rows)
+            tot_cloud_kg = sum(x['kg'] for x in rows if x.get('kg') is not None)
+            kg_count = sum(1 for x in rows if x.get('kg') is not None)
+            done_count = sum(1 for x in rows if x.get('is_done'))
+            print(f"  [✓] Verifikasi Cloud: Total {tot_count} bal ({kg_count} dengan Kg, total {tot_cloud_kg:.1f} Kg, {done_count} selesai) aktif di tabel Supabase.")
     except Exception as e:
         print(f"  [!] Gagal memverifikasi count Supabase: {e}")
         
