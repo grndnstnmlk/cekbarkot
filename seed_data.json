@@ -12859,7 +12859,7 @@
       "no_gud": 1844,
       "grade": "70",
       "barkot": "381362",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -12867,7 +12867,7 @@
       "no_gud": 1888,
       "grade": "67",
       "barkot": "381098",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12875,7 +12875,7 @@
       "no_gud": 1895,
       "grade": "68",
       "barkot": "381099",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -12883,7 +12883,7 @@
       "no_gud": 1896,
       "grade": "67",
       "barkot": "381097",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -12891,7 +12891,7 @@
       "no_gud": 1897,
       "grade": "67",
       "barkot": "381372",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -12899,7 +12899,7 @@
       "no_gud": 1898,
       "grade": "68",
       "barkot": "381083",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12907,7 +12907,7 @@
       "no_gud": 1899,
       "grade": "68",
       "barkot": "381087",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12915,7 +12915,7 @@
       "no_gud": 1900,
       "grade": "68",
       "barkot": "381084",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -12923,7 +12923,7 @@
       "no_gud": 1901,
       "grade": "68",
       "barkot": "381361",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -12931,7 +12931,7 @@
       "no_gud": 1902,
       "grade": "67",
       "barkot": "381085",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12939,7 +12939,7 @@
       "no_gud": 1903,
       "grade": "66",
       "barkot": "381088",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12947,7 +12947,7 @@
       "no_gud": 1904,
       "grade": "67",
       "barkot": "381089",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -12955,7 +12955,7 @@
       "no_gud": 1905,
       "grade": "67",
       "barkot": "381086",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -12963,7 +12963,7 @@
       "no_gud": 1906,
       "grade": "68",
       "barkot": "381360",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -12971,7 +12971,7 @@
       "no_gud": 1907,
       "grade": "68",
       "barkot": "381365",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -12979,7 +12979,7 @@
       "no_gud": 1908,
       "grade": "68",
       "barkot": "381364",
-      "kg": null,
+      "kg": 35.0,
       "is_done": false
     },
     {
@@ -12987,7 +12987,7 @@
       "no_gud": 1909,
       "grade": "67",
       "barkot": "381363",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -12995,7 +12995,7 @@
       "no_gud": 1910,
       "grade": "68",
       "barkot": "381366",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13003,7 +13003,7 @@
       "no_gud": 1911,
       "grade": "62",
       "barkot": "381284",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13011,7 +13011,7 @@
       "no_gud": 1912,
       "grade": "62",
       "barkot": "381283",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -13019,7 +13019,7 @@
       "no_gud": 1913,
       "grade": "63",
       "barkot": "381367",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -13027,7 +13027,7 @@
       "no_gud": 1916,
       "grade": "65",
       "barkot": "381092",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13035,7 +13035,7 @@
       "no_gud": 1917,
       "grade": "65",
       "barkot": "381091",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -13043,7 +13043,7 @@
       "no_gud": 1918,
       "grade": "66",
       "barkot": "381708",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -13051,7 +13051,7 @@
       "no_gud": 1919,
       "grade": "64",
       "barkot": "381804",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13059,7 +13059,7 @@
       "no_gud": 1920,
       "grade": "62",
       "barkot": "381294",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -13067,7 +13067,7 @@
       "no_gud": 1921,
       "grade": "58",
       "barkot": "381402",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13075,7 +13075,7 @@
       "no_gud": 1923,
       "grade": "67",
       "barkot": "381377",
-      "kg": null,
+      "kg": 49.0,
       "is_done": false
     },
     {
@@ -13083,7 +13083,7 @@
       "no_gud": 1926,
       "grade": "66",
       "barkot": "381287",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13091,7 +13091,7 @@
       "no_gud": 1927,
       "grade": "66",
       "barkot": "381286",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -13099,7 +13099,7 @@
       "no_gud": 1928,
       "grade": "66",
       "barkot": "381285",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -13107,7 +13107,7 @@
       "no_gud": 1931,
       "grade": "70",
       "barkot": "381636",
-      "kg": null,
+      "kg": 49.0,
       "is_done": false
     },
     {
@@ -13115,7 +13115,7 @@
       "no_gud": 1932,
       "grade": "72",
       "barkot": "381637",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -13123,7 +13123,7 @@
       "no_gud": 1933,
       "grade": "70",
       "barkot": "381368",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -13131,7 +13131,7 @@
       "no_gud": 1934,
       "grade": "68",
       "barkot": "381288",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -13139,7 +13139,7 @@
       "no_gud": 1935,
       "grade": "68",
       "barkot": "381638",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -13147,7 +13147,7 @@
       "no_gud": 1936,
       "grade": "68",
       "barkot": "381639",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -13155,7 +13155,7 @@
       "no_gud": 1937,
       "grade": "68",
       "barkot": "381371",
-      "kg": null,
+      "kg": 35.0,
       "is_done": false
     },
     {
@@ -13163,7 +13163,7 @@
       "no_gud": 1938,
       "grade": "67",
       "barkot": "381370",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13171,7 +13171,7 @@
       "no_gud": 1939,
       "grade": "68",
       "barkot": "381369",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13179,7 +13179,7 @@
       "no_gud": 1940,
       "grade": "67",
       "barkot": "381094",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13187,7 +13187,7 @@
       "no_gud": 1941,
       "grade": "68",
       "barkot": "381095",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -13195,7 +13195,7 @@
       "no_gud": 1943,
       "grade": "67",
       "barkot": "381373",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13203,7 +13203,7 @@
       "no_gud": 1944,
       "grade": "64",
       "barkot": "381712",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -13211,7 +13211,7 @@
       "no_gud": 1945,
       "grade": "66",
       "barkot": "381096",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -13219,7 +13219,7 @@
       "no_gud": 1946,
       "grade": "68",
       "barkot": "381379",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13227,7 +13227,7 @@
       "no_gud": 1947,
       "grade": "67",
       "barkot": "381807",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -13235,7 +13235,7 @@
       "no_gud": 1948,
       "grade": "64",
       "barkot": "381713",
-      "kg": null,
+      "kg": 41.0,
       "is_done": false
     },
     {
@@ -13243,7 +13243,7 @@
       "no_gud": 1949,
       "grade": "68",
       "barkot": "381378",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13251,7 +13251,7 @@
       "no_gud": 1950,
       "grade": "65",
       "barkot": "381290",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -13259,7 +13259,7 @@
       "no_gud": 1951,
       "grade": "64",
       "barkot": "381100",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -13267,7 +13267,7 @@
       "no_gud": 1952,
       "grade": "65",
       "barkot": "381291",
-      "kg": null,
+      "kg": 40.0,
       "is_done": false
     },
     {
@@ -13275,7 +13275,7 @@
       "no_gud": 1953,
       "grade": "66",
       "barkot": "381701",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -13283,7 +13283,7 @@
       "no_gud": 1954,
       "grade": "64",
       "barkot": "381289",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13291,7 +13291,7 @@
       "no_gud": 1955,
       "grade": "66",
       "barkot": "381292",
-      "kg": null,
+      "kg": 35.0,
       "is_done": false
     },
     {
@@ -13299,7 +13299,7 @@
       "no_gud": 1956,
       "grade": "68",
       "barkot": "381293",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13307,7 +13307,7 @@
       "no_gud": 1957,
       "grade": "65",
       "barkot": "381803",
-      "kg": null,
+      "kg": 38.0,
       "is_done": false
     },
     {
@@ -13315,7 +13315,7 @@
       "no_gud": 1958,
       "grade": "66",
       "barkot": "381808",
-      "kg": null,
+      "kg": 41.0,
       "is_done": false
     },
     {
@@ -13323,7 +13323,7 @@
       "no_gud": 1959,
       "grade": "65",
       "barkot": "381295",
-      "kg": null,
+      "kg": 34.0,
       "is_done": false
     },
     {
@@ -13331,7 +13331,7 @@
       "no_gud": 1960,
       "grade": "64",
       "barkot": "381296",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -13339,7 +13339,7 @@
       "no_gud": 1961,
       "grade": "62",
       "barkot": "381299",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -13347,7 +13347,7 @@
       "no_gud": 1962,
       "grade": "67",
       "barkot": "381375",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13355,7 +13355,7 @@
       "no_gud": 1963,
       "grade": "68",
       "barkot": "381376",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13363,7 +13363,7 @@
       "no_gud": 1964,
       "grade": "67",
       "barkot": "381374",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13371,7 +13371,7 @@
       "no_gud": 1965,
       "grade": "65",
       "barkot": "381703",
-      "kg": null,
+      "kg": 46.0,
       "is_done": false
     },
     {
@@ -13379,7 +13379,7 @@
       "no_gud": 1966,
       "grade": "63",
       "barkot": "381704",
-      "kg": null,
+      "kg": 42.0,
       "is_done": false
     },
     {
@@ -13387,7 +13387,7 @@
       "no_gud": 1967,
       "grade": "65",
       "barkot": "381702",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13395,7 +13395,7 @@
       "no_gud": 1971,
       "grade": "64",
       "barkot": "381706",
-      "kg": null,
+      "kg": 48.0,
       "is_done": false
     },
     {
@@ -13403,7 +13403,7 @@
       "no_gud": 1974,
       "grade": "64",
       "barkot": "381707",
-      "kg": null,
+      "kg": 41.0,
       "is_done": false
     },
     {
@@ -13411,7 +13411,7 @@
       "no_gud": 1975,
       "grade": "66",
       "barkot": "381705",
-      "kg": null,
+      "kg": 45.0,
       "is_done": false
     },
     {
@@ -13419,7 +13419,7 @@
       "no_gud": 1976,
       "grade": "65",
       "barkot": "381709",
-      "kg": null,
+      "kg": 43.0,
       "is_done": false
     },
     {
@@ -13427,7 +13427,7 @@
       "no_gud": 1978,
       "grade": "67",
       "barkot": "381710",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -13435,7 +13435,7 @@
       "no_gud": 1979,
       "grade": "67",
       "barkot": "381380",
-      "kg": null,
+      "kg": 39.0,
       "is_done": false
     },
     {
@@ -13443,7 +13443,7 @@
       "no_gud": 1980,
       "grade": "62",
       "barkot": "282389",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -13451,7 +13451,7 @@
       "no_gud": 1982,
       "grade": "60",
       "barkot": "125889",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13459,7 +13459,7 @@
       "no_gud": 1983,
       "grade": "64",
       "barkot": "381298",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13467,7 +13467,7 @@
       "no_gud": 1984,
       "grade": "65",
       "barkot": "381711",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13475,7 +13475,7 @@
       "no_gud": 1985,
       "grade": "65",
       "barkot": "381297",
-      "kg": null,
+      "kg": 50.0,
       "is_done": false
     },
     {
@@ -13483,7 +13483,7 @@
       "no_gud": 1986,
       "grade": "64",
       "barkot": "381802",
-      "kg": null,
+      "kg": 47.0,
       "is_done": false
     },
     {
@@ -13491,7 +13491,7 @@
       "no_gud": 1987,
       "grade": "64",
       "barkot": "381805",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -13499,7 +13499,7 @@
       "no_gud": 1988,
       "grade": "64",
       "barkot": "381806",
-      "kg": null,
+      "kg": 36.0,
       "is_done": false
     },
     {
@@ -13507,7 +13507,7 @@
       "no_gud": 1989,
       "grade": "60",
       "barkot": "381300",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -13515,7 +13515,7 @@
       "no_gud": 1990,
       "grade": "60",
       "barkot": "381801",
-      "kg": null,
+      "kg": 30.0,
       "is_done": false
     },
     {
@@ -13523,7 +13523,7 @@
       "no_gud": 1992,
       "grade": "60",
       "barkot": "380886",
-      "kg": null,
+      "kg": 34.0,
       "is_done": false
     },
     {
@@ -13531,7 +13531,7 @@
       "no_gud": 1993,
       "grade": "55",
       "barkot": "381403",
-      "kg": null,
+      "kg": 37.0,
       "is_done": false
     },
     {
@@ -13539,7 +13539,7 @@
       "no_gud": 1994,
       "grade": "65",
       "barkot": "381090",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     },
     {
@@ -13547,7 +13547,7 @@
       "no_gud": 1995,
       "grade": "65",
       "barkot": "381093",
-      "kg": null,
+      "kg": 44.0,
       "is_done": false
     }
   ]
