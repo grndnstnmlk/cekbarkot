@@ -403,7 +403,7 @@ def git_commit_and_push(iso_date, items, cache_ver):
     thn = parts[0]
     
     total_kg = sum(x['kg'] for x in items if x.get('kg') is not None)
-    kg_str = f", {total_kg:.1f} kg" if total_kg > 0 else ""
+    kg_str = f", {total_kg:.1f} kg" if total_kg > 0 else ", kg menyusul"
     commit_msg = (
         f"feat: update data bal tembakau tanggal {d_num} {bln_name} {thn} "
         f"({len(items)} bal{kg_str}, No Gud {min_ng}-{max_ng}), sync Supabase, update rekap excel, dan bump cache version {cache_ver}"

@@ -54,6 +54,7 @@ files = [
     ("2026-09-26", "26-9", "SABTU", "grade 26 sep.xlsx"),
     ("2026-09-27", "27-9", "MINGGU", "grade 27 sep.xlsx"),
     ("2026-09-28", "28-9", "SENIN", "grade 28 sep.xlsx"),
+    ("2026-09-29", "29-9", "SELASA", "grade 29 sep.xlsx"),
 ]
 
 all_items = []
@@ -331,11 +332,16 @@ for c_idx, h_text in enumerate(headers3, 1):
 ws3.row_dimensions[4].height = 24.0
 
 from collections import defaultdict
-summary = defaultdict(lambda: {"count": 0, "kg": 0, "no_guds": [], "hari": ""})
+summary = defaultdict(lambda: {"count": 0, "kg": 0.0, "has_kg": False, "no_guds": [], "hari": ""})
 for it in all_items:
     d = it["date"]
     summary[d]["count"] += 1
-    summary[d]["kg"] += it["kg"]
+    if it["kg"] is not None:
+        try:
+            summary[d]["kg"] += float(it["kg"])
+            summary[d]["has_kg"] = True
+        except (ValueError, TypeError):
+            pass
     summary[d]["no_guds"].append(it["no_gud"])
     summary[d]["hari"] = it["hari"]
 
@@ -345,13 +351,14 @@ for idx, dt in enumerate(sorted(summary.keys()), 1):
     info = summary[dt]
     min_ng = min(info["no_guds"])
     max_ng = max(info["no_guds"])
-    avg_kg = round(info["kg"] / info["count"], 2) if info["count"] > 0 else 0
+    avg_kg = round(info["kg"] / info["count"], 2) if (info["has_kg"] and info["count"] > 0) else "-"
+    total_kg_val = round(info["kg"], 2) if info["has_kg"] else "-"
     row_data = [
         idx,
         dt,
         info["hari"],
         info["count"],
-        info["kg"],
+        total_kg_val,
         avg_kg,
         f"{min_ng} - {max_ng}"
     ]
