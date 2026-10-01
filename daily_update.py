@@ -74,7 +74,18 @@ def parse_excel_date(fpath):
     if fn_match:
         d = int(fn_match.group(1))
         bln_str = fn_match.group(2)[:3]
-        m = 9 if 'sep' in bln_str else (8 if 'agu' in bln_str else 9)
+        if 'okt' in bln_str or 'oct' in bln_str:
+            m = 10
+        elif 'nov' in bln_str:
+            m = 11
+        elif 'des' in bln_str or 'dec' in bln_str:
+            m = 12
+        elif 'sep' in bln_str:
+            m = 9
+        elif 'agu' in bln_str or 'aug' in bln_str:
+            m = 8
+        else:
+            m = 10
         iso_date = f"{tahun}-{m:02d}-{d:02d}"
         tgl_short = f"{d}-{m}"
         # Estimasi hari dari tanggal
