@@ -251,7 +251,7 @@ def update_supabase_schema(iso_date, items):
     
     # Ganti titik koma terakhir menjadi koma dan tambahkan baris baru
     # Cari baris insert terakhir: ('YYYY-MM-DD', ..., ...);
-    last_semi_match = re.search(r"(\('[^']+',\s*\d+,\s*[^;]+);\s*$", sql.rstrip())
+    last_semi_match = re.search(r"(\('[^']+',\s*\d+,\s*[^;\n]+);\s*$", sql.rstrip())
     if last_semi_match:
         last_item_str = last_semi_match.group(1)
         new_lines = [f"{last_item_str},"]
