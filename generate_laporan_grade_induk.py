@@ -58,6 +58,7 @@ files = [
     ("2026-09-30", "30-9", "RABU", "grade 30 sep.xlsx"),
     ("2026-10-01", "1-10", "KAMIS", "grade 1 okt.xlsx"),
     ("2026-10-02", "2-10", "JUMAT", "grade 2 okt.xlsx"),
+    ("2026-10-03", "3-10", "SABTU", "grade 3 okt.xlsx"),
 ]
 
 all_items = []
@@ -95,8 +96,8 @@ for dt_str, tgl_short, hari, fname in files:
                     "ket": ket if ket is not None else ""
                 })
 
-# Sort ascending by no_gud, then date
-all_items.sort(key=lambda x: (x["no_gud"] if isinstance(x["no_gud"], int) else 999999, x["date"]))
+# Sort ascending by barkot (no barkot awal 30140, 30141, dst), then date and no_gud
+all_items.sort(key=lambda x: (int(x["barkot"]) if str(x["barkot"]).isdigit() else 999999999, x["date"], x["no_gud"] if isinstance(x["no_gud"], int) else 999999))
 
 print(f"Total rows to write: {len(all_items)}")
 
@@ -225,8 +226,22 @@ for c in range(1, 7):
     cell.alignment = align_center
     cell.border = thin_border
 
-# Enable gridlines
+# Enable gridlines & A4 Page Setup (Narrow Margins for Print)
 ws1.views.sheetView[0].showGridLines = True
+ws1.page_setup.paperSize = ws1.PAPERSIZE_A4
+ws1.page_setup.orientation = ws1.ORIENTATION_PORTRAIT
+ws1.page_margins.left = 0.25
+ws1.page_margins.right = 0.25
+ws1.page_margins.top = 0.35
+ws1.page_margins.bottom = 0.35
+ws1.page_margins.header = 0.15
+ws1.page_margins.footer = 0.15
+ws1.print_options.horizontalCentered = True
+ws1.sheet_properties.pageSetUpPr.fitToPage = True
+ws1.page_setup.fitToWidth = 1
+ws1.page_setup.fitToHeight = 0
+ws1.print_title_rows = "$3:$4"
+ws1.print_area = f"A1:F{total_row}"
 
 # ==========================================
 # SHEET 2: DATA DETAIL (+ TANGGAL)
@@ -252,7 +267,7 @@ ws2["A1"].font = Font(name="Arial", size=16, bold=True)
 ws2["A1"].alignment = align_center
 
 ws2.merge_cells("A2:I2")
-ws2["A2"].value = f"Diurutkan berdasarkan No Gudang terkecil sampai terbesar | Total: {len(all_items)} Bal Berbarkot"
+ws2["A2"].value = f"Diurutkan berdasarkan Nomor Barkot (no barkot awal: 30140, 30141, ...) | Total: {len(all_items)} Bal Berbarkot"
 ws2["A2"].font = Font(name="Arial", size=10, italic=True)
 ws2["A2"].alignment = align_center
 
@@ -300,6 +315,20 @@ for c in range(1, 10):
     cell.fill = fill_total
     cell.alignment = align_center
     cell.border = thin_border
+
+# A4 Landscape Page Setup for Sheet 2
+ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
+ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
+ws2.page_margins.left = 0.25
+ws2.page_margins.right = 0.25
+ws2.page_margins.top = 0.35
+ws2.page_margins.bottom = 0.35
+ws2.print_options.horizontalCentered = True
+ws2.sheet_properties.pageSetUpPr.fitToPage = True
+ws2.page_setup.fitToWidth = 1
+ws2.page_setup.fitToHeight = 0
+ws2.print_title_rows = "$4:$4"
+ws2.print_area = f"A1:I{tot2_row}"
 
 # ==========================================
 # SHEET 3: RINGKASAN PER TANGGAL
@@ -386,16 +415,36 @@ for c in range(1, 8):
     cell.alignment = align_center
     cell.border = thin_border
 
+# A4 Portrait Page Setup for Sheet 3 (Fits 1 Page)
+ws3.page_setup.paperSize = ws3.PAPERSIZE_A4
+ws3.page_setup.orientation = ws3.ORIENTATION_PORTRAIT
+ws3.page_margins.left = 0.25
+ws3.page_margins.right = 0.25
+ws3.page_margins.top = 0.35
+ws3.page_margins.bottom = 0.35
+ws3.print_options.horizontalCentered = True
+ws3.sheet_properties.pageSetUpPr.fitToPage = True
+ws3.page_setup.fitToWidth = 1
+ws3.page_setup.fitToHeight = 1
+ws3.print_area = f"A1:G{tot3_row}"
+
 # Save files
 out_path_folder1 = os.path.join(folder, "buku_grade_induk_rekap_barkot_tgl_21_sd_31.xlsx")
 out_path_folder2 = os.path.join(folder, "laporan_grade_induk_semua_barkot_tgl_21_sd_31.xlsx")
-out_path_root = r"c:\Users\xenov\Downloads\cekbarkot\buku_grade_induk_rekap_barkot_tgl_21_sd_31.xlsx"
+out_path_folder3 = os.path.join(folder, "buku_grade_induk_rekap_barkot_urut_barkot.xlsx")
+out_path_root1 = r"c:\Users\xenov\Downloads\cekbarkot\buku_grade_induk_rekap_barkot_tgl_21_sd_31.xlsx"
+out_path_root2 = r"c:\Users\xenov\Downloads\cekbarkot\buku_grade_induk_rekap_barkot_urut_barkot.xlsx"
 
 wb.save(out_path_folder1)
 wb.save(out_path_folder2)
-wb.save(out_path_root)
+wb.save(out_path_folder3)
+wb.save(out_path_root1)
+wb.save(out_path_root2)
 
 print(f"Saved successfully to:")
 print(f"  1. {out_path_folder1}")
 print(f"  2. {out_path_folder2}")
-print(f"  3. {out_path_root}")
+print(f"  3. {out_path_folder3}")
+print(f"  4. {out_path_root1}")
+print(f"  5. {out_path_root2}")
+
