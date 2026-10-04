@@ -143,4 +143,21 @@ python daily_update.py
 6. **Frontend & Cache Busting**: Mengubah `currentDate` di `app.js`, memperbarui label tanggal, dan menaikkan versi query string pada `index.html` (contoh: `v=6.6`).
 7. **Deploy Otomatis**: Melakukan staging, git commit deskriptif, dan push ke branch `main` GitHub Pages (`https://grndnstnmlk.github.io/cekbarkot/`).
 
+---
+
+## 9. 🖨️ Berkas Cetak Fisik & Buku Grade Induk Urut Barkot
+
+Untuk kebutuhan cetak fisik (print dokumen kerja di gudang / kantor):
+1. **Folder Khusus Cetak**:
+   - Seluruh berkas harian yang diurutkan ascending berdasarkan nomor seri barcode (`barkot`) disimpan rapi di dalam folder:
+     `Buku Grade Induk Urut Barkot/`
+   - Format penamaan berkas terurut kronologis:
+     `buku_grade_induk_YYYY-MM-DD_tgl_DD_mmm_urut_barkot.xlsx`
+2. **Layout Dua Sheet Cetak (Kertas A4)**:
+   - **Sheet 1: `Cetak 1 Halaman (A4 Pas)`**: Didesain agar seluruh bal pada hari tersebut muat pas dalam 1 lembar kertas A4 portrait.
+   - **Sheet 2: `Cetak Standar (Font Besar)`**: Menggunakan font ukuran 14pt tebal, baris header berulang (`$3:$4`) otomatis pada setiap lembar berikutnya untuk bal dalam jumlah besar.
+3. **Master Generator**:
+   - `python generate_semua_buku_urut_barkot.py` untuk meregenerasi seluruh 42 tanggal dan membuat lembar checklist `_REKAP_DAFTAR_PRINT_SEMUA_TANGGAL.xlsx`.
+
+
 

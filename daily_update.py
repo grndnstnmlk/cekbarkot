@@ -142,24 +142,40 @@ def update_generate_script(iso_date, tgl_short, hari, fname):
     entry_line = f'    ("{iso_date}", "{tgl_short}", "{hari}", "{fname}"),'
     if fname in content or iso_date in content:
         print(f"  [i] Entri {fname} sudah ada di generate_laporan_grade_induk.py")
-        return
-    
-    # Sisipkan sebelum akhir list files
-    target = ']\n\nall_items = []'
-    replacement = f'{entry_line}\n]\n\nall_items = []'
-    if target in content:
-        content = content.replace(target, replacement)
     else:
-        # Fallback regex
-        content = re.sub(r'(\s*\(\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\"\),\s*\n)(\])',
-                         r'\1' + entry_line + r'\n\2', content)
-    
-    with open(gen_path, 'w', encoding='utf-8') as f:
-        f.write(content)
-    print(f"  [+] Ditambahkan entri ke generate_laporan_grade_induk.py: {entry_line.strip()}")
+        # Sisipkan sebelum akhir list files
+        target = ']\n\nall_items = []'
+        replacement = f'{entry_line}\n]\n\nall_items = []'
+        if target in content:
+            content = content.replace(target, replacement)
+        else:
+            # Fallback regex
+            content = re.sub(r'(\s*\(\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\"\),\s*\n)(\])',
+                             r'\1' + entry_line + r'\n\2', content)
+        
+        with open(gen_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"  [+] Ditambahkan entri ke generate_laporan_grade_induk.py: {entry_line.strip()}")
+
+    # Juga tambahkan entri ke generate_semua_buku_urut_barkot.py jika belum ada
+    semua_path = os.path.join(BASE_DIR, "generate_semua_buku_urut_barkot.py")
+    if os.path.exists(semua_path):
+        with open(semua_path, 'r', encoding='utf-8') as f:
+            semua_content = f.read()
+        if fname not in semua_content and iso_date not in semua_content:
+            target_semua = ']\n\ndef make_filename(dt_str):'
+            replacement_semua = f'{entry_line}\n]\n\ndef make_filename(dt_str):'
+            if target_semua in semua_content:
+                semua_content = semua_content.replace(target_semua, replacement_semua)
+            else:
+                semua_content = re.sub(r'(\s*\(\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\",\s*\"[^\"]+\"\),\s*\n)(\])',
+                                      r'\1' + entry_line + r'\n\2', semua_content)
+            with open(semua_path, 'w', encoding='utf-8') as f:
+                f.write(semua_content)
+            print(f"  [+] Ditambahkan entri ke generate_semua_buku_urut_barkot.py: {entry_line.strip()}")
 
 def run_generate_script():
-    """Menjalankan generate_laporan_grade_induk.py untuk meregenerasi file Excel rekap."""
+    """Menjalankan generate_laporan_grade_induk.py dan generate_semua_buku_urut_barkot.py."""
     print("  [*] Meregenerasi file Excel rekap buku grade induk...")
     gen_path = os.path.join(BASE_DIR, "generate_laporan_grade_induk.py")
     res = subprocess.run([sys.executable, gen_path], capture_output=True, text=True, cwd=BASE_DIR)
@@ -167,6 +183,15 @@ def run_generate_script():
         print(f"  [!] Gagal menjalankan generate script: {res.stderr}")
     else:
         print("  [✓] File Excel rekap berhasil diperbarui.")
+
+    semua_path = os.path.join(BASE_DIR, "generate_semua_buku_urut_barkot.py")
+    if os.path.exists(semua_path):
+        print("  [*] Meregenerasi buku grade induk urut barkot (siap print)...")
+        res_semua = subprocess.run([sys.executable, semua_path], capture_output=True, text=True, cwd=BASE_DIR)
+        if res_semua.returncode != 0:
+            print(f"  [!] Gagal meregenerasi urut barkot: {res_semua.stderr}")
+        else:
+            print("  [✓] Folder 'Buku Grade Induk Urut Barkot' berhasil diperbarui.")
 
 def update_seed_data(iso_date, items, existing_status=None):
     """Memperbarui seed_data.json dan seed_data.js."""
