@@ -83,6 +83,7 @@ FILES_MASTER = [
     ("2026-10-03", "3-10", "SABTU", "grade 3 okt.xlsx"),
     ("2026-10-04", "4-10", "MINGGU", "grade 4 okt.xlsx"),
     ("2026-10-05", "5-10", "SENIN", "grade 5 okt.xlsx"),
+    ("2026-10-06", "6-10", "SELASA", "grade 6 okt.xlsx"),
 ]
 
 def make_filename(dt_str):
